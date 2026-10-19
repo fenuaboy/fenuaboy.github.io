@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brown vs White vs Pink Noise: Free Noise Generator, No Ads</title>
+<meta name="description" content="Play brown, white, pink or green noise for free in your browser, with a sleep timer and no ads. Then learn how the colors differ and what research says about noise for sleep.">
+<link rel="canonical" href="https://filozen.app/sleep/noise/">
+<meta property="og:title" content="Brown vs White vs Pink Noise: Free Noise Generator">
+<meta property="og:description" content="Free noise generator with a sleep timer and no ads, plus an honest guide to noise colors and sleep.">
+<meta property="og:url" content="https://filozen.app/sleep/noise/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0E1230">
+<script src="../../consent.js"></script>
+<link rel="icon" href="../../icon.png">
+<link rel="stylesheet" href="../sleep.css">
+<style>
+  #noise{--accent:var(--brown)}
+  .colors{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 18px}
+  .colors button{font:inherit;font-weight:800;font-size:15px;padding:12px 6px;border-radius:14px;border:2px solid var(--line);background:var(--bg2);color:var(--ink);cursor:pointer}
+  .colors button[aria-pressed=true]{border-color:currentColor}
+  .colors [data-color=white]{color:var(--white)} .colors [data-color=pink]{color:var(--pink)}
+  .colors [data-color=brown]{color:var(--brown)} .colors [data-color=green]{color:var(--green)}
+  .play{display:block;width:100%;font:inherit;font-size:20px;font-weight:800;padding:16px;border:0;border-radius:16px;background:var(--accent);color:#0E1230;cursor:pointer}
+  .row{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .row label{font-weight:700;font-size:15px;color:var(--muted)}
+  .row input[type=range]{flex:1;min-width:160px;accent-color:var(--accent)}
+  .row select{font:inherit;font-size:15px;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+  [data-status]{margin:14px 0 0;min-height:1.6em;color:var(--muted);font-size:15px}
+  .chart{width:100%;height:auto;margin:6px 0 4px}
+  .chart text{fill:var(--muted);font-size:12px;font-family:inherit}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebApplication","name":"Free Noise Generator","url":"https://filozen.app/sleep/noise/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Brown, white, pink and green noise generated in the browser, with a sleep timer and no ads.","publisher":{"@id":"https://filozen.app/#glazikprod"}},
+ {"@type":"Organization","@id":"https://filozen.app/#glazikprod","name":"Glazik Prod","url":"https://filozen.app/sleep/","sameAs":["https://www.youtube.com/@GlazikProdSleepMeditation"]},
+ {"@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"Which noise color is best for sleep?","acceptedAnswer":{"@type":"Answer","text":"No color has been proven best. A 2021 systematic review of 38 studies rated the evidence that continuous noise improves sleep as very low. Choose the sound you notice least. Many people find brown or pink noise softer than white noise because they have less high-pitched hiss."}},
+  {"@type":"Question","name":"Does pink noise improve deep sleep?","acceptedAnswer":{"@type":"Answer","text":"Lab studies played very short bursts of pink noise timed to the sleeper's own brain waves, and saw stronger deep sleep waves and better memory the next day. Playing pink noise continuously all night is a different thing and has not shown the same effect."}},
+  {"@type":"Question","name":"Is brown noise good for ADHD or focus?","acceptedAnswer":{"@type":"Answer","text":"Many people say brown noise helps them focus, but there are no reliable studies on brown noise specifically. Small studies on white noise and attention give mixed results. If it helps you, use it, at a low volume."}},
+  {"@type":"Question","name":"Is it safe to sleep with noise all night?","acceptedAnswer":{"@type":"Answer","text":"Keep the volume low and the speaker away from your head. A 2014 study found that some infant sleep machines can exceed safe sound levels at close range, so for babies use the lowest volume, keep the device far from the crib and use a timer."}},
+  {"@type":"Question","name":"Is this noise generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It runs in your browser, with no ads, no account and nothing to install."}}
+ ]}
+]}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top"><a class="brand" href="../">Glazik Prod Sleep</a><a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a></nav>
+
+  <h1>Brown vs White vs Pink Noise: free noise generator</h1>
+  <p class="lead">Pick a color, press play, set a timer. No ads to wake you up, no account, nothing to install. Below, how the colors differ and what research actually says about noise and sleep.</p>
+
+  <section id="noise" class="card" aria-label="Noise generator">
+    <div class="colors" role="group" aria-label="Noise color">
+      <button type="button" data-color="white" aria-pressed="false">White</button>
+      <button type="button" data-color="pink" aria-pressed="false">Pink</button>
+      <button type="button" data-color="brown" aria-pressed="true">Brown</button>
+      <button type="button" data-color="green" aria-pressed="false">Green</button>
+    </div>
+    <button type="button" class="play" data-play aria-pressed="false">Play</button>
+    <div class="row">
+      <label for="vol">Volume</label>
+      <input id="vol" type="range" min="0" max="100" value="45" data-vol>
+    </div>
+    <div class="row">
+      <label for="timer">Sleep timer</label>
+      <select id="timer" data-timer>
+        <option value="0">Off</option>
+        <option value="15">15 min</option>
+        <option value="30" selected>30 min</option>
+        <option value="60">1 hour</option>
+        <option value="90">90 min</option>
+      </select>
+    </div>
+    <p data-status aria-live="polite"></p>
+    <p class="small muted">On iPhone, the sound can stop when the screen locks. Keep the page open, or play one of our long videos below.</p>
+  </section>
+
+  <h2>What is the difference between white, pink, brown and green noise?</h2>
+  <p>All four are made of every audible frequency at once. What changes is how loud the low sounds are compared with the high ones.</p>
+  <p><strong>White noise</strong> gives every frequency the same energy. Our ears hear a lot of high pitch in it, so it sounds like a hiss: a detuned radio, a fan on full speed.</p>
+  <p><strong>Pink noise</strong> gets 3 dB quieter every time the frequency doubles. The hiss softens and it sounds like steady rain or wind in the trees.</p>
+  <p><strong>Brown noise</strong> (also called red or Brownian noise) drops twice as fast, 6 dB per octave. What remains is a deep rumble, like a waterfall heard from a distance or the inside of a plane.</p>
+  <p><strong>Green noise</strong> has no scientific definition. The name is used online for noise centered on the middle frequencies, around 500 Hz, which some people compare to the background sound of nature. Our version is white noise filtered around 500 Hz.</p>
+
+  <svg class="chart" viewBox="0 0 600 260" role="img" aria-label="Chart comparing the frequency spectrum of white, pink, brown and green noise">
+    <line x1="40" y1="230" x2="580" y2="230" stroke="#2A3170"/>
+    <line x1="40" y1="12" x2="40" y2="230" stroke="#2A3170"/>
+    <polyline fill="none" stroke="var(--white)" stroke-width="3" points="40,20 580,20"/>
+    <polyline fill="none" stroke="var(--pink)" stroke-width="3" points="40,20 580,119"/>
+    <polyline fill="none" stroke="var(--brown)" stroke-width="3" points="40,20 580,218"/>
+    <polyline fill="none" stroke="var(--green)" stroke-width="3" points="40,98.5 94,94.9 148,82.4 202,55.6 256,26.9 310,22.3 364,46.7 418,76.1 472,92.6 526,97.9 580,99.2"/>
+    <text x="40" y="248">20 Hz</text><text x="205" y="248">200 Hz</text><text x="385" y="248">2 kHz</text><text x="545" y="248">20 kHz</text>
+    <text x="520" y="14">White</text><text x="520" y="112">Pink</text><text x="520" y="210">Brown</text><text x="290" y="16">Green</text>
+  </svg>
+  <p class="small muted">Relative loudness by frequency (log scale). Lower line means quieter at that pitch.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Color</th><th>Sounds like</th><th>Often used for</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dot" style="background:var(--white)"></span>White</td><td>Hiss, fan, detuned radio</td><td>Masking voices and sudden noises</td></tr>
+      <tr><td><span class="dot" style="background:var(--pink)"></span>Pink</td><td>Steady rain, wind</td><td>Sleep, a softer alternative to white</td></tr>
+      <tr><td><span class="dot" style="background:var(--brown)"></span>Brown</td><td>Distant waterfall, plane cabin</td><td>Sleep, focus, covering low traffic rumble</td></tr>
+      <tr><td><span class="dot" style="background:var(--green)"></span>Green</td><td>Soft mid-range, nature-like</td><td>Relaxation</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Which one is best for sleep?</h2>
+  <p>The honest answer: nobody knows for sure. In 2021, a team of sleep researchers reviewed 38 studies on continuous noise and sleep. They rated the evidence that it improves sleep as very low. Some studies found people fell asleep faster, at least one found more disrupted sleep.</p>
+  <p>Pink noise gets the most attention because of lab studies where very short bursts of pink noise were played in sync with the sleeper's own deep sleep waves. Those waves got stronger and memory improved the next day. That setup measures the brain in real time. Playing pink noise all night from a speaker is a different thing, and it has not shown the same result.</p>
+  <p>Brown noise became popular on social media, but it has no dedicated sleep studies yet.</p>
+  <p>What does seem to work in practice is masking: a steady sound makes a door, a car or a neighbor less noticeable. So the best color is the one you stop noticing. If white feels harsh, try pink. If pink still feels sharp, try brown.</p>
+
+  <h2>Brown noise for focus and ADHD</h2>
+  <p>Many people with ADHD say brown noise helps them concentrate, and that experience is real for them. Science has not caught up: small studies on white noise and attention give mixed results, and there are no reliable studies on brown noise specifically. If it helps you work, use it, and keep the volume low.</p>
+
+  <h2>How to use noise safely</h2>
+  <p>Keep the volume as low as still works, around the level of a quiet conversation or lower, and put the speaker away from your head. Use the timer so the sound fades out once you are asleep.</p>
+  <p>For babies, be careful. A 2014 study in the journal Pediatrics measured 14 infant sleep machines: at 30 cm, all of them went above the 50 dB recommended for hospital nurseries, and three could exceed adult workplace limits at full volume. Use the lowest volume, keep the device far from the crib and turn it off after the baby falls asleep.</p>
+
+  <h2>Prefer a longer soundscape?</h2>
+  <p>Our channel publishes long sleep and meditation sessions with natural sounds and a black screen, so your phone stays dark.</p>
+  <div class="grid2">
+    <button type="button" class="video" data-id="WGoW4cPYOYA"><i></i><span>Thunderstorm sounds for deep sleep, 3 hours, black screen</span></button>
+    <button type="button" class="video" data-id="zABgG_wo2Fs"><i></i><span>Beach night sounds, theta waves, 1 hour</span></button>
+  </div>
+
+  <h2>Questions</h2>
+  <details><summary>Which noise color is best for sleep?</summary><p>No color has been proven best. Choose the one you notice least. Many people find brown or pink softer than white because they have less high-pitched hiss.</p></details>
+  <details><summary>Does pink noise improve deep sleep?</summary><p>Lab studies used very short bursts timed to brain waves. Continuous pink noise all night has not shown the same effect.</p></details>
+  <details><summary>Is brown noise good for ADHD or focus?</summary><p>Many people say yes, but there are no reliable studies on brown noise specifically. If it helps you, use it at a low volume.</p></details>
+  <details><summary>Is it safe to sleep with noise all night?</summary><p>Keep it quiet and away from your head, and use a timer. For babies, keep the device far from the crib at the lowest volume.</p></details>
+  <details><summary>Is this noise generator free?</summary><p>Yes. It runs in your browser, with no ads, no account and nothing to install.</p></details>
+
+  <h2>Sources</h2>
+  <p class="small muted">
+    Riedy SM et al. Noise as a sleep aid: a systematic review. Sleep Medicine Reviews, 2021. <a href="https://pubmed.ncbi.nlm.nih.gov/33007706/">PubMed</a><br>
+    Ngo HV et al. Auditory closed-loop stimulation of the sleep slow oscillation enhances memory. Neuron, 2013. <a href="https://doi.org/10.1016/j.neuron.2013.03.006">DOI</a><br>
+    Capezuti E et al. Systematic review: auditory stimulation and sleep. Journal of Clinical Sleep Medicine, 2022. <a href="https://pubmed.ncbi.nlm.nih.gov/34964434/">PubMed</a><br>
+    Hugh SC et al. Infant sleep machines and hazardous sound pressure levels. Pediatrics, 2014. <a href="https://doi.org/10.1542/peds.2013-3617">DOI</a>
+  </p>
+  <p class="small muted">This page is for general information and is not medical advice. If you have ongoing sleep problems, talk to a doctor.</p>
+
+  <footer>
+    Made by <a href="../">Glazik Prod</a>. Also on <a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a>.
+    <a href="../../cookies.html">Cookies</a> · <a href="mailto:contact@filozen.app">Contact</a>
+  </footer>
+</div>
+<script src="noise.js"></script>
+<script src="../sleep.js"></script>
+</body>
+</html>
