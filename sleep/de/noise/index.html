@@ -15,41 +15,11 @@
 <link rel="icon" href="../../../icon.png">
 <link rel="stylesheet" href="../../sleep.css">
 <style>
-  #noise{--accent:var(--brown);margin-top:34px;text-align:center}
-  #noise h2{font:600 16px/24px var(--sans);margin:0 0 16px;color:var(--md-on-surface-variant);letter-spacing:.15px}
-  .chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-  .chip{height:36px;display:inline-flex;align-items:center;gap:8px;padding:0 16px 0 10px;border-radius:10px;border:1px solid var(--md-outline);background:transparent;color:var(--md-on-surface-variant);font:600 14px/20px var(--sans);cursor:pointer;transition:background .2s}
-  .chip i{width:18px;height:18px;border-radius:50%;background:var(--c)}
-  .chip[aria-pressed=true]{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-color:transparent}
-  .chip[aria-pressed=true] i{background:none;display:grid;place-items:center}
-  .chip[aria-pressed=true] i::after{content:"";width:5px;height:10px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
-  .chip[data-color=white]{--c:var(--white)} .chip[data-color=pink]{--c:var(--pink)} .chip[data-color=brown]{--c:var(--brown)} .chip[data-color=green]{--c:var(--green)}
-  .stage{position:relative;width:176px;height:176px;margin:0 auto;display:grid;place-items:center}
-  .stage::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--accent);opacity:.14;transform:scale(.88);transition:opacity .4s}
-  #noise.on .stage::before{animation:breathe 8s ease-in-out infinite;opacity:.3}
-  @keyframes breathe{0%,100%{transform:scale(.82)}50%{transform:scale(1.12)}}
-  .play{position:relative;width:112px;height:112px;border-radius:50%;border:0;background:var(--md-primary);color:var(--md-on-primary);cursor:pointer;display:grid;place-items:center;
-    box-shadow:0 4px 8px 3px rgba(0,0,0,.25),0 1px 3px rgba(0,0,0,.4);transition:transform .15s}
-  .play:active{transform:scale(.95)}
-  .play svg{width:44px;height:44px;fill:currentColor}
-  [data-status]{margin:12px 0 20px;min-height:1.6em;color:var(--md-on-surface-variant);font-size:15px}
-  .field{text-align:left;max-width:400px;margin:0 auto 20px}
-  .field>span{display:block;font:600 12px/16px var(--sans);letter-spacing:.5px;text-transform:uppercase;color:var(--md-on-surface-variant);margin-bottom:12px}
-  input.m3s{-webkit-appearance:none;appearance:none;width:100%;height:16px;border-radius:8px;margin:14px 0;outline:none;
-    background:linear-gradient(90deg,var(--md-primary) 0 var(--v,45%),var(--md-secondary-container) var(--v,45%) 100%)}
-  input.m3s::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:44px;border-radius:2px;background:var(--md-primary);box-shadow:0 0 0 6px #1a2048}
-  input.m3s::-moz-range-thumb{width:4px;height:44px;border-radius:2px;background:var(--md-primary);border:0}
-  input.m3s:focus-visible{box-shadow:0 0 0 3px rgba(233,193,108,.5)}
-  .seg{display:flex;border:1px solid var(--md-outline);border-radius:20px;overflow:hidden}
-  .seg button{flex:1;height:40px;border:0;border-right:1px solid var(--md-outline);background:transparent;color:var(--ink);font:600 14px/20px var(--sans);cursor:pointer}
-  .seg button:last-child{border-right:0}
-  .seg button[aria-pressed=true]{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
-  .hint{margin:6px 0 0}
   .chart{width:100%;height:auto;margin:6px 0 4px}
   .chart text{fill:var(--muted);font-size:12px;font-family:var(--sans)}
 </style>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "Kostenloser Rauschgenerator", "url": "https://filozen.app/sleep/noise/", "applicationCategory": "MultimediaApplication", "operatingSystem": "Any (web browser)", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Braunes, weißes, rosa und grünes Rauschen, im Browser erzeugt, mit Schlaf-Timer und ohne Werbung.", "publisher": {"@id": "https://filozen.app/#glazikprod"}}, {"@type": "Organization", "@id": "https://filozen.app/#glazikprod", "name": "Glazik Prod", "url": "https://filozen.app/sleep/", "sameAs": ["https://www.youtube.com/@GlazikProdSleepMeditation"]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Welche Rauschfarbe ist am besten zum Schlafen?", "acceptedAnswer": {"@type": "Answer", "text": "Keine Farbe hat sich als die beste erwiesen. Wähle die, die du am wenigsten bemerkst. Viele empfinden Braun oder Rosa als sanfter als Weiß, weil sie weniger Höhen haben."}}, {"@type": "Question", "name": "Verbessert rosa Rauschen den Tiefschlaf?", "acceptedAnswer": {"@type": "Answer", "text": "Laborstudien nutzten sehr kurze Stöße, abgestimmt auf die Gehirnwellen. Dauerhaftes rosa Rauschen die ganze Nacht hat nicht dieselbe Wirkung gezeigt."}}, {"@type": "Question", "name": "Hilft braunes Rauschen bei ADHS oder Konzentration?", "acceptedAnswer": {"@type": "Answer", "text": "Viele sagen ja, aber es gibt keine verlässlichen Studien zu braunem Rauschen. Wenn es dir hilft, nutze es bei geringer Lautstärke."}}, {"@type": "Question", "name": "Ist es sicher, die ganze Nacht mit Rauschen zu schlafen?", "acceptedAnswer": {"@type": "Answer", "text": "Halte es leise und weg vom Kopf und nutze einen Timer. Bei Babys stell das Gerät weit weg vom Bettchen und auf die niedrigste Lautstärke."}}, {"@type": "Question", "name": "Ist dieser Rauschgenerator kostenlos?", "acceptedAnswer": {"@type": "Answer", "text": "Ja. Er läuft in deinem Browser, ohne Werbung, ohne Konto und ohne Installation."}}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Kostenloser Rauschgenerator","url":"https://filozen.app/sleep/noise/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Braunes, weißes, rosa und grünes Rauschen, im Browser erzeugt, mit Schlaf-Timer und ohne Werbung.","publisher":{"@id":"https://filozen.app/#glazikprod"}},{"@type":"Organization","@id":"https://filozen.app/#glazikprod","name":"Glazik Prod","url":"https://filozen.app/sleep/","sameAs":["https://www.youtube.com/@GlazikProdSleepMeditation"]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Welche Rauschfarbe ist am besten zum Schlafen?","acceptedAnswer":{"@type":"Answer","text":"Keine Farbe hat sich als die beste erwiesen. Wähle die, die du am wenigsten bemerkst. Viele empfinden Braun oder Rosa als sanfter als Weiß, weil sie weniger Höhen haben."}},{"@type":"Question","name":"Verbessert rosa Rauschen den Tiefschlaf?","acceptedAnswer":{"@type":"Answer","text":"Laborstudien nutzten sehr kurze Stöße, abgestimmt auf die Gehirnwellen. Dauerhaftes rosa Rauschen die ganze Nacht hat nicht dieselbe Wirkung gezeigt."}},{"@type":"Question","name":"Hilft braunes Rauschen bei ADHS oder Konzentration?","acceptedAnswer":{"@type":"Answer","text":"Viele sagen ja, aber es gibt keine verlässlichen Studien zu braunem Rauschen. Wenn es dir hilft, nutze es bei geringer Lautstärke."}},{"@type":"Question","name":"Ist es sicher, die ganze Nacht mit Rauschen zu schlafen?","acceptedAnswer":{"@type":"Answer","text":"Halte es leise und weg vom Kopf und nutze einen Timer. Bei Babys stell das Gerät weit weg vom Bettchen und auf die niedrigste Lautstärke."}},{"@type":"Question","name":"Ist dieser Rauschgenerator kostenlos?","acceptedAnswer":{"@type":"Answer","text":"Ja. Er läuft in deinem Browser, ohne Werbung, ohne Konto und ohne Installation."}}]}]}
 </script>
 <!--i18n-->
 <link rel="alternate" hreflang="en" href="https://filozen.app/sleep/noise/">
@@ -73,7 +43,7 @@
     <h1>Braunes, weißes oder rosa Rauschen: <em>finde deinen Klang</em></h1>
     <p class="lead">Wähle eine Farbe, drück auf Play, stell den Timer. Nichts zu installieren, kein Konto und keine Werbung, die dich weckt. Weiter unten: wie sich die Farben unterscheiden und was die Forschung wirklich sagt.</p>
 
-    <section id="noise" data-i18n='{"white": "Weißes Rauschen", "pink": "Rosa Rauschen", "brown": "Braunes Rauschen", "green": "Grünes Rauschen", "ready": "Bereit: {c}. Kostenlos, ohne Werbung, ohne Installation.", "playing": "Läuft: {c}.", "stops": "{c} · Stoppt in {t}, sanft ausgeblendet", "play": "Abspielen", "pause": "Pause", "old": "Dein Browser kann keinen Klang erzeugen. Bitte aktualisiere ihn."}' class="card" aria-label="Rauschgenerator">
+    <section id="noise" data-i18n='{"white": "Weißes Rauschen", "pink": "Rosa Rauschen", "brown": "Braunes Rauschen", "green": "Grünes Rauschen", "ready": "Bereit: {c}. Kostenlos, ohne Werbung, ohne Installation.", "playing": "Läuft: {c}.", "stops": "{c} · Stoppt in {t}, sanft ausgeblendet", "play": "Abspielen", "pause": "Pause", "old": "Dein Browser kann keinen Klang erzeugen. Bitte aktualisiere ihn."}' class="card gen" aria-label="Rauschgenerator">
       <h2>Rauschgenerator</h2>
       <div class="chips" role="group" aria-label="Rauschfarbe">
         <button type="button" class="chip" data-color="white" aria-pressed="false"><i></i>Weiß</button>
@@ -142,6 +112,8 @@
   <h2>Rauschen sicher nutzen</h2>
   <p>Halte die Lautstärke so niedrig, wie es gerade noch wirkt, etwa auf dem Niveau eines ruhigen Gesprächs oder darunter, und stell den Lautsprecher weg vom Kopf. Nutze den Timer, damit der Klang ausklingt, sobald du schläfst.</p>
   <p>Bei Babys ist Vorsicht geboten. Eine Studie von 2014 in der Fachzeitschrift Pediatrics hat 14 Einschlafgeräte für Säuglinge gemessen: In 30 cm Abstand lagen alle über den 50 dB, die für Neugeborenenstationen empfohlen werden, und drei konnten bei voller Lautstärke die Arbeitsschutzgrenzen für Erwachsene überschreiten. Nutze die niedrigste Lautstärke, stell das Gerät weit weg vom Bettchen und schalte es aus, wenn das Baby schläft.</p>
+
+  <p>Neugierig auf Gehirnwellen? Lies <a href="../binaural/">Wirken binaurale Beats?</a> und probier unseren kostenlosen Binaural-Generator.</p>
 
   <h2>Lieber eine längere Klangwelt?</h2>
   <p>Unser Kanal veröffentlicht lange Sessions zum Schlafen und Meditieren, mit Naturklängen und schwarzem Bildschirm, damit dein Handy dunkel bleibt.</p>

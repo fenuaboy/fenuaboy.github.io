@@ -15,41 +15,11 @@
 <link rel="icon" href="../../../icon.png">
 <link rel="stylesheet" href="../../sleep.css">
 <style>
-  #noise{--accent:var(--brown);margin-top:34px;text-align:center}
-  #noise h2{font:600 16px/24px var(--sans);margin:0 0 16px;color:var(--md-on-surface-variant);letter-spacing:.15px}
-  .chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px}
-  .chip{height:36px;display:inline-flex;align-items:center;gap:8px;padding:0 16px 0 10px;border-radius:10px;border:1px solid var(--md-outline);background:transparent;color:var(--md-on-surface-variant);font:600 14px/20px var(--sans);cursor:pointer;transition:background .2s}
-  .chip i{width:18px;height:18px;border-radius:50%;background:var(--c)}
-  .chip[aria-pressed=true]{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-color:transparent}
-  .chip[aria-pressed=true] i{background:none;display:grid;place-items:center}
-  .chip[aria-pressed=true] i::after{content:"";width:5px;height:10px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
-  .chip[data-color=white]{--c:var(--white)} .chip[data-color=pink]{--c:var(--pink)} .chip[data-color=brown]{--c:var(--brown)} .chip[data-color=green]{--c:var(--green)}
-  .stage{position:relative;width:176px;height:176px;margin:0 auto;display:grid;place-items:center}
-  .stage::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--accent);opacity:.14;transform:scale(.88);transition:opacity .4s}
-  #noise.on .stage::before{animation:breathe 8s ease-in-out infinite;opacity:.3}
-  @keyframes breathe{0%,100%{transform:scale(.82)}50%{transform:scale(1.12)}}
-  .play{position:relative;width:112px;height:112px;border-radius:50%;border:0;background:var(--md-primary);color:var(--md-on-primary);cursor:pointer;display:grid;place-items:center;
-    box-shadow:0 4px 8px 3px rgba(0,0,0,.25),0 1px 3px rgba(0,0,0,.4);transition:transform .15s}
-  .play:active{transform:scale(.95)}
-  .play svg{width:44px;height:44px;fill:currentColor}
-  [data-status]{margin:12px 0 20px;min-height:1.6em;color:var(--md-on-surface-variant);font-size:15px}
-  .field{text-align:left;max-width:400px;margin:0 auto 20px}
-  .field>span{display:block;font:600 12px/16px var(--sans);letter-spacing:.5px;text-transform:uppercase;color:var(--md-on-surface-variant);margin-bottom:12px}
-  input.m3s{-webkit-appearance:none;appearance:none;width:100%;height:16px;border-radius:8px;margin:14px 0;outline:none;
-    background:linear-gradient(90deg,var(--md-primary) 0 var(--v,45%),var(--md-secondary-container) var(--v,45%) 100%)}
-  input.m3s::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:44px;border-radius:2px;background:var(--md-primary);box-shadow:0 0 0 6px #1a2048}
-  input.m3s::-moz-range-thumb{width:4px;height:44px;border-radius:2px;background:var(--md-primary);border:0}
-  input.m3s:focus-visible{box-shadow:0 0 0 3px rgba(233,193,108,.5)}
-  .seg{display:flex;border:1px solid var(--md-outline);border-radius:20px;overflow:hidden}
-  .seg button{flex:1;height:40px;border:0;border-right:1px solid var(--md-outline);background:transparent;color:var(--ink);font:600 14px/20px var(--sans);cursor:pointer}
-  .seg button:last-child{border-right:0}
-  .seg button[aria-pressed=true]{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
-  .hint{margin:6px 0 0}
   .chart{width:100%;height:auto;margin:6px 0 4px}
   .chart text{fill:var(--muted);font-size:12px;font-family:var(--sans)}
 </style>
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "Generador de ruido gratis", "url": "https://filozen.app/sleep/noise/", "applicationCategory": "MultimediaApplication", "operatingSystem": "Any (web browser)", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Ruido marrón, blanco, rosa y verde generado en el navegador, con temporizador y sin anuncios.", "publisher": {"@id": "https://filozen.app/#glazikprod"}}, {"@type": "Organization", "@id": "https://filozen.app/#glazikprod", "name": "Glazik Prod", "url": "https://filozen.app/sleep/", "sameAs": ["https://www.youtube.com/@GlazikProdSleepMeditation"]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué color de ruido es mejor para dormir?", "acceptedAnswer": {"@type": "Answer", "text": "Ninguno ha demostrado ser el mejor. Elige el que menos notes. Mucha gente encuentra el marrón o el rosa más suaves que el blanco porque tienen menos agudos."}}, {"@type": "Question", "name": "¿El ruido rosa mejora el sueño profundo?", "acceptedAnswer": {"@type": "Answer", "text": "Los estudios de laboratorio usaban ráfagas muy cortas sincronizadas con las ondas cerebrales. El ruido rosa continuo toda la noche no ha mostrado el mismo efecto."}}, {"@type": "Question", "name": "¿El ruido marrón ayuda con el TDAH o la concentración?", "acceptedAnswer": {"@type": "Answer", "text": "Mucha gente dice que sí, pero no hay estudios fiables sobre el ruido marrón. Si te ayuda, úsalo a volumen bajo."}}, {"@type": "Question", "name": "¿Es seguro dormir con ruido toda la noche?", "acceptedAnswer": {"@type": "Answer", "text": "Mantén el volumen bajo, lejos de tu cabeza, y usa un temporizador. Con bebés, aleja el aparato de la cuna y pon el volumen al mínimo."}}, {"@type": "Question", "name": "¿Este generador de ruido es gratis?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Funciona en tu navegador, sin anuncios, sin cuenta y sin instalar nada."}}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","name":"Generador de ruido gratis","url":"https://filozen.app/sleep/noise/","applicationCategory":"MultimediaApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Ruido marrón, blanco, rosa y verde generado en el navegador, con temporizador y sin anuncios.","publisher":{"@id":"https://filozen.app/#glazikprod"}},{"@type":"Organization","@id":"https://filozen.app/#glazikprod","name":"Glazik Prod","url":"https://filozen.app/sleep/","sameAs":["https://www.youtube.com/@GlazikProdSleepMeditation"]},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Qué color de ruido es mejor para dormir?","acceptedAnswer":{"@type":"Answer","text":"Ninguno ha demostrado ser el mejor. Elige el que menos notes. Mucha gente encuentra el marrón o el rosa más suaves que el blanco porque tienen menos agudos."}},{"@type":"Question","name":"¿El ruido rosa mejora el sueño profundo?","acceptedAnswer":{"@type":"Answer","text":"Los estudios de laboratorio usaban ráfagas muy cortas sincronizadas con las ondas cerebrales. El ruido rosa continuo toda la noche no ha mostrado el mismo efecto."}},{"@type":"Question","name":"¿El ruido marrón ayuda con el TDAH o la concentración?","acceptedAnswer":{"@type":"Answer","text":"Mucha gente dice que sí, pero no hay estudios fiables sobre el ruido marrón. Si te ayuda, úsalo a volumen bajo."}},{"@type":"Question","name":"¿Es seguro dormir con ruido toda la noche?","acceptedAnswer":{"@type":"Answer","text":"Mantén el volumen bajo, lejos de tu cabeza, y usa un temporizador. Con bebés, aleja el aparato de la cuna y pon el volumen al mínimo."}},{"@type":"Question","name":"¿Este generador de ruido es gratis?","acceptedAnswer":{"@type":"Answer","text":"Sí. Funciona en tu navegador, sin anuncios, sin cuenta y sin instalar nada."}}]}]}
 </script>
 <!--i18n-->
 <link rel="alternate" hreflang="en" href="https://filozen.app/sleep/noise/">
@@ -73,7 +43,7 @@
     <h1>Ruido marrón, blanco o rosa: <em>encuentra tu sonido</em></h1>
     <p class="lead">Elige un color, dale a reproducir y pon el temporizador. Nada que instalar, sin cuenta y sin anuncios que te despierten. Más abajo, en qué se diferencian los colores y qué dice de verdad la investigación.</p>
 
-    <section id="noise" data-i18n='{"white": "Ruido blanco", "pink": "Ruido rosa", "brown": "Ruido marrón", "green": "Ruido verde", "ready": "Listo: {c}. Gratis, sin anuncios, nada que instalar.", "playing": "Sonando: {c}.", "stops": "{c} · Se apaga en {t}, con fundido suave", "play": "Reproducir", "pause": "Pausa", "old": "Tu navegador no puede generar sonido. Actualízalo."}' class="card" aria-label="Generador de ruido">
+    <section id="noise" data-i18n='{"white": "Ruido blanco", "pink": "Ruido rosa", "brown": "Ruido marrón", "green": "Ruido verde", "ready": "Listo: {c}. Gratis, sin anuncios, nada que instalar.", "playing": "Sonando: {c}.", "stops": "{c} · Se apaga en {t}, con fundido suave", "play": "Reproducir", "pause": "Pausa", "old": "Tu navegador no puede generar sonido. Actualízalo."}' class="card gen" aria-label="Generador de ruido">
       <h2>Generador de ruido</h2>
       <div class="chips" role="group" aria-label="Color del ruido">
         <button type="button" class="chip" data-color="white" aria-pressed="false"><i></i>Blanco</button>
@@ -142,6 +112,8 @@
   <h2>Cómo usar el ruido de forma segura</h2>
   <p>Mantén el volumen lo más bajo posible mientras funcione, como una conversación tranquila o menos, y aleja el altavoz de tu cabeza. Usa el temporizador para que el sonido se apague cuando te duermas.</p>
   <p>Con bebés, cuidado. Un estudio de 2014 en la revista Pediatrics midió 14 aparatos de ruido para bebés: a 30 cm, todos superaban los 50 dB recomendados en las salas de neonatos, y tres podían superar los límites laborales para adultos a todo volumen. Usa el volumen más bajo, aleja el aparato de la cuna y apágalo cuando el bebé se duerma.</p>
+
+  <p>¿Te interesan las ondas cerebrales? Lee <a href="../binaural/">¿funcionan los pulsos binaurales?</a> y prueba nuestro generador binaural gratis.</p>
 
   <h2>¿Prefieres un ambiente más largo?</h2>
   <p>Nuestro canal publica sesiones largas para dormir y meditar, con sonidos naturales y pantalla negra, para que tu móvil se quede a oscuras.</p>
