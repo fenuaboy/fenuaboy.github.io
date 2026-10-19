@@ -108,3 +108,19 @@ footer img{width:28px;height:28px;border-radius:50%}
 .vtxt{padding:14px 16px 16px}
 .vtxt b{display:block;font-weight:600;font-size:16px;line-height:1.4}
 .vtxt span{font-size:14px;color:var(--md-on-surface-variant)}
+
+/* Sélecteur de langue */
+.langs{position:relative;display:inline-block;margin-left:16px}
+.langs summary{list-style:none;cursor:pointer;color:var(--muted);font-weight:600;padding:2px 10px;border:1px solid var(--line);border-radius:999px;font-size:13px;letter-spacing:.04em}
+.langs summary::-webkit-details-marker{display:none}
+.langs div{position:absolute;right:0;top:calc(100% + 8px);z-index:20;min-width:150px;padding:6px;border-radius:14px;background:#1f2350;border:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.langs div a{display:block;margin:0;padding:8px 12px;border-radius:10px;color:var(--ink);font-weight:500}
+.langs div a:hover,.langs div a[aria-current]{background:rgba(255,255,255,.08)}
+.top nav{display:flex;align-items:center}
+@media (max-width:540px){.top nav .langs div a{display:block}.top nav>a:not(:last-child){display:none}}
+details.langs{border:0;padding:0}
+.langs summary{display:inline-flex;gap:6px;align-items:center}
+.langs summary::after{content:"";width:6px;height:6px;border:solid var(--muted);border-width:0 1.5px 1.5px 0;transform:translateY(-2px) rotate(45deg);font-size:0}
+details.langs[open] summary::after{transform:translateY(1px) rotate(-135deg)}
+.tool .swatch{align-self:flex-start}
+@media (max-width:540px){.top nav>a{display:none}.tool .swatch{flex-basis:48px;height:48px}}

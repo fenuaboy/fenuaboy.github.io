@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ruido marrón, blanco o rosa: generador de ruido gratis, sin anuncios</title>
+<meta name="description" content="Escucha ruido marrón, blanco, rosa o verde gratis en tu navegador, con temporizador y sin anuncios. Después descubre en qué se diferencian los colores y qué dice la investigación sobre el ruido y el sueño.">
+<link rel="canonical" href="https://filozen.app/sleep/es/noise/">
+<meta property="og:title" content="Ruido marrón, blanco o rosa: generador de ruido gratis">
+<meta property="og:description" content="Generador de ruido gratis con temporizador y sin anuncios, y una guía honesta sobre los colores de ruido y el sueño.">
+<meta property="og:url" content="https://filozen.app/sleep/es/noise/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070B1F">
+<script src="../../../consent.js"></script>
+<link rel="icon" href="../../../icon.png">
+<link rel="stylesheet" href="../../sleep.css">
+<style>
+  #noise{--accent:var(--brown);margin-top:34px;text-align:center}
+  #noise h2{font:600 16px/24px var(--sans);margin:0 0 16px;color:var(--md-on-surface-variant);letter-spacing:.15px}
+  .chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .chip{height:36px;display:inline-flex;align-items:center;gap:8px;padding:0 16px 0 10px;border-radius:10px;border:1px solid var(--md-outline);background:transparent;color:var(--md-on-surface-variant);font:600 14px/20px var(--sans);cursor:pointer;transition:background .2s}
+  .chip i{width:18px;height:18px;border-radius:50%;background:var(--c)}
+  .chip[aria-pressed=true]{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-color:transparent}
+  .chip[aria-pressed=true] i{background:none;display:grid;place-items:center}
+  .chip[aria-pressed=true] i::after{content:"";width:5px;height:10px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+  .chip[data-color=white]{--c:var(--white)} .chip[data-color=pink]{--c:var(--pink)} .chip[data-color=brown]{--c:var(--brown)} .chip[data-color=green]{--c:var(--green)}
+  .stage{position:relative;width:176px;height:176px;margin:0 auto;display:grid;place-items:center}
+  .stage::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--accent);opacity:.14;transform:scale(.88);transition:opacity .4s}
+  #noise.on .stage::before{animation:breathe 8s ease-in-out infinite;opacity:.3}
+  @keyframes breathe{0%,100%{transform:scale(.82)}50%{transform:scale(1.12)}}
+  .play{position:relative;width:112px;height:112px;border-radius:50%;border:0;background:var(--md-primary);color:var(--md-on-primary);cursor:pointer;display:grid;place-items:center;
+    box-shadow:0 4px 8px 3px rgba(0,0,0,.25),0 1px 3px rgba(0,0,0,.4);transition:transform .15s}
+  .play:active{transform:scale(.95)}
+  .play svg{width:44px;height:44px;fill:currentColor}
+  [data-status]{margin:12px 0 20px;min-height:1.6em;color:var(--md-on-surface-variant);font-size:15px}
+  .field{text-align:left;max-width:400px;margin:0 auto 20px}
+  .field>span{display:block;font:600 12px/16px var(--sans);letter-spacing:.5px;text-transform:uppercase;color:var(--md-on-surface-variant);margin-bottom:12px}
+  input.m3s{-webkit-appearance:none;appearance:none;width:100%;height:16px;border-radius:8px;margin:14px 0;outline:none;
+    background:linear-gradient(90deg,var(--md-primary) 0 var(--v,45%),var(--md-secondary-container) var(--v,45%) 100%)}
+  input.m3s::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:44px;border-radius:2px;background:var(--md-primary);box-shadow:0 0 0 6px #1a2048}
+  input.m3s::-moz-range-thumb{width:4px;height:44px;border-radius:2px;background:var(--md-primary);border:0}
+  input.m3s:focus-visible{box-shadow:0 0 0 3px rgba(233,193,108,.5)}
+  .seg{display:flex;border:1px solid var(--md-outline);border-radius:20px;overflow:hidden}
+  .seg button{flex:1;height:40px;border:0;border-right:1px solid var(--md-outline);background:transparent;color:var(--ink);font:600 14px/20px var(--sans);cursor:pointer}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed=true]{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+  .hint{margin:6px 0 0}
+  .chart{width:100%;height:auto;margin:6px 0 4px}
+  .chart text{fill:var(--muted);font-size:12px;font-family:var(--sans)}
+</style>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "Generador de ruido gratis", "url": "https://filozen.app/sleep/es/noise/", "applicationCategory": "MultimediaApplication", "operatingSystem": "Any (web browser)", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Ruido marrón, blanco, rosa y verde generado en el navegador, con temporizador y sin anuncios.", "publisher": {"@id": "https://filozen.app/#glazikprod"}}, {"@type": "Organization", "@id": "https://filozen.app/#glazikprod", "name": "Glazik Prod", "url": "https://filozen.app/sleep/", "sameAs": ["https://www.youtube.com/@GlazikProdSleepMeditation"]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué color de ruido es mejor para dormir?", "acceptedAnswer": {"@type": "Answer", "text": "Ninguno ha demostrado ser el mejor. Elige el que menos notes. Mucha gente encuentra el marrón o el rosa más suaves que el blanco porque tienen menos agudos."}}, {"@type": "Question", "name": "¿El ruido rosa mejora el sueño profundo?", "acceptedAnswer": {"@type": "Answer", "text": "Los estudios de laboratorio usaban ráfagas muy cortas sincronizadas con las ondas cerebrales. El ruido rosa continuo toda la noche no ha mostrado el mismo efecto."}}, {"@type": "Question", "name": "¿El ruido marrón ayuda con el TDAH o la concentración?", "acceptedAnswer": {"@type": "Answer", "text": "Mucha gente dice que sí, pero no hay estudios fiables sobre el ruido marrón. Si te ayuda, úsalo a volumen bajo."}}, {"@type": "Question", "name": "¿Es seguro dormir con ruido toda la noche?", "acceptedAnswer": {"@type": "Answer", "text": "Mantén el volumen bajo, lejos de tu cabeza, y usa un temporizador. Con bebés, aleja el aparato de la cuna y pon el volumen al mínimo."}}, {"@type": "Question", "name": "¿Este generador de ruido es gratis?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Funciona en tu navegador, sin anuncios, sin cuenta y sin instalar nada."}}]}]}
+</script>
+<!--i18n-->
+<link rel="alternate" hreflang="en" href="https://filozen.app/sleep/noise/">
+<link rel="alternate" hreflang="fr" href="https://filozen.app/sleep/fr/noise/">
+<link rel="alternate" hreflang="es" href="https://filozen.app/sleep/es/noise/">
+<link rel="alternate" hreflang="de" href="https://filozen.app/sleep/de/noise/">
+<link rel="alternate" hreflang="pt-BR" href="https://filozen.app/sleep/pt/noise/">
+<link rel="alternate" hreflang="it" href="https://filozen.app/sleep/it/noise/">
+<link rel="alternate" hreflang="x-default" href="https://filozen.app/sleep/noise/">
+<!--/i18n-->
+</head>
+<body>
+<header class="sky">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="../"><img src="../../logo.png" alt="" width="36" height="36">Glazik Prod Sleep</a>
+      <nav><!--lang--><details class="langs"><summary>ES</summary><div><a href="/sleep/noise/" hreflang="en" lang="en">English</a><a href="/sleep/fr/noise/" hreflang="fr" lang="fr">Français</a><a href="/sleep/es/noise/" hreflang="es" lang="es" aria-current="true">Español</a><a href="/sleep/de/noise/" hreflang="de" lang="de">Deutsch</a><a href="/sleep/pt/noise/" hreflang="pt-BR" lang="pt-BR">Português</a><a href="/sleep/it/noise/" hreflang="it" lang="it">Italiano</a></div></details><!--/lang--><a href="../">Sonidos</a><a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a></nav>
+    </div>
+    <span class="eyebrow">Herramienta gratis · Sin anuncios</span>
+    <h1>Ruido marrón, blanco o rosa: <em>encuentra tu sonido</em></h1>
+    <p class="lead">Elige un color, dale a reproducir y pon el temporizador. Nada que instalar, sin cuenta y sin anuncios que te despierten. Más abajo, en qué se diferencian los colores y qué dice de verdad la investigación.</p>
+
+    <section id="noise" data-i18n='{"white": "Ruido blanco", "pink": "Ruido rosa", "brown": "Ruido marrón", "green": "Ruido verde", "ready": "Listo: {c}. Gratis, sin anuncios, nada que instalar.", "playing": "Sonando: {c}.", "stops": "{c} · Se apaga en {t}, con fundido suave", "play": "Reproducir", "pause": "Pausa", "old": "Tu navegador no puede generar sonido. Actualízalo."}' class="card" aria-label="Generador de ruido">
+      <h2>Generador de ruido</h2>
+      <div class="chips" role="group" aria-label="Color del ruido">
+        <button type="button" class="chip" data-color="white" aria-pressed="false"><i></i>Blanco</button>
+        <button type="button" class="chip" data-color="pink" aria-pressed="false"><i></i>Rosa</button>
+        <button type="button" class="chip" data-color="brown" aria-pressed="true"><i></i>Marrón</button>
+        <button type="button" class="chip" data-color="green" aria-pressed="false"><i></i>Verde</button>
+      </div>
+      <div class="stage"><button type="button" class="play" data-play aria-pressed="false" aria-label="Reproducir"></button></div>
+      <p data-status aria-live="polite"></p>
+      <label class="field"><span>Volumen</span><input class="m3s" type="range" min="0" max="100" value="45" data-vol></label>
+      <div class="field"><span id="tl">Temporizador</span>
+        <div class="seg" role="group" aria-labelledby="tl" data-timer>
+          <button type="button" data-min="0" aria-pressed="false">Sin</button>
+          <button type="button" data-min="15" aria-pressed="false">15 min</button>
+          <button type="button" data-min="30" aria-pressed="true">30 min</button>
+          <button type="button" data-min="60" aria-pressed="false">1 h</button>
+          <button type="button" data-min="90" aria-pressed="false">90 min</button>
+        </div>
+      </div>
+      <p class="small muted hint">En iPhone, el sonido puede detenerse cuando se bloquea la pantalla. Deja la página abierta o pon uno de nuestros vídeos largos más abajo.</p>
+    </section>
+  </div>
+</header>
+<main class="wrap">
+
+  <h2>¿Qué diferencia hay entre el ruido blanco, rosa, marrón y verde?</h2>
+  <p>Los cuatro contienen todas las frecuencias audibles a la vez. Lo que cambia es el volumen de los graves en comparación con los agudos.</p>
+  <p><strong>El ruido blanco</strong> da la misma energía a todas las frecuencias. Nuestro oído percibe muchos agudos, por eso suena como un siseo: una radio mal sintonizada, un ventilador al máximo.</p>
+  <p><strong>El ruido rosa</strong> baja 3 dB cada vez que la frecuencia se duplica. El siseo se suaviza y suena como una lluvia constante o el viento entre los árboles.</p>
+  <p><strong>El ruido marrón</strong> (también llamado ruido rojo o browniano) baja el doble de rápido, 6 dB por octava. Queda un rumor grave, como una cascada a lo lejos o el interior de un avión.</p>
+  <p><strong>El ruido verde</strong> no tiene definición científica. En internet se llama así al ruido centrado en las frecuencias medias, alrededor de 500 Hz, que algunos comparan con el sonido de fondo de la naturaleza. Nuestra versión es ruido blanco filtrado alrededor de 500 Hz.</p>
+
+  <svg class="chart" viewBox="0 0 600 260" role="img" aria-label="Gráfico que compara el espectro del ruido blanco, rosa, marrón y verde">
+    <line x1="40" y1="230" x2="580" y2="230" stroke="#2A3170"/>
+    <line x1="40" y1="12" x2="40" y2="230" stroke="#2A3170"/>
+    <polyline fill="none" stroke="var(--white)" stroke-width="3" points="40,20 580,20"/>
+    <polyline fill="none" stroke="var(--pink)" stroke-width="3" points="40,20 580,119"/>
+    <polyline fill="none" stroke="var(--brown)" stroke-width="3" points="40,20 580,218"/>
+    <polyline fill="none" stroke="var(--green)" stroke-width="3" points="40,98.5 94,94.9 148,82.4 202,55.6 256,26.9 310,22.3 364,46.7 418,76.1 472,92.6 526,97.9 580,99.2"/>
+    <text x="40" y="248">20 Hz</text><text x="205" y="248">200 Hz</text><text x="385" y="248">2 kHz</text><text x="545" y="248">20 kHz</text>
+    <text x="520" y="14">Blanco</text><text x="520" y="112">Rosa</text><text x="520" y="210">Marrón</text><text x="290" y="16">Verde</text>
+  </svg>
+  <p class="small muted">Volumen relativo según la frecuencia (escala logarítmica). Cuanto más baja la línea, más suave a esa altura.</p>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Color</th><th>Suena como</th><th>Se usa a menudo para</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dot" style="background:var(--white)"></span>Blanco</td><td>Siseo, ventilador, radio mal sintonizada</td><td>Tapar voces y ruidos repentinos</td></tr>
+      <tr><td><span class="dot" style="background:var(--pink)"></span>Rosa</td><td>Lluvia constante, viento</td><td>Dormir, más suave que el blanco</td></tr>
+      <tr><td><span class="dot" style="background:var(--brown)"></span>Marrón</td><td>Cascada lejana, cabina de avión</td><td>Dormir, concentrarse, tapar el rumor del tráfico</td></tr>
+      <tr><td><span class="dot" style="background:var(--green)"></span>Verde</td><td>Medios suaves, parecido a la naturaleza</td><td>Relajarse</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>¿Cuál es mejor para dormir?</h2>
+  <p>La respuesta honesta: nadie lo sabe con certeza. En 2021, un equipo de investigadores del sueño revisó 38 estudios sobre ruido continuo y sueño. Calificaron como muy baja la evidencia de que mejore el sueño. Algunos estudios vieron que la gente se dormía antes, al menos uno encontró un sueño más interrumpido.</p>
+  <p>El ruido rosa recibe más atención por estudios de laboratorio en los que se reproducían ráfagas muy cortas de ruido rosa al ritmo de las propias ondas de sueño profundo de la persona. Esas ondas se reforzaban y la memoria mejoraba al día siguiente. Ese sistema mide el cerebro en tiempo real. Poner ruido rosa toda la noche en un altavoz es otra cosa, y no ha mostrado el mismo resultado.</p>
+  <p>El ruido marrón se hizo popular en redes sociales, pero aún no hay estudios sobre él y el sueño.</p>
+  <p>Lo que sí parece funcionar en la práctica es el enmascaramiento: un sonido constante hace menos perceptibles una puerta, un coche o un vecino. Así que el mejor color es el que dejas de notar. Si el blanco te parece áspero, prueba el rosa. Si el rosa aún te parece agudo, prueba el marrón.</p>
+
+  <h2>Ruido marrón, concentración y TDAH</h2>
+  <p>Muchas personas con TDAH dicen que el ruido marrón les ayuda a concentrarse, y esa experiencia es real para ellas. La ciencia todavía no ha llegado: pequeños estudios sobre ruido blanco y atención dan resultados dispares, y no hay estudios fiables sobre el ruido marrón. Si te ayuda a trabajar, úsalo, con el volumen bajo.</p>
+
+  <h2>Cómo usar el ruido de forma segura</h2>
+  <p>Mantén el volumen lo más bajo posible mientras funcione, como una conversación tranquila o menos, y aleja el altavoz de tu cabeza. Usa el temporizador para que el sonido se apague cuando te duermas.</p>
+  <p>Con bebés, cuidado. Un estudio de 2014 en la revista Pediatrics midió 14 aparatos de ruido para bebés: a 30 cm, todos superaban los 50 dB recomendados en las salas de neonatos, y tres podían superar los límites laborales para adultos a todo volumen. Usa el volumen más bajo, aleja el aparato de la cuna y apágalo cuando el bebé se duerma.</p>
+
+  <h2>¿Prefieres un ambiente más largo?</h2>
+  <p>Nuestro canal publica sesiones largas para dormir y meditar, con sonidos naturales y pantalla negra, para que tu móvil se quede a oscuras.</p>
+  <div class="grid2">
+    <article class="vcard"><button type="button" class="video" data-id="WGoW4cPYOYA" aria-label="Reproducir: Thunderstorm sounds for deep sleep, 3 hours, black screen"><i></i></button><div class="vtxt"><b>Tormenta para un sueño profundo</b><span>3 horas · Pantalla negra</span></div></article>
+    <article class="vcard"><button type="button" class="video" data-id="zABgG_wo2Fs" aria-label="Reproducir: Beach night sounds, theta waves, 1 hour"><i></i></button><div class="vtxt"><b>Playa de noche</b><span>Ondas theta · 1 hora</span></div></article>
+  </div>
+
+  <h2>Preguntas</h2>
+  <details><summary>¿Qué color de ruido es mejor para dormir?</summary><p>Ninguno ha demostrado ser el mejor. Elige el que menos notes. Mucha gente encuentra el marrón o el rosa más suaves que el blanco porque tienen menos agudos.</p></details>
+  <details><summary>¿El ruido rosa mejora el sueño profundo?</summary><p>Los estudios de laboratorio usaban ráfagas muy cortas sincronizadas con las ondas cerebrales. El ruido rosa continuo toda la noche no ha mostrado el mismo efecto.</p></details>
+  <details><summary>¿El ruido marrón ayuda con el TDAH o la concentración?</summary><p>Mucha gente dice que sí, pero no hay estudios fiables sobre el ruido marrón. Si te ayuda, úsalo a volumen bajo.</p></details>
+  <details><summary>¿Es seguro dormir con ruido toda la noche?</summary><p>Mantén el volumen bajo, lejos de tu cabeza, y usa un temporizador. Con bebés, aleja el aparato de la cuna y pon el volumen al mínimo.</p></details>
+  <details><summary>¿Este generador de ruido es gratis?</summary><p>Sí. Funciona en tu navegador, sin anuncios, sin cuenta y sin instalar nada.</p></details>
+
+  <h2>Fuentes</h2>
+  <p class="small muted">
+    Riedy SM et al. Noise as a sleep aid: a systematic review. Sleep Medicine Reviews, 2021. <a href="https://pubmed.ncbi.nlm.nih.gov/33007706/">PubMed</a><br>
+    Ngo HV et al. Auditory closed-loop stimulation of the sleep slow oscillation enhances memory. Neuron, 2013. <a href="https://doi.org/10.1016/j.neuron.2013.03.006">DOI</a><br>
+    Capezuti E et al. Systematic review: auditory stimulation and sleep. Journal of Clinical Sleep Medicine, 2022. <a href="https://pubmed.ncbi.nlm.nih.gov/34964434/">PubMed</a><br>
+    Hugh SC et al. Infant sleep machines and hazardous sound pressure levels. Pediatrics, 2014. <a href="https://doi.org/10.1542/peds.2013-3617">DOI</a>
+  </p>
+  <p class="small muted">Esta página ofrece información general y no sustituye el consejo médico. Si tus problemas de sueño persisten, consulta a un médico.</p>
+
+  <footer>
+    <img src="../../logo.png" alt="" width="28" height="28"><span>Creado por <a href="../">Glazik Prod</a></span>
+    <a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a>
+    <a href="../../../cookies.html">Cookies</a><a href="mailto:contact@filozen.app">Contact</a>
+  </footer>
+</main>
+<script src="../../noise/noise.js"></script>
+<script src="../../sleep.js"></script>
+</body>
+</html>

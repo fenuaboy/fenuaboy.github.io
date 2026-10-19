@@ -17,13 +17,16 @@
     'registerProcessor("noise",Noise);'
   ].join('\n');
 
-  var COLORS = {
-    white: { label: 'White' }, pink: { label: 'Pink' },
-    brown: { label: 'Brown' }, green: { label: 'Green' }
+  var T = {
+    white: 'White noise', pink: 'Pink noise', brown: 'Brown noise', green: 'Green noise',
+    ready: 'Ready: {c}. Free, no ads, nothing to install.', playing: 'Playing {c}.',
+    stops: '{c} · Stops in {t}, with a gentle fade', play: 'Play', pause: 'Pause',
+    old: 'Your browser cannot play generated sound. Please update it.'
   };
 
   var root = document.getElementById('noise');
   if (!root) return;
+  try { var tr = JSON.parse(root.dataset.i18n || '{}'); for (var k in tr) T[k] = tr[k]; } catch (e) {}
   var playBtn = root.querySelector('[data-play]');
   var vol = root.querySelector('[data-vol]');
   var seg = root.querySelector('[data-timer]');
@@ -54,7 +57,7 @@
       try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
       var AC = window.AudioContext || window.webkitAudioContext;
       if (!AC || !('audioWorklet' in AC.prototype)) {
-        status.textContent = 'Your browser cannot play generated sound. Please update it.';
+        status.textContent = T.old;
         return;
       }
       ctx = new AC();
@@ -106,14 +109,14 @@
       ? '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg>'
       : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>');
     playBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
-    playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    playBtn.setAttribute('aria-label', playing ? T.pause : T.play);
     root.classList.toggle('on', playing);
-    var label = COLORS[color].label + ' noise';
-    if (!playing) status.textContent = 'Ready: ' + label + '. Free, no ads, nothing to install.';
+    var label = T[color];
+    if (!playing) status.textContent = T.ready.replace('{c}', label);
     else if (endAt) {
       var s = Math.max(0, Math.round((endAt - Date.now()) / 1000));
-      status.textContent = label + ' · Stops in ' + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0') + ', with a gentle fade';
-    } else status.textContent = 'Playing ' + label + '.';
+      status.textContent = T.stops.replace('{c}', label).replace('{t}', Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'));
+    } else status.textContent = T.playing.replace('{c}', label);
   }
 
   colorBtns.forEach(function (b) {
