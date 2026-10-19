@@ -1,0 +1,23 @@
+# Glazik Prod (filozen.app)
+
+> Glazik Prod is a small independent studio that makes calm, free things with no ads and no account: Filozen, a daily one-thread number puzzle for iPhone, and Glazik Prod Sleep, sleep and meditation sounds with free web tools and honest, sourced guides. The site is available in English, French, Spanish, German, Brazilian Portuguese and Italian.
+
+Our guides state plainly what research shows and what it does not. We make no medical claims.
+
+## Filozen
+
+- [Filozen on the App Store](https://apps.apple.com/app/id6816490789): free daily puzzle with no ads. Connect the numbers in order with a single thread that fills every cell of the grid.
+- [Home page](https://filozen.app/): overview of Filozen and Glazik Prod Sleep.
+
+## Sleep and meditation
+
+- [Glazik Prod Sleep](https://filozen.app/sleep/): long black screen videos for sleep and meditation (thunderstorm, ocean, theta waves, 40 Hz morning sessions) and free tools.
+- [Brown vs white vs pink noise](https://filozen.app/sleep/noise/): free noise generator with a sleep timer, how the noise colors differ, and what studies say about noise and sleep.
+- [Do binaural beats work?](https://filozen.app/sleep/binaural/): free binaural beat generator and an evidence-based answer covering brain wave entrainment, anxiety, sleep, 40 Hz research and headphones.
+- [YouTube channel](https://www.youtube.com/@GlazikProdSleepMeditation): Glazik Prod Sleep & Meditation.
+
+## Optional
+
+- [Filozen privacy policy](https://filozen.app/privacy.html): the app collects no data.
+- [Cookies and site analytics](https://filozen.app/cookies.html)
+- Contact: contact@filozen.app
