@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filozen e Glazik Prod Sleep: un rompicapo quotidiano rilassante e suoni per dormire</title>
+<meta name="description" content="Glazik Prod crea cose calme. Filozen, un rompicapo quotidiano gratis e senza pubblicità, e Glazik Prod Sleep, suoni gratis per dormire e meditare.">
+<link rel="canonical" href="https://filozen.app/it/">
+<meta property="og:title" content="Filozen e Glazik Prod Sleep">
+<meta property="og:description" content="Un rompicapo calmo per il mattino, suoni per dormire e meditare la sera. Gratis, senza pubblicità.">
+<meta property="og:url" content="https://filozen.app/it/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070B1F">
+<script src="../consent.js"></script>
+<link rel="icon" href="../icon.png">
+<link rel="stylesheet" href="../sleep/sleep.css">
+<style>
+  .sky{padding-bottom:40px}
+  .hero{position:relative;text-align:center;padding:30px 0 8px}
+  .hero .eyebrow{margin-top:40px}
+  .hero h1{font-size:clamp(40px,9vw,72px);margin:14px auto 18px;max-width:12ch}
+  .hero .lead{margin:0 auto}
+  .tiles{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:44px auto 0;max-width:1080px;padding:0 20px}
+  @media (max-width:860px){.tiles{grid-template-columns:1fr;max-width:560px}}
+  .tile{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:440px;border-radius:32px;overflow:hidden;
+    text-decoration:none;color:var(--ink);border:1px solid var(--line);isolation:isolate;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+  @media (max-width:860px){.tile{min-height:430px}}
+  .tile:hover{transform:translateY(-6px);box-shadow:0 26px 70px rgba(0,0,0,.5)}
+  .tile .art{position:absolute;inset:0;z-index:-1;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+  .tile:hover .art{transform:scale(1.05)}
+  .tile .txt{padding:24px;background:linear-gradient(transparent,rgba(5,8,23,.78) 38%);padding-top:70px}
+  .tile .kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2)}
+  .tile h2{margin:6px 0 6px;font-size:32px}
+  .tile p{margin:0 0 14px;color:#d4d6ea;font-size:16px;line-height:1.55}
+  .tile .cta{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 20px;border-radius:20px;background:var(--md-primary);color:var(--md-on-primary);font-weight:600;font-size:14px}
+  .tile .cta.tonal{background:rgba(255,255,255,.12);color:var(--ink);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+
+  /* Tuile Filozen : la grille et son fil */
+  .art.app{background:radial-gradient(500px 300px at 70% 10%,rgba(138,92,246,.45),transparent 70%),linear-gradient(160deg,#1B1640,#0B1230 70%)}
+  .art.app svg{position:absolute;left:50%;top:28%;width:min(190px,50%);transform:translate(-50%,-50%) rotate(-6deg);filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
+  .art.app .thread{stroke-dasharray:640;stroke-dashoffset:640;animation:draw 6s ease-in-out infinite}
+  @keyframes draw{0%{stroke-dashoffset:640}45%,75%{stroke-dashoffset:0}100%{stroke-dashoffset:-640}}
+  .art.app img{position:absolute;right:20px;top:20px;width:56px;height:56px;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+
+  /* Tuile Sommeil : ciel, lune, horizon */
+  .art.sleep{background:radial-gradient(600px 260px at 50% 100%,rgba(233,140,108,.35),transparent 65%),linear-gradient(180deg,#050817,#0B1230 60%,#1a2050)}
+  .art.sleep::before{content:"";position:absolute;inset:0;opacity:.9;background-image:
+    radial-gradient(1.3px 1.3px at 15% 20%,#fff,transparent),radial-gradient(1px 1px at 35% 12%,#fff,transparent),radial-gradient(1.2px 1.2px at 62% 26%,#fff,transparent),
+    radial-gradient(1px 1px at 82% 14%,#fff,transparent),radial-gradient(1px 1px at 22% 44%,#fff,transparent),radial-gradient(1.2px 1.2px at 74% 46%,#fff,transparent),
+    radial-gradient(1px 1px at 48% 36%,#fff,transparent),radial-gradient(1px 1px at 90% 34%,#fff,transparent);animation:twinkle 6s ease-in-out infinite alternate}
+  .art.sleep .bigmoon{position:absolute;left:50%;top:18%;width:120px;height:120px;margin-left:-60px;border-radius:50%;box-shadow:inset -26px 10px 0 0 var(--gold2);transform:rotate(-20deg);filter:drop-shadow(0 0 30px rgba(245,213,139,.45))}
+  .art.sleep .hill{position:absolute;left:-10%;right:-10%;bottom:-40px;height:46%;background:radial-gradient(70% 100% at 50% 100%,#0a0f2a 60%,transparent 61%)}
+
+  /* Tuile Méditation : cercles qui respirent */
+  .art.medi{background:radial-gradient(500px 340px at 50% 30%,rgba(134,213,168,.22),transparent 70%),linear-gradient(170deg,#0d2a2e,#0B1230 75%)}
+  .art.medi i{position:absolute;left:50%;top:28%;border-radius:50%;border:1.5px solid rgba(245,213,139,.55);transform:translate(-50%,-50%);animation:breathe2 8s ease-in-out infinite}
+  .art.medi i:nth-child(1){width:70px;height:70px;background:rgba(245,213,139,.18)}
+  .art.medi i:nth-child(2){width:140px;height:140px;animation-delay:.4s;opacity:.7}
+  .art.medi i:nth-child(3){width:220px;height:220px;animation-delay:.8s;opacity:.45}
+  .art.medi i:nth-child(4){width:310px;height:310px;animation-delay:1.2s;opacity:.25}
+  @keyframes breathe2{0%,100%{transform:translate(-50%,-50%) scale(.86)}50%{transform:translate(-50%,-50%) scale(1.08)}}
+
+  .breath{max-width:620px;margin:80px auto 0;text-align:center}
+  .breath p{color:var(--muted)}
+  .home-footer{max-width:1080px;margin:0 auto;padding:0 20px}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"Organization","@id":"https://filozen.app/#glazikprod","name":"Glazik Prod","url":"https://filozen.app/","logo":"https://filozen.app/sleep/logo.png","sameAs":["https://www.youtube.com/@GlazikProdSleepMeditation","https://apps.apple.com/app/id6816490789"]},
+ {"@type":"MobileApplication","name":"Filozen","operatingSystem":"iOS","applicationCategory":"GameApplication","url":"https://apps.apple.com/app/id6816490789","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Un rompicapo quotidiano gratis: collega i numeri in ordine con un solo filo che riempie tutta la griglia. Senza pubblicità.","publisher":{"@id":"https://filozen.app/#glazikprod"}}
+]}
+</script>
+<!--i18n-->
+<link rel="alternate" hreflang="en" href="https://filozen.app/">
+<link rel="alternate" hreflang="fr" href="https://filozen.app/fr/">
+<link rel="alternate" hreflang="es" href="https://filozen.app/es/">
+<link rel="alternate" hreflang="de" href="https://filozen.app/de/">
+<link rel="alternate" hreflang="pt-BR" href="https://filozen.app/pt/">
+<link rel="alternate" hreflang="it" href="https://filozen.app/it/">
+<link rel="alternate" hreflang="x-default" href="https://filozen.app/">
+<!--/i18n-->
+</head>
+<body>
+<header class="sky">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="./"><img src="../sleep/logo.png" alt="" width="36" height="36">Glazik Prod</a>
+      <nav><!--lang--><details class="langs"><summary>IT</summary><div><a href="/" hreflang="en" lang="en">English</a><a href="/fr/" hreflang="fr" lang="fr">Français</a><a href="/es/" hreflang="es" lang="es">Español</a><a href="/de/" hreflang="de" lang="de">Deutsch</a><a href="/pt/" hreflang="pt-BR" lang="pt-BR">Português</a><a href="/it/" hreflang="it" lang="it" aria-current="true">Italiano</a></div></details><!--/lang--><a href="../sleep/it/">Dormire</a><a href="https://apps.apple.com/app/id6816490789">Filozen</a></nav>
+    </div>
+    <div class="hero">
+      <span class="eyebrow">Cose calme, fatte con cura</span>
+      <h1>Non perdere <em>il filo.</em></h1>
+      <p class="lead">Un rompicapo per svegliare la mente al mattino. Suoni per calmarla la sera. Gratis, senza pubblicità, senza chiedere nulla in cambio.</p>
+    </div>
+  </div>
+  <div class="tiles">
+    <a class="tile" href="https://apps.apple.com/app/id6816490789">
+      <div class="art app" aria-hidden="true">
+        <img src="../icon.png" alt="">
+        <svg viewBox="0 0 200 200">
+          <rect x="4" y="4" width="192" height="192" rx="26" fill="#ECEEFF"/>
+          <g stroke="#D9DBF5" stroke-width="2"><path d="M52 4v192M100 4v192M148 4v192M4 52h192M4 100h192M4 148h192"/></g>
+          <path class="thread" d="M28 28H172V76H28V124H172V172H28" fill="none" stroke="#E2B655" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+          <g font-family="Inter,Arial" font-weight="800" font-size="20" text-anchor="middle" fill="#1B1640">
+            <circle cx="28" cy="28" r="15" fill="#fff"/><text x="28" y="35">1</text>
+            <circle cx="172" cy="76" r="15" fill="#fff"/><text x="172" y="83">2</text>
+            <circle cx="28" cy="124" r="15" fill="#fff"/><text x="28" y="131">3</text>
+            <circle cx="28" cy="172" r="15" fill="#fff"/><text x="28" y="179">4</text>
+          </g>
+        </svg>
+      </div>
+      <div class="txt">
+        <span class="kicker">App · Mattino</span>
+        <h2>Filozen</h2>
+        <p>Una griglia al giorno per diradare la nebbia del mattino. Collega i numeri con un solo filo che riempie ogni casella.</p>
+        <span class="cta">Gratis su App Store</span>
+      </div>
+    </a>
+    <a class="tile" href="../sleep/it/#sleep">
+      <div class="art sleep" aria-hidden="true"><div class="bigmoon"></div><div class="hill"></div></div>
+      <div class="txt">
+        <span class="kicker">Sonno · Notte</span>
+        <h2>Dormire</h2>
+        <p>Lunghe sessioni a schermo nero, temporali e onde del mare, e un generatore di rumore gratis con timer.</p>
+        <span class="cta tonal">Addormentarsi →</span>
+      </div>
+    </a>
+    <a class="tile" href="../sleep/it/#meditate">
+      <div class="art medi" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="txt">
+        <span class="kicker">Meditazione · In ogni momento</span>
+        <h2>Meditare</h2>
+        <p>Onde theta, il Sutra del Cuore, una spiaggia di notte. Trenta minuti per respirare e tornare a te.</p>
+        <span class="cta tonal">Respira →</span>
+      </div>
+    </a>
+  </div>
+</header>
+<main class="wrap">
+  <section class="breath">
+    <h2>Fatto con calma, di proposito</h2>
+    <p>Glazik Prod è un piccolo studio indipendente. Niente pubblicità che ti sveglia, nessun account da creare, nessun dato venduto. Solo alcune cose calme che vorremmo usare noi stessi.</p>
+  </section>
+</main>
+<div class="home-footer">
+  <footer>
+    <img src="../sleep/logo.png" alt="" width="28" height="28"><span>Glazik Prod</span>
+    <a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a>
+    <a href="../privacy.html">Privacy di Filozen</a>
+    <a href="../cartes-de-mamie/confidentialite.html">Les cartes de Mamie</a>
+    <a href="../cookies.html">Cookies</a>
+    <a href="mailto:contact@filozen.app">contact@filozen.app</a>
+  </footer>
+</div>
+</body>
+</html>
