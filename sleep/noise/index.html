@@ -10,25 +10,35 @@
 <meta property="og:description" content="Free noise generator with a sleep timer and no ads, plus an honest guide to noise colors and sleep.">
 <meta property="og:url" content="https://filozen.app/sleep/noise/">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0E1230">
+<meta name="theme-color" content="#070B1F">
 <script src="../../consent.js"></script>
 <link rel="icon" href="../../icon.png">
 <link rel="stylesheet" href="../sleep.css">
 <style>
-  #noise{--accent:var(--brown)}
-  .colors{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 18px}
-  .colors button{font:inherit;font-weight:800;font-size:15px;padding:12px 6px;border-radius:14px;border:2px solid var(--line);background:var(--bg2);color:var(--ink);cursor:pointer}
-  .colors button[aria-pressed=true]{border-color:currentColor}
-  .colors [data-color=white]{color:var(--white)} .colors [data-color=pink]{color:var(--pink)}
-  .colors [data-color=brown]{color:var(--brown)} .colors [data-color=green]{color:var(--green)}
-  .play{display:block;width:100%;font:inherit;font-size:20px;font-weight:800;padding:16px;border:0;border-radius:16px;background:var(--accent);color:#0E1230;cursor:pointer}
-  .row{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
-  .row label{font-weight:700;font-size:15px;color:var(--muted)}
-  .row input[type=range]{flex:1;min-width:160px;accent-color:var(--accent)}
-  .row select{font:inherit;font-size:15px;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
-  [data-status]{margin:14px 0 0;min-height:1.6em;color:var(--muted);font-size:15px}
+  #noise{--accent:var(--brown);margin-top:34px;text-align:center}
+  .colors{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 0 26px}
+  .colors button{font:inherit;font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;padding:9px 16px 9px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);cursor:pointer;transition:background .2s,border-color .2s}
+  .colors button::before{content:"";width:18px;height:18px;border-radius:50%;background:var(--c)}
+  .colors button[aria-pressed=true]{border-color:var(--c);background:rgba(255,255,255,.1)}
+  .colors [data-color=white]{--c:var(--white)} .colors [data-color=pink]{--c:var(--pink)}
+  .colors [data-color=brown]{--c:var(--brown)} .colors [data-color=green]{--c:var(--green)}
+  .stage{position:relative;width:168px;height:168px;margin:0 auto 8px;display:grid;place-items:center}
+  .stage::before,.stage::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,var(--accent) 0%,transparent 68%);opacity:.18;transition:opacity .4s}
+  #noise.on .stage::before{animation:breathe 8s ease-in-out infinite;opacity:.45}
+  #noise.on .stage::after{animation:breathe 8s ease-in-out infinite 4s;opacity:.25}
+  @keyframes breathe{0%,100%{transform:scale(.85)}50%{transform:scale(1.25)}}
+  .play{position:relative;z-index:1;width:112px;height:112px;border-radius:50%;border:0;background:var(--accent);color:var(--night);cursor:pointer;
+    font:600 15px var(--sans);box-shadow:0 10px 40px rgba(0,0,0,.4),inset 0 -6px 14px rgba(0,0,0,.18);transition:transform .15s}
+  .play:active{transform:scale(.96)}
+  .play svg{display:block;margin:0 auto 2px;width:30px;height:30px;fill:currentColor}
+  .controls{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;max-width:440px;margin:18px auto 0;text-align:left}
+  .controls label{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  input[type=range]{width:100%;accent-color:var(--accent);grid-column:1/-1;margin:-6px 0 4px}
+  select{font:inherit;font-size:15px;background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+  [data-status]{margin:18px 0 0;min-height:1.6em;color:var(--ink);font-size:15px}
+  .hint{margin:6px 0 0}
   .chart{width:100%;height:auto;margin:6px 0 4px}
-  .chart text{fill:var(--muted);font-size:12px;font-family:inherit}
+  .chart text{fill:var(--muted);font-size:12px;font-family:var(--sans)}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
@@ -45,37 +55,43 @@
 </script>
 </head>
 <body>
-<div class="wrap">
-  <nav class="top"><a class="brand" href="../">Glazik Prod Sleep</a><a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a></nav>
+<header class="sky">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="top">
+      <a class="brand" href="../"><img src="../logo.png" alt="" width="36" height="36">Glazik Prod Sleep</a>
+      <nav><a href="../">Sounds</a><a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a></nav>
+    </div>
+    <span class="eyebrow">Free tool · No ads</span>
+    <h1>Brown, white or pink noise: <em>find your sound</em></h1>
+    <p class="lead">Pick a color, press play, set a timer. Nothing to install, no account, and no ad to wake you up. Below, how the colors differ and what research actually says.</p>
 
-  <h1>Brown vs White vs Pink Noise: free noise generator</h1>
-  <p class="lead">Pick a color, press play, set a timer. No ads to wake you up, no account, nothing to install. Below, how the colors differ and what research actually says about noise and sleep.</p>
-
-  <section id="noise" class="card" aria-label="Noise generator">
-    <div class="colors" role="group" aria-label="Noise color">
-      <button type="button" data-color="white" aria-pressed="false">White</button>
-      <button type="button" data-color="pink" aria-pressed="false">Pink</button>
-      <button type="button" data-color="brown" aria-pressed="true">Brown</button>
-      <button type="button" data-color="green" aria-pressed="false">Green</button>
-    </div>
-    <button type="button" class="play" data-play aria-pressed="false">Play</button>
-    <div class="row">
-      <label for="vol">Volume</label>
-      <input id="vol" type="range" min="0" max="100" value="45" data-vol>
-    </div>
-    <div class="row">
-      <label for="timer">Sleep timer</label>
-      <select id="timer" data-timer>
-        <option value="0">Off</option>
-        <option value="15">15 min</option>
-        <option value="30" selected>30 min</option>
-        <option value="60">1 hour</option>
-        <option value="90">90 min</option>
-      </select>
-    </div>
-    <p data-status aria-live="polite"></p>
-    <p class="small muted">On iPhone, the sound can stop when the screen locks. Keep the page open, or play one of our long videos below.</p>
-  </section>
+    <section id="noise" class="card" aria-label="Noise generator">
+      <div class="colors" role="group" aria-label="Noise color">
+        <button type="button" data-color="white" aria-pressed="false">White</button>
+        <button type="button" data-color="pink" aria-pressed="false">Pink</button>
+        <button type="button" data-color="brown" aria-pressed="true">Brown</button>
+        <button type="button" data-color="green" aria-pressed="false">Green</button>
+      </div>
+      <div class="stage"><button type="button" class="play" data-play aria-pressed="false" aria-label="Play"></button></div>
+      <p data-status aria-live="polite"></p>
+      <div class="controls">
+        <label for="vol">Volume</label><span></span>
+        <input id="vol" type="range" min="0" max="100" value="45" data-vol>
+        <label for="timer">Sleep timer</label>
+        <select id="timer" data-timer>
+          <option value="0">Off</option>
+          <option value="15">15 min</option>
+          <option value="30" selected>30 min</option>
+          <option value="60">1 hour</option>
+          <option value="90">90 min</option>
+        </select>
+      </div>
+      <p class="small muted hint">On iPhone, the sound can stop when the screen locks. Keep the page open, or play one of our long videos below.</p>
+    </section>
+  </div>
+</header>
+<main class="wrap">
 
   <h2>What is the difference between white, pink, brown and green noise?</h2>
   <p>All four are made of every audible frequency at once. What changes is how loud the low sounds are compared with the high ones.</p>
@@ -145,10 +161,11 @@
   <p class="small muted">This page is for general information and is not medical advice. If you have ongoing sleep problems, talk to a doctor.</p>
 
   <footer>
-    Made by <a href="../">Glazik Prod</a>. Also on <a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a>.
-    <a href="../../cookies.html">Cookies</a> · <a href="mailto:contact@filozen.app">Contact</a>
+    <img src="../logo.png" alt="" width="28" height="28"><span>Made by <a href="../">Glazik Prod</a></span>
+    <a href="https://www.youtube.com/@GlazikProdSleepMeditation">YouTube</a>
+    <a href="../../cookies.html">Cookies</a><a href="mailto:contact@filozen.app">Contact</a>
   </footer>
-</div>
+</main>
 <script src="noise.js"></script>
 <script src="../sleep.js"></script>
 </body>
