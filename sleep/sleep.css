@@ -97,3 +97,14 @@ footer img{width:28px;height:28px;border-radius:50%}
   .eyebrow{margin-top:44px}
   .card{padding:22px 16px}
 }
+
+/* Composants Material 3 (hybride : surfaces nuit, primaire dorée) */
+:root{--md-primary:#e9c16c;--md-on-primary:#402d00;--md-secondary-container:#2c3263;--md-on-secondary-container:#dfe0ff;
+  --md-on-surface-variant:#c7c5d0;--md-outline:#90909a}
+.vcard{border-radius:20px;overflow:hidden;background:rgba(255,255,255,.06);border:1px solid var(--line);transition:transform .25s,box-shadow .25s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,0,0,.45)}
+.vcard .video{border:0;border-radius:0}
+.vcard .video:hover{transform:none;box-shadow:none}
+.vtxt{padding:14px 16px 16px}
+.vtxt b{display:block;font-weight:600;font-size:16px;line-height:1.4}
+.vtxt span{font-size:14px;color:var(--md-on-surface-variant)}

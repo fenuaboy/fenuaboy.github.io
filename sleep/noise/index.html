@@ -16,26 +16,34 @@
 <link rel="stylesheet" href="../sleep.css">
 <style>
   #noise{--accent:var(--brown);margin-top:34px;text-align:center}
-  .colors{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 0 26px}
-  .colors button{font:inherit;font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;padding:9px 16px 9px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);cursor:pointer;transition:background .2s,border-color .2s}
-  .colors button::before{content:"";width:18px;height:18px;border-radius:50%;background:var(--c)}
-  .colors button[aria-pressed=true]{border-color:var(--c);background:rgba(255,255,255,.1)}
-  .colors [data-color=white]{--c:var(--white)} .colors [data-color=pink]{--c:var(--pink)}
-  .colors [data-color=brown]{--c:var(--brown)} .colors [data-color=green]{--c:var(--green)}
-  .stage{position:relative;width:168px;height:168px;margin:0 auto 8px;display:grid;place-items:center}
-  .stage::before,.stage::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,var(--accent) 0%,transparent 68%);opacity:.18;transition:opacity .4s}
-  #noise.on .stage::before{animation:breathe 8s ease-in-out infinite;opacity:.45}
-  #noise.on .stage::after{animation:breathe 8s ease-in-out infinite 4s;opacity:.25}
-  @keyframes breathe{0%,100%{transform:scale(.85)}50%{transform:scale(1.25)}}
-  .play{position:relative;z-index:1;width:112px;height:112px;border-radius:50%;border:0;background:var(--accent);color:var(--night);cursor:pointer;
-    font:600 15px var(--sans);box-shadow:0 10px 40px rgba(0,0,0,.4),inset 0 -6px 14px rgba(0,0,0,.18);transition:transform .15s}
-  .play:active{transform:scale(.96)}
-  .play svg{display:block;margin:0 auto 2px;width:30px;height:30px;fill:currentColor}
-  .controls{display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center;max-width:440px;margin:18px auto 0;text-align:left}
-  .controls label{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  input[type=range]{width:100%;accent-color:var(--accent);grid-column:1/-1;margin:-6px 0 4px}
-  select{font:inherit;font-size:15px;background:rgba(255,255,255,.06);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:7px 14px}
-  [data-status]{margin:18px 0 0;min-height:1.6em;color:var(--ink);font-size:15px}
+  #noise h2{font:600 16px/24px var(--sans);margin:0 0 16px;color:var(--md-on-surface-variant);letter-spacing:.15px}
+  .chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+  .chip{height:36px;display:inline-flex;align-items:center;gap:8px;padding:0 16px 0 10px;border-radius:10px;border:1px solid var(--md-outline);background:transparent;color:var(--md-on-surface-variant);font:600 14px/20px var(--sans);cursor:pointer;transition:background .2s}
+  .chip i{width:18px;height:18px;border-radius:50%;background:var(--c)}
+  .chip[aria-pressed=true]{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-color:transparent}
+  .chip[aria-pressed=true] i{background:none;display:grid;place-items:center}
+  .chip[aria-pressed=true] i::after{content:"";width:5px;height:10px;border:solid currentColor;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+  .chip[data-color=white]{--c:var(--white)} .chip[data-color=pink]{--c:var(--pink)} .chip[data-color=brown]{--c:var(--brown)} .chip[data-color=green]{--c:var(--green)}
+  .stage{position:relative;width:176px;height:176px;margin:0 auto;display:grid;place-items:center}
+  .stage::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--accent);opacity:.14;transform:scale(.88);transition:opacity .4s}
+  #noise.on .stage::before{animation:breathe 8s ease-in-out infinite;opacity:.3}
+  @keyframes breathe{0%,100%{transform:scale(.82)}50%{transform:scale(1.12)}}
+  .play{position:relative;width:112px;height:112px;border-radius:50%;border:0;background:var(--md-primary);color:var(--md-on-primary);cursor:pointer;display:grid;place-items:center;
+    box-shadow:0 4px 8px 3px rgba(0,0,0,.25),0 1px 3px rgba(0,0,0,.4);transition:transform .15s}
+  .play:active{transform:scale(.95)}
+  .play svg{width:44px;height:44px;fill:currentColor}
+  [data-status]{margin:12px 0 20px;min-height:1.6em;color:var(--md-on-surface-variant);font-size:15px}
+  .field{text-align:left;max-width:400px;margin:0 auto 20px}
+  .field>span{display:block;font:600 12px/16px var(--sans);letter-spacing:.5px;text-transform:uppercase;color:var(--md-on-surface-variant);margin-bottom:12px}
+  input.m3s{-webkit-appearance:none;appearance:none;width:100%;height:16px;border-radius:8px;margin:14px 0;outline:none;
+    background:linear-gradient(90deg,var(--md-primary) 0 var(--v,45%),var(--md-secondary-container) var(--v,45%) 100%)}
+  input.m3s::-webkit-slider-thumb{-webkit-appearance:none;width:4px;height:44px;border-radius:2px;background:var(--md-primary);box-shadow:0 0 0 6px #1a2048}
+  input.m3s::-moz-range-thumb{width:4px;height:44px;border-radius:2px;background:var(--md-primary);border:0}
+  input.m3s:focus-visible{box-shadow:0 0 0 3px rgba(233,193,108,.5)}
+  .seg{display:flex;border:1px solid var(--md-outline);border-radius:20px;overflow:hidden}
+  .seg button{flex:1;height:40px;border:0;border-right:1px solid var(--md-outline);background:transparent;color:var(--ink);font:600 14px/20px var(--sans);cursor:pointer}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed=true]{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
   .hint{margin:6px 0 0}
   .chart{width:100%;height:auto;margin:6px 0 4px}
   .chart text{fill:var(--muted);font-size:12px;font-family:var(--sans)}
@@ -67,25 +75,24 @@
     <p class="lead">Pick a color, press play, set a timer. Nothing to install, no account, and no ad to wake you up. Below, how the colors differ and what research actually says.</p>
 
     <section id="noise" class="card" aria-label="Noise generator">
-      <div class="colors" role="group" aria-label="Noise color">
-        <button type="button" data-color="white" aria-pressed="false">White</button>
-        <button type="button" data-color="pink" aria-pressed="false">Pink</button>
-        <button type="button" data-color="brown" aria-pressed="true">Brown</button>
-        <button type="button" data-color="green" aria-pressed="false">Green</button>
+      <h2>Noise generator</h2>
+      <div class="chips" role="group" aria-label="Noise color">
+        <button type="button" class="chip" data-color="white" aria-pressed="false"><i></i>White</button>
+        <button type="button" class="chip" data-color="pink" aria-pressed="false"><i></i>Pink</button>
+        <button type="button" class="chip" data-color="brown" aria-pressed="true"><i></i>Brown</button>
+        <button type="button" class="chip" data-color="green" aria-pressed="false"><i></i>Green</button>
       </div>
       <div class="stage"><button type="button" class="play" data-play aria-pressed="false" aria-label="Play"></button></div>
       <p data-status aria-live="polite"></p>
-      <div class="controls">
-        <label for="vol">Volume</label><span></span>
-        <input id="vol" type="range" min="0" max="100" value="45" data-vol>
-        <label for="timer">Sleep timer</label>
-        <select id="timer" data-timer>
-          <option value="0">Off</option>
-          <option value="15">15 min</option>
-          <option value="30" selected>30 min</option>
-          <option value="60">1 hour</option>
-          <option value="90">90 min</option>
-        </select>
+      <label class="field"><span>Volume</span><input class="m3s" type="range" min="0" max="100" value="45" data-vol></label>
+      <div class="field"><span id="tl">Sleep timer</span>
+        <div class="seg" role="group" aria-labelledby="tl" data-timer>
+          <button type="button" data-min="0" aria-pressed="false">Off</button>
+          <button type="button" data-min="15" aria-pressed="false">15 min</button>
+          <button type="button" data-min="30" aria-pressed="true">30 min</button>
+          <button type="button" data-min="60" aria-pressed="false">1 h</button>
+          <button type="button" data-min="90" aria-pressed="false">90 min</button>
+        </div>
       </div>
       <p class="small muted hint">On iPhone, the sound can stop when the screen locks. Keep the page open, or play one of our long videos below.</p>
     </section>
@@ -140,8 +147,8 @@
   <h2>Prefer a longer soundscape?</h2>
   <p>Our channel publishes long sleep and meditation sessions with natural sounds and a black screen, so your phone stays dark.</p>
   <div class="grid2">
-    <button type="button" class="video" data-id="WGoW4cPYOYA"><i></i><span>Thunderstorm sounds for deep sleep, 3 hours, black screen</span></button>
-    <button type="button" class="video" data-id="zABgG_wo2Fs"><i></i><span>Beach night sounds, theta waves, 1 hour</span></button>
+    <article class="vcard"><button type="button" class="video" data-id="WGoW4cPYOYA" aria-label="Play: Thunderstorm sounds for deep sleep, 3 hours, black screen"><i></i></button><div class="vtxt"><b>Thunderstorm sounds for deep sleep</b><span>3 hours · Black screen</span></div></article>
+    <article class="vcard"><button type="button" class="video" data-id="zABgG_wo2Fs" aria-label="Play: Beach night sounds, theta waves, 1 hour"><i></i></button><div class="vtxt"><b>Beach night sounds</b><span>Theta waves · 1 hour</span></div></article>
   </div>
 
   <h2>Questions</h2>

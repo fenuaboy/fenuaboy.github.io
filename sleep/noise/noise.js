@@ -26,7 +26,8 @@
   if (!root) return;
   var playBtn = root.querySelector('[data-play]');
   var vol = root.querySelector('[data-vol]');
-  var timerSel = root.querySelector('[data-timer]');
+  var seg = root.querySelector('[data-timer]');
+  var timerMin = 30;
   var status = root.querySelector('[data-status]');
   var colorBtns = root.querySelectorAll('[data-color]');
 
@@ -86,7 +87,7 @@
 
   function armTimer() {
     clearInterval(tick);
-    var min = +timerSel.value;
+    var min = timerMin;
     endAt = min ? Date.now() + min * 60000 : 0;
     if (endAt) tick = setInterval(function () {
       var left = endAt - Date.now();
@@ -102,8 +103,8 @@
 
   function render() {
     playBtn.innerHTML = (playing
-      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg>Pause'
-      : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>Play');
+      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg>'
+      : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>');
     playBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
     playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
     root.classList.toggle('on', playing);
@@ -111,7 +112,7 @@
     if (!playing) status.textContent = 'Ready: ' + label + '. Free, no ads, nothing to install.';
     else if (endAt) {
       var s = Math.max(0, Math.round((endAt - Date.now()) / 1000));
-      status.textContent = 'Playing ' + label + '. Stops in ' + Math.floor(s / 60) + ' min ' + String(s % 60).padStart(2, '0') + ' s, with a gentle fade.';
+      status.textContent = label + ' · Stops in ' + Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0') + ', with a gentle fade';
     } else status.textContent = 'Playing ' + label + '.';
   }
 
@@ -122,7 +123,15 @@
   vol.addEventListener('input', function () {
     if (gain && playing) gain.gain.setTargetAtTime(level(), ctx.currentTime, 0.05);
   });
-  timerSel.addEventListener('change', function () { if (playing) { gain.gain.setTargetAtTime(level(), ctx.currentTime, 0.2); armTimer(); render(); } });
+  seg.querySelectorAll('button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      timerMin = +b.dataset.min;
+      seg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      if (playing) { gain.gain.setTargetAtTime(level(), ctx.currentTime, 0.2); armTimer(); render(); }
+    });
+  });
+  function paintVol() { vol.style.setProperty('--v', vol.value + '%'); }
+  vol.addEventListener('input', paintVol); paintVol();
 
   setColor('brown');
   render();
