@@ -1,0 +1,2511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Filozen Daily XL: free number path puzzle, a new grid every day</title>
+<meta name="description" content="Play today's Filozen XL grid free in your browser: connect the numbers in order with one thread that fills every cell. Same grid for everyone, share your time. No ads, no account.">
+<link rel="canonical" href="https://filozen.app/play/">
+<meta property="og:title" content="Filozen Daily XL: today's number path puzzle">
+<meta property="og:description" content="One thread, every cell, numbers in order. A new 8×8 grid every day. Can you beat my time?">
+<meta property="og:url" content="https://filozen.app/play/">
+<meta property="og:image" content="https://filozen.app/icon.png">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#ECEEFF">
+<link rel="icon" href="../icon.png">
+<script src="../consent.js"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebApplication","name":"Filozen Daily XL","url":"https://filozen.app/play/","applicationCategory":"GameApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"A free daily number path puzzle: connect the numbers in order with a single thread that passes through every cell. A new 8×8 grid every day.","publisher":{"@type":"Organization","name":"Glazik Prod","url":"https://filozen.app/"}},
+ {"@type":"FAQPage","mainEntity":[
+  {"@type":"Question","name":"How do you play Filozen?","acceptedAnswer":{"@type":"Answer","text":"Start on 1 and draw one continuous thread through the grid. Reach the numbers in order, never cross a wall, and pass through every cell exactly once."}},
+  {"@type":"Question","name":"Is it the same grid for everyone?","acceptedAnswer":{"@type":"Answer","text":"Yes. Everyone gets the same XL grid each day, so you can compare times with friends. A new grid arrives at midnight, your local time."}},
+  {"@type":"Question","name":"Is Filozen free?","acceptedAnswer":{"@type":"Answer","text":"Yes. The daily grid is free in your browser, and the iPhone app is free with no ads and 50 levels."}},
+  {"@type":"Question","name":"Is Filozen like LinkedIn Zip?","acceptedAnswer":{"@type":"Answer","text":"It uses the same idea of linking numbers with one path that fills the grid. Filozen offers a bigger 8×8 daily grid on the web and a free iPhone app with 50 levels and a daily challenge."}}
+ ]}
+]}
+</script>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} [hidden]{display:none!important}</style>
+
+<style>
+/* polices intégrées à l'app : le jeu fonctionne hors connexion */
+@font-face{font-family:'Baloo 2'; font-weight:600; font-display:swap; src:url(fonts/baloo-2-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Baloo 2'; font-weight:700; font-display:swap; src:url(fonts/baloo-2-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Baloo 2'; font-weight:800; font-display:swap; src:url(fonts/baloo-2-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito'; font-weight:500; font-display:swap; src:url(fonts/nunito-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito'; font-weight:700; font-display:swap; src:url(fonts/nunito-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito'; font-weight:800; font-display:swap; src:url(fonts/nunito-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito'; font-weight:900; font-display:swap; src:url(fonts/nunito-latin-900-normal.woff2) format('woff2')}
+:root{
+  --ground:#ECEEFF; --dots:#D9DCFA; --surface:#FFFFFF; --cellbg:#F1F2FE; --ink:#1B1640; --muted:#6B6790;
+  --line:#D9DBF5; --line-dark:#C3C6EC; --sun:#FFB400; --warn:#E0453A;
+  --accent:#2F6BFF; --accent-dark:#1F4FD1; --accent-ink:#FFFFFF; --ring:#FFB400;
+  --dawn1:#FFE9B8; --dawn2:#FFC896; --dawn3:#F7A3A0; --fog:#F4F1F7; --daycell:rgba(255,255,255,.5);
+  --display:"Baloo 2", "Arial Rounded MT Bold", "Trebuchet MS", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, sans-serif;
+  --body:"Nunito", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --dawn1:#2B2150; --dawn2:#5B2F63; --dawn3:#B45A58; --fog:#3A3560; --daycell:rgba(255,255,255,.12);
+    --ground:#12102A; --dots:#1E1B42; --surface:#1D1A3D; --cellbg:#27234F; --ink:#F1EFFF; --muted:#A09CC8;
+    --line:#342F66; --line-dark:#0B0A1E; --warn:#FF7A6E;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+    --dawn1:#2B2150; --dawn2:#5B2F63; --dawn3:#B45A58; --fog:#3A3560; --daycell:rgba(255,255,255,.12);
+  --ground:#12102A; --dots:#1E1B42; --surface:#1D1A3D; --cellbg:#27234F; --ink:#F1EFFF; --muted:#A09CC8;
+  --line:#342F66; --line-dark:#0B0A1E; --warn:#FF7A6E;
+}
+*{box-sizing:border-box}
+body{background-color:var(--ground); background-image:radial-gradient(var(--dots) 1.3px, transparent 1.6px); background-size:22px 22px;
+  color:var(--ink); font:500 16px/1.5 var(--body); -webkit-tap-highlight-color:transparent}
+.app{max-width:480px; margin:0 auto; padding-inline:16px; padding-block:18px 48px; display:flex; flex-direction:column; gap:16px}
+.stack{display:flex; flex-direction:column; gap:16px}
+.stack[hidden]{display:none!important}
+button{font-family:inherit}
+
+/* ---------- en-tête ---------- */
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.wordmark{margin:0; display:flex; flex-direction:column; align-items:stretch; line-height:1}
+.wordmark .wm{font:800 42px/0.8 var(--display); letter-spacing:-0.03em}
+.c1{color:#FF5D5D} .c2{color:#FFB400} .c3{color:#16C79A} .c4{color:#2F6BFF} .c5{color:#8A5CF6} .c6{color:#FF5D5D} .c7{color:#FFB400}
+.wordmark svg{width:100%; height:10px; margin-top:3px}
+.wordmark path{fill:none; stroke:var(--ink); stroke-width:3; stroke-linecap:round; opacity:.8}
+.iconbtn{width:44px; height:44px; border-radius:14px; border:2px solid var(--line); background:var(--surface); box-shadow:0 4px 0 var(--line); font-size:20px; cursor:pointer; color:var(--ink)}
+.iconbtn:active{transform:translateY(3px); box-shadow:0 1px 0 var(--line)}
+.iconbtn.off{opacity:.5}
+.topbtns{display:flex; gap:8px}
+#homeBtn{font-size:22px; line-height:1}
+.homebtn{display:flex; flex-direction:column; align-items:flex-start; gap:4px; text-align:left; border:0; border-radius:22px; padding:18px 20px; cursor:pointer;
+  background:var(--hb); color:var(--hbt); box-shadow:0 6px 0 var(--hbd); transition:transform .05s}
+.homebtn:active{transform:translateY(4px); box-shadow:0 2px 0 var(--hbd)}
+.homebtn:focus-visible{outline:3px solid var(--sun); outline-offset:3px}
+.homebtn[hidden]{display:none!important}
+.homebtn .hb-t{font:800 26px/1.05 var(--display)}
+.homebtn .hb-s{font:800 14px/1.3 var(--body); opacity:.85}
+.homebtn.primary{--hb:#2F6BFF; --hbd:#1F4FD1; --hbt:#fff; padding:24px 20px}
+.homebtn.primary .hb-t{font-size:32px}
+.homebtn.lv{--hb:#16C79A; --hbd:#0E9E7A; --hbt:#fff}
+.homebtn.daily{--hb:#FFB400; --hbd:#D08E00; --hbt:#3A2600}
+.homebtn.free{--hb:#8A5CF6; --hbd:#6A3FD6; --hbt:#fff}
+.langsel{width:auto; padding:0 8px; font:800 14px/1 var(--body); appearance:none; -webkit-appearance:none; text-align:center}
+
+.player{background:var(--surface); border:2px solid var(--line); border-radius:20px; box-shadow:0 5px 0 var(--line); padding:12px 14px; display:flex; flex-direction:column; gap:8px}
+.player .row1{display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+.rankname{font:800 18px/1.1 var(--display)}
+.rankname small{display:block; font:700 11px/1.2 var(--body); color:var(--muted); text-transform:uppercase; letter-spacing:.08em}
+.xp{font:900 18px/1 var(--body); font-variant-numeric:tabular-nums; color:var(--accent); white-space:nowrap}
+.xp small{font-weight:700; font-size:12px; color:var(--muted)}
+.bar{height:12px; border-radius:99px; background:var(--cellbg); overflow:hidden}
+.bar i{display:block; height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,#16C79A,#2F6BFF 55%,#8A5CF6); transition:width .8s cubic-bezier(.2,.9,.3,1)}
+.player .hintline{font-size:12px; color:var(--muted); margin:0}
+
+.tabs{display:grid; grid-template-columns:repeat(3,1fr); background:var(--cellbg); border-radius:16px; padding:4px; gap:4px}
+.tabs button{border:0; background:transparent; color:var(--muted); font:800 14px/1 var(--body); padding:11px 4px; border-radius:12px; cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:0 3px 0 var(--line)}
+
+/* ---------- jeu ---------- */
+.meta{display:flex; justify-content:space-between; align-items:center; gap:12px}
+.meta .label{font:800 24px/1 var(--display)}
+.meta .sub{color:var(--muted); font-size:13px; font-weight:700}
+.meta .sub::first-letter{text-transform:uppercase}
+.back{border:0; background:none; color:var(--accent); font:800 13px/1 var(--body); padding:0 0 6px; cursor:pointer; display:block}
+.back[hidden]{display:none!important}
+.timer{font:900 24px/1 var(--body); font-variant-numeric:tabular-nums; background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:8px 12px}
+
+.sizes{display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+.sizes[hidden]{display:none!important}
+.chip{border:2px solid var(--line); background:var(--surface); color:var(--ink); font:800 13px/1 var(--body); padding:8px 12px; border-radius:999px; cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+.chip.new{margin-left:auto}
+
+.board{position:relative; width:100%; aspect-ratio:1; max-width:100%; background:var(--surface); border-radius:24px; border:3px solid var(--line); box-shadow:0 7px 0 var(--line);
+  container-type:inline-size; touch-action:none; user-select:none; -webkit-user-select:none; cursor:pointer}
+.layer{position:absolute; inset:7px; display:grid; grid-template-columns:repeat(var(--n),1fr); grid-template-rows:repeat(var(--n),1fr)}
+.cell{position:relative}
+.cell::before{content:""; position:absolute; inset:5%; border-radius:26%; background:var(--cellbg); transition:background .15s, transform .15s}
+.cell.on::before{background:color-mix(in srgb, var(--accent) 22%, var(--cellbg))}
+.cell.cur::after{content:""; position:absolute; inset:5%; border-radius:26%; border:3px solid var(--accent); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  animation:curpulse 1.2s ease-in-out infinite; pointer-events:none; z-index:3}
+@keyframes curpulse{50%{box-shadow:0 0 0 7px color-mix(in srgb, var(--accent) 12%, transparent)}}
+@media (prefers-reduced-motion: reduce){ .cell.cur::after{animation:none} }
+.threadsvg{position:absolute; inset:7px; width:calc(100% - 14px); height:calc(100% - 14px); pointer-events:none; overflow:visible}
+.threadsvg polyline{fill:none; stroke:var(--accent); stroke-width:.34; stroke-linecap:round; stroke-linejoin:round}
+.threadsvg circle{fill:var(--accent); stroke:var(--surface); stroke-width:.07}
+.threadsvg .walls line{stroke:var(--ink); stroke-width:.11; stroke-linecap:round}
+.knots{pointer-events:none}
+.slot{display:grid; place-items:center}
+.knot{width:62%; aspect-ratio:1; border-radius:50%; display:grid; place-items:center; background:var(--ink); color:var(--surface);
+  font:800 calc(100cqw / var(--n) * .32)/1 var(--display); padding-top:.08em; transition:background .15s, color .15s}
+.knot.hit{background:var(--accent); color:var(--accent-ink)}
+.knot.next{box-shadow:0 0 0 3px var(--surface), 0 0 0 6px var(--ring); animation:pulse 1.4s ease-in-out infinite}
+.knot.pop{animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+.knot.shake{animation:shake .35s}
+.board.won .cell.on::before{animation:glow .7s ease-out calc(var(--o) * 16ms) both}
+@keyframes pulse{50%{transform:scale(1.1)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes shake{25%{transform:translateX(-14%)}75%{transform:translateX(14%)}}
+@keyframes glow{40%{background:var(--accent); transform:scale(1.08)}}
+
+.status{min-height:24px; margin:-4px 0 0; color:var(--muted); font-size:14px; font-weight:700; text-align:center}
+.status.warn{color:var(--warn)}
+
+.controls{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.controls[hidden]{display:none!important}
+.btn{border:2px solid var(--line); background:var(--surface); color:var(--ink); font:800 15px/1.2 var(--body); padding:12px 8px; border-radius:16px; cursor:pointer; box-shadow:0 4px 0 var(--line); transition:transform .05s}
+.btn:active{transform:translateY(3px); box-shadow:0 1px 0 var(--line)}
+.btn small{display:block; font-weight:700; font-size:11px; color:var(--muted)}
+.btn.primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent); box-shadow:0 4px 0 var(--accent-dark)}
+.btn.primary:active{box-shadow:0 1px 0 var(--accent-dark)}
+.btn[hidden]{display:none!important}
+.btn:focus-visible,.chip:focus-visible,.tabs button:focus-visible,.node:focus-visible,.back:focus-visible,.iconbtn:focus-visible{outline:3px solid var(--sun); outline-offset:3px}
+
+.result{background:var(--surface); border:2px solid var(--line); box-shadow:0 5px 0 var(--line); border-radius:22px; padding:18px; display:flex; flex-direction:column; gap:12px}
+.result[hidden]{display:none!important}
+.result h2{margin:0; font:800 20px/1.1 var(--display)}
+.result p{margin:0; color:var(--muted); font-size:14px; font-weight:700}
+.share{margin:0; padding:12px 14px; background:var(--cellbg); border-radius:14px; font:700 14px/1.6 var(--body); white-space:pre-wrap; user-select:text; -webkit-user-select:text}
+.row{display:flex; gap:10px; flex-wrap:wrap}
+.row .btn{flex:1 1 140px}
+
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0}
+.stats[hidden]{display:none!important}
+.stats div{background:var(--surface); border:2px solid var(--line); border-radius:16px; padding:10px 12px}
+.stats dt{font-size:12px; font-weight:700; color:var(--muted)}
+.stats dd{margin:0; font:800 24px/1.1 var(--display); font-variant-numeric:tabular-nums}
+
+/* ---------- carte des niveaux ---------- */
+.progress{background:var(--surface); border:2px solid var(--line); box-shadow:0 5px 0 var(--line); border-radius:20px; padding:14px; display:flex; flex-direction:column; gap:10px}
+.progress .top strong{font:800 20px/1 var(--display)}
+.progress .top span{color:var(--muted); font-size:13px; font-weight:800; font-variant-numeric:tabular-nums}
+.badges{display:grid; grid-template-columns:repeat(auto-fill, minmax(62px,1fr)); gap:8px}
+.badge{display:flex; flex-direction:column; align-items:center; gap:2px; text-align:center; font-size:10px; font-weight:800; color:var(--ink); line-height:1.15}
+.badge .ic{width:44px; height:44px; border-radius:50%; display:grid; place-items:center; font-size:22px; background:color-mix(in srgb, var(--sun) 25%, var(--surface)); border:2px solid var(--sun)}
+.badge.locked{color:var(--muted)}
+.badge.locked .ic{background:var(--cellbg); border:2px dashed var(--line); filter:grayscale(1); opacity:.45}
+.subttl{margin:0; font:800 13px/1 var(--body); color:var(--muted); text-transform:uppercase; letter-spacing:.08em}
+
+.path{position:relative; width:100%}
+.path svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
+.path svg path{fill:none; stroke-width:12; stroke-linecap:round; vector-effect:non-scaling-stroke}
+.bandpill{position:absolute; left:50%; transform:translate(-50%,-50%); background:var(--bc); color:var(--bt); padding:8px 16px; border-radius:999px; box-shadow:0 4px 0 var(--bd);
+  font:800 15px/1 var(--display); white-space:nowrap; display:flex; gap:8px; align-items:center; z-index:1}
+.bandpill span{font:800 12px/1 var(--body); opacity:.8}
+.bandpill.locked{background:var(--cellbg); color:var(--muted); box-shadow:0 4px 0 var(--line)}
+.node{position:absolute; transform:translate(-50%,-50%); width:62px; height:62px; border-radius:50%; border:0; cursor:pointer; z-index:1;
+  background:var(--cellbg); color:var(--muted); box-shadow:0 5px 0 var(--line); font:800 24px/1 var(--display); padding:4px 0 0}
+.node.done{background:var(--bc); color:var(--bt); box-shadow:0 5px 0 var(--bd)}
+.node.current{background:var(--surface); color:var(--bc); box-shadow:0 0 0 5px var(--bc), 0 10px 0 var(--bd); animation:bob 1.5s ease-in-out infinite}
+.node.boss{width:78px; height:78px; font-size:28px}
+.node:disabled{cursor:not-allowed}
+.node .st em{display:block; font:800 11px/1 var(--body); font-style:normal; letter-spacing:0; color:var(--muted); margin-top:3px}
+.node .st{position:absolute; top:100%; left:50%; transform:translateX(-50%); margin-top:9px; font:900 12px/1 var(--body); letter-spacing:1px; color:var(--sun); white-space:nowrap; text-shadow:0 1px 0 var(--surface)}
+.node .st .off{color:var(--line)}
+.node .tag{position:absolute; bottom:100%; left:50%; transform:translateX(-50%); margin-bottom:8px; background:var(--ink); color:var(--surface); font:900 10px/1 var(--body); letter-spacing:.1em; padding:5px 8px; border-radius:99px; white-space:nowrap}
+.node.current .tag{background:var(--bc); color:var(--bt); font-size:12px; padding:6px 10px}
+@keyframes bob{50%{transform:translate(-50%,-58%)}}
+
+.rules{background:var(--surface); border:2px solid var(--line); border-radius:20px; padding:14px 16px}
+.rules h3{margin:0 0 6px; font:800 18px/1.2 var(--display)}
+.rules ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:4px}
+.rules li::marker{color:var(--accent); font-weight:900}
+footer{color:var(--muted); font-size:12px; font-weight:700; text-align:center; display:flex; flex-direction:column; gap:6px; align-items:center}
+.linkbtn{border:0; background:none; color:var(--muted); text-decoration:underline; font:inherit; cursor:pointer; padding:0}
+
+/* ---------- célébration ---------- */
+.overlay{position:fixed; inset:0; z-index:20; background:rgba(18,16,42,.6); display:grid; place-items:center;
+  padding:max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px))}
+.overlay[hidden]{display:none!important}
+.card{background:var(--surface); border:3px solid var(--accent); box-shadow:0 10px 0 var(--accent-dark); border-radius:30px; padding:22px 18px 20px; width:min(420px,100%); max-height:100%; overflow:auto;
+  text-align:center; display:flex; flex-direction:column; gap:12px; animation:cardin .5s cubic-bezier(.2,1.4,.4,1)}
+.kicker{font:900 12px/1 var(--body); text-transform:uppercase; letter-spacing:.12em; color:var(--accent)}
+.card h2{margin:0; font:800 38px/1 var(--display); letter-spacing:-0.01em}
+.bigstars{display:flex; justify-content:center; gap:10px; font-size:48px; line-height:1; min-height:48px}
+.bigstars[hidden]{display:none!important}
+.bigstars span{color:var(--line); transform:scale(.4); opacity:0; display:inline-block}
+.bigstars span.in{animation:starin .45s cubic-bezier(.2,1.8,.4,1) forwards}
+.bigstars span.lit{color:var(--sun); text-shadow:0 4px 0 #D08E00}
+.ctime{font:900 20px/1 var(--body); color:var(--muted); font-variant-numeric:tabular-nums}
+.gains{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; text-align:left}
+.gains li{display:flex; justify-content:space-between; gap:12px; background:var(--cellbg); border-radius:12px; padding:9px 12px; font-weight:800; font-size:14px; opacity:0; transform:translateY(6px); animation:rise .35s ease-out forwards}
+.gains li b{color:var(--accent); font-variant-numeric:tabular-nums; white-space:nowrap}
+.gains li.big{background:color-mix(in srgb, var(--sun) 28%, var(--surface)); border:2px solid var(--sun)}
+.rankbox{display:flex; flex-direction:column; gap:6px; text-align:left}
+.rankline{display:flex; justify-content:space-between; font-weight:900; font-size:14px}
+.rankline b{font-variant-numeric:tabular-nums; color:var(--accent)}
+.rankmsg{margin:0; font-size:13px; font-weight:800; color:var(--muted)}
+.rankmsg.up{color:var(--ink); font:800 20px/1.2 var(--display)}
+.newbadges{display:flex; flex-wrap:wrap; gap:8px; justify-content:center}
+.newbadges .badge{width:84px}
+@keyframes cardin{from{transform:scale(.7) translateY(30px); opacity:0}}
+@keyframes starin{to{transform:scale(1); opacity:1}}
+@keyframes rise{to{opacity:1; transform:none}}
+
+/* ---------- compte à rebours ---------- */
+.countdown{position:absolute; inset:0; z-index:3; display:grid; place-items:center; pointer-events:none;
+  font:800 34cqw/1 var(--display); color:var(--accent); text-shadow:0 8px 0 var(--accent-dark), 0 0 30px var(--surface)}
+.countdown[hidden]{display:none!important}
+.countdown.go{font-size:22cqw}
+.countdown.tick{animation:tick .6s cubic-bezier(.2,1.6,.4,1)}
+.board.counting .layer, .board.counting .threadsvg{filter:blur(8px); opacity:.45; transition:filter .3s, opacity .3s}
+@keyframes tick{from{transform:scale(2.2); opacity:0}}
+
+/* ---------- intro ---------- */
+.intro{position:fixed; inset:0; z-index:50; display:grid; place-items:center; cursor:pointer; padding-inline:16px;
+  background-color:var(--ground); background-image:radial-gradient(var(--dots) 1.3px, transparent 1.6px); background-size:22px 22px; transition:opacity .35s, transform .35s}
+.intro.out{opacity:0; transform:scale(1.08); pointer-events:none}
+.intro[hidden]{display:none!important}
+.introInner{display:flex; flex-direction:column; align-items:center; gap:6px; width:min(360px,100%)}
+.introThread{width:100%; overflow:visible}
+.introThread .thr{fill:none; stroke:#2F6BFF; stroke-width:9; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:1; animation:draw 1.3s 1.2s linear forwards}
+.introThread .k{transform-box:fill-box; transform-origin:center; transform:scale(0); animation:kpop .4s cubic-bezier(.2,1.8,.4,1) forwards}
+.introThread .k circle{fill:var(--ink)}
+.introThread .k text{fill:var(--surface); font:800 17px var(--display); text-anchor:middle}
+.introThread .k1{animation-delay:1.2s} .introThread .k2{animation-delay:1.62s} .introThread .k3{animation-delay:2.05s} .introThread .k4{animation-delay:2.45s}
+.introThread .k4 circle{fill:#FFB400}
+.introWord{font:800 min(84px, 19vw)/0.85 var(--display); letter-spacing:-0.03em; display:flex}
+.introFlow{font:800 26px/1 var(--display); letter-spacing:.5em; text-transform:uppercase; color:var(--ink); padding-left:.5em; margin-top:4px; opacity:0; transform:translateY(10px); animation:letter .5s cubic-bezier(.2,1.7,.4,1) 1.95s forwards}
+.introWord span{display:inline-block; transform:translateY(40px) scale(.3); opacity:0; animation:letter .55s cubic-bezier(.2,1.7,.4,1) forwards}
+.introWord span:nth-child(1){animation-delay:2.6s} .introWord span:nth-child(2){animation-delay:2.7s} .introWord span:nth-child(3){animation-delay:2.8s} .introWord span:nth-child(4){animation-delay:2.9s}
+.introWord span:nth-child(5){animation-delay:3.0s} .introWord span:nth-child(6){animation-delay:3.1s} .introWord span:nth-child(7){animation-delay:3.2s}
+.introTag{margin:4px 0 18px; font-weight:800; color:var(--muted); opacity:0; animation:fade .5s 3.35s forwards}
+.introGo{background:#2F6BFF; color:#fff; font:800 17px/1 var(--body); padding:16px 26px; border-radius:18px; box-shadow:0 5px 0 #1F4FD1; opacity:0;
+  animation:fade .4s 3.6s forwards, breathe 1.4s 4s ease-in-out infinite}
+/* rien ne bouge tant que .play n'est pas posé (écran de lancement du téléphone encore affiché) */
+.intro:not(.play) *{animation:none!important}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes kpop{to{transform:scale(1)}}
+@keyframes letter{to{transform:none; opacity:1}}
+@keyframes fade{to{opacity:1}}
+@keyframes breathe{50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion: reduce){
+  .introThread .thr{animation:none; stroke-dashoffset:0}
+  .introThread .k,.introWord span,.introFlow{animation:none; transform:none; opacity:1}
+  .introTag,.introGo{animation:none; opacity:1}
+  .countdown.tick{animation:none}
+}
+
+/* ---------- fin du jeu ---------- */
+.finale{position:fixed; inset:0; z-index:44; overflow:hidden; display:grid; place-items:center; padding-inline:16px; color:#1B1640}
+.finale[hidden]{display:none!important}
+.finSky{position:absolute; inset:0; background:linear-gradient(#7FB8FF, #BFE0FF 55%, #FFE9B0)}
+.finSun{position:absolute; left:50%; top:16%; width:130px; height:130px; margin-left:-65px; border-radius:50%; background:#FFD23F; box-shadow:0 0 60px 20px rgba(255,210,63,.6);
+  transform:translateY(60vh); animation:sunrise 2.6s .6s cubic-bezier(.2,.8,.3,1) forwards}
+.finSun i{position:absolute; inset:-40px; border-radius:50%; background:repeating-conic-gradient(rgba(255,210,63,.45) 0 8deg, transparent 8deg 22deg); animation:spin 14s linear infinite}
+.finFog{position:absolute; inset:0; background:rgba(150,158,176,.9); animation:fogfade 2.4s .8s ease-in forwards}
+.finFog b{position:absolute; width:70vmax; height:45vmax; border-radius:50%; background:#C9CED8; filter:blur(30px); opacity:.95}
+.finFog .f1{left:-30vmax; top:-10vmax; animation:fogL 3s .5s ease-in forwards} .finFog .f2{right:-30vmax; top:5vmax; animation:fogR 3s .6s ease-in forwards}
+.finFog .f3{left:-25vmax; top:30vmax; animation:fogL 3s .7s ease-in forwards} .finFog .f4{right:-25vmax; top:45vmax; animation:fogR 3s .8s ease-in forwards}
+.finFog .f5{left:-20vmax; bottom:-15vmax; animation:fogL 3s .9s ease-in forwards} .finFog .f6{right:-20vmax; bottom:-10vmax; animation:fogR 3s 1s ease-in forwards}
+.finInner{position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; max-width:420px}
+.finFilo{width:120px; height:120px; overflow:visible; opacity:0; animation:finpop .6s 2.2s cubic-bezier(.2,1.7,.4,1) forwards, hop 1.1s 3s ease-in-out infinite}
+.finFilo .eyes{transform-box:fill-box; transform-origin:center; animation:blink 3.5s 3.6s infinite}
+.finale h2{margin:0; font:800 64px/1 var(--display); color:#fff; text-shadow:0 5px 0 #2F6BFF, 0 10px 30px rgba(47,107,255,.35); opacity:0; animation:finpop .6s 2.5s cubic-bezier(.2,1.7,.4,1) forwards}
+.finale p{margin:0; font-weight:800; font-size:17px; opacity:0; animation:fade .6s 2.9s forwards}
+.finale p.finBig{font:800 24px/1.2 var(--display); animation-delay:2.75s}
+.finale p.finSoon{margin-top:6px; background:rgba(255,255,255,.75); border-radius:14px; padding:10px 16px; animation-delay:3.2s}
+.finale .row{width:100%; margin-top:10px; opacity:0; animation:fade .5s 3.5s forwards}
+@keyframes sunrise{to{transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fogfade{to{opacity:0}}
+@keyframes fogL{to{transform:translateX(-80vmax); opacity:0}}
+@keyframes fogR{to{transform:translateX(80vmax); opacity:0}}
+@keyframes finpop{from{transform:scale(.3); opacity:0} to{transform:none; opacity:1}}
+@keyframes hop{0%,100%{translate:0 0} 50%{translate:0 -18px}}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)} 97%{transform:scaleY(.1)}}
+@media (prefers-reduced-motion: reduce){
+  .finale *{animation:none!important; opacity:1!important}
+  .finFog{display:none} .finSun{transform:none}
+}
+
+/* ---------- défi du jour : thème « Aube dorée » ----------
+   Le brouillard se dissipe et le soleil se lève à mesure que le fil avance (--prog de 0 à 1). */
+.daysky,.dayfog{display:none}
+.board.daily{background:linear-gradient(180deg, var(--dawn1), var(--dawn2) 55%, var(--dawn3)); border-color:#F2C46B; box-shadow:0 7px 0 #E0A43F; overflow:hidden}
+.boardwrap{position:relative}
+.boardwrap .board{z-index:1}
+/* soleil cartoon qui se lève derrière le bord haut de la grille */
+.daysun2{display:none}
+.boardwrap.daily{margin-top:34px}
+.boardwrap.daily .daysun2{display:block; position:absolute; right:10%; top:-66px; width:108px; height:108px; z-index:0; overflow:visible;
+  transform:translateY(calc((1 - var(--prog, 0)) * 62px)); transition:transform .7s cubic-bezier(.2,1.3,.4,1)}
+.daysun2 .rays{transform-box:fill-box; transform-origin:center; animation:spin 18s linear infinite}
+@media (prefers-reduced-motion: reduce){ .daysun2 .rays{animation:none} }
+.board.daily .cell::before{background:var(--daycell); backdrop-filter:blur(1px)}
+.board.daily .cell.on::before{background:rgba(255,196,64,.42)}
+.board.daily .dayfog{display:block; position:absolute; inset:0; pointer-events:none; z-index:1; opacity:calc(.92 - var(--prog, 0) * .92); transition:opacity .5s}
+.board.daily .dayfog i{position:absolute; width:90%; height:45%; border-radius:50%; background:var(--fog); filter:blur(22px)}
+.board.daily .dayfog i:nth-child(1){left:-30%; top:-8%; animation:drift 9s ease-in-out infinite alternate}
+.board.daily .dayfog i:nth-child(2){right:-35%; top:22%; animation:drift 11s ease-in-out infinite alternate-reverse}
+.board.daily .dayfog i:nth-child(3){left:-25%; top:48%; animation:drift 10s ease-in-out infinite alternate}
+.board.daily .dayfog i:nth-child(4){right:-30%; bottom:-10%; animation:drift 12s ease-in-out infinite alternate-reverse}
+.board.daily .threadsvg,.board.daily .knots{z-index:2}
+.board.daily.won .dayfog{opacity:0}
+@keyframes drift{to{translate:18% 4%}}
+@media (prefers-reduced-motion: reduce){ .board.daily .dayfog i{animation:none} }
+
+/* ---------- réglages ---------- */
+.setcard{text-align:left; gap:10px}
+.setcard h2{margin:0 0 4px; font:800 30px/1 var(--display); text-align:center}
+.setrow{display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--cellbg); border-radius:14px; padding:12px 14px; font-weight:800; color:var(--ink); text-decoration:none; cursor:pointer}
+.setrow small{font-weight:700; color:var(--muted); font-size:12px}
+.setrow b{font-size:22px; color:var(--muted)}
+.settoggle{border:0; border-radius:999px; padding:8px 14px; font:800 14px/1 var(--body); background:#16C79A; color:#fff; cursor:pointer; min-width:110px}
+.settoggle.isoff{background:var(--line); color:var(--ink)}
+.setselect{font:800 15px/1 var(--body); color:var(--ink); background:var(--surface); border:2px solid var(--line); border-radius:12px; padding:8px 10px}
+.setver{margin:4px 0 0; text-align:center; font-size:12px; font-weight:700; color:var(--muted)}
+
+/* ---------- soutenir (pourboire) ---------- */
+.tipcard{align-items:center}
+.tipFilo{width:84px; height:84px; overflow:visible; animation:hop 1.1s ease-in-out infinite}
+.tipcard h2{margin:0; font:800 30px/1.05 var(--display)}
+.tiptext{margin:6px 0 0; font-weight:700; color:var(--muted)}
+.tiplist{display:flex; flex-direction:column; gap:8px; margin-top:12px; width:100%}
+.tipbtn{display:flex; justify-content:space-between; align-items:center; gap:10px; border:2px solid var(--line); background:var(--surface); color:var(--ink);
+  border-radius:16px; padding:14px 16px; font:800 16px/1.2 var(--body); cursor:pointer; box-shadow:0 4px 0 var(--line)}
+.tipbtn:active{transform:translateY(3px); box-shadow:0 1px 0 var(--line)}
+.tipbtn em{font-style:normal; background:#FFB400; color:#3A2600; border-radius:999px; padding:6px 12px; font-weight:900}
+.tipnote{margin:8px 0 0; font-size:12px; font-weight:700; color:var(--muted)}
+.tipnote.sim{color:var(--warn)}
+#tipAsk,#tipDone{text-align:center; width:100%}
+.tiprow{border:0; width:100%; font:inherit; font-weight:800}
+.btn.tipfin{background:#FFB400; border-color:#FFB400; color:#3A2600; box-shadow:0 4px 0 #D08E00}
+.finale .row + .row{margin-top:0}
+.finale .row[hidden],.setrow[hidden],.linkbtn[hidden],.adpremium[hidden]{display:none!important}
+
+/* ---------- pub de test ---------- */
+.adscreen{position:fixed; inset:0; z-index:45; background:#0B0A1E; color:#fff; display:flex; flex-direction:column; justify-content:space-between; gap:16px;
+  padding:max(16px, env(safe-area-inset-top, 0px)) 16px max(20px, env(safe-area-inset-bottom, 0px))}
+.adscreen[hidden]{display:none!important}
+.adtop{display:flex; justify-content:space-between; align-items:center}
+.adtag{font:900 11px/1 var(--body); letter-spacing:.14em; text-transform:uppercase; background:#FFB400; color:#1B1640; padding:6px 10px; border-radius:6px}
+.adclose{width:40px; height:40px; border-radius:50%; border:2px solid rgba(255,255,255,.4); background:transparent; color:#fff; font:900 16px/1 var(--body); cursor:pointer}
+.adclose:disabled{opacity:.7; cursor:default}
+.adbox{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; border:2px dashed rgba(255,255,255,.25); border-radius:24px; padding:24px}
+.adbox h2{margin:0; font:800 28px/1.1 var(--display)}
+.adbox p{margin:0; color:rgba(255,255,255,.7); font-weight:700; max-width:30ch}
+.adicon{width:72px; height:72px; border-radius:50%; background:rgba(255,255,255,.12); display:grid; place-items:center; font-size:28px}
+.adpremium{align-self:center; width:min(360px,100%)}
+.btn.reward{background:#FFB400; border-color:#FFB400; color:#3A2600; box-shadow:0 4px 0 #D08E00}
+.btn.reward:active{box-shadow:0 1px 0 #D08E00}
+.btn.reward small{color:#5A3F00}
+
+#confetti{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:30}
+.toast{position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom, 0px)); transform:translate(-50%, 140%); z-index:40; background:var(--ink); color:var(--surface);
+  padding:12px 18px; border-radius:16px; font-weight:800; font-size:14px; box-shadow:0 5px 0 rgba(0,0,0,.25); max-width:calc(100% - 32px); text-align:center;
+  opacity:0; visibility:hidden; pointer-events:none; transition:transform .35s cubic-bezier(.2,1.4,.4,1), opacity .25s, visibility 0s .35s}
+.toast.show{transform:translate(-50%, 0); opacity:1; visibility:visible; transition:transform .35s cubic-bezier(.2,1.4,.4,1), opacity .2s, visibility 0s}
+
+@media (prefers-reduced-motion: reduce){
+  .knot.next,.knot.pop,.knot.shake,.board.won .cell.on::before,.node.current,.card{animation:none}
+  .bigstars span,.gains li{animation:none; opacity:1; transform:none}
+}
+</style>
+
+<div class="app">
+  <div class="top">
+    <h1 class="wordmark" aria-label="Filozen"><span class="wm" aria-hidden="true"><span class="c1">f</span><span class="c2">i</span><span class="c3">l</span><span class="c4">o</span><span class="c5">z</span><span class="c6">e</span><span class="c7">n</span></span><svg viewBox="0 0 90 12" aria-hidden="true"><path d="M3 7 C 15 1, 25 1, 35 6 S 55 12, 65 6 S 82 2, 87 4"/></svg></h1>
+    <div class="topbtns">
+      <button class="iconbtn" id="homeBtn" data-ta="menu" aria-label="Menu">⌂</button>
+      <button class="iconbtn" id="settingsBtn" data-ta="settings" aria-label="Réglages">⚙︎</button>
+    </div>
+  </div>
+
+  <section class="player" data-ta="player" aria-label="Votre progression">
+    <div class="row1">
+      <div class="rankname" id="rankName"><small>Rang</small>Esprit embrumé</div>
+      <div class="xp"><span id="xp">0</span> <small data-t="neurons">neurones</small></div>
+    </div>
+    <div class="bar"><i id="xpBar"></i></div>
+    <p class="hintline" id="rankHint">Encore 250 neurones pour « Réveillé »</p>
+  </section>
+
+  <!-- menu d'accueil -->
+  <div class="stack" id="home" hidden>
+    <button class="homebtn primary" id="homeContinue"><span class="hb-t" id="hcT"></span><span class="hb-s" id="hcS"></span></button>
+    <button class="homebtn lv" id="homeLevels"><span class="hb-t" data-t="tabLevels">Niveaux</span><span class="hb-s" id="hlS"></span></button>
+    <button class="homebtn daily" id="homeDaily"><span class="hb-t" data-t="homeDaily">Défi du jour</span><span class="hb-s" id="hdS"></span></button>
+    <button class="homebtn free" id="homeFree"><span class="hb-t" data-t="homeFree">Entraînement libre</span><span class="hb-s" data-t="homeFreeSub">Grilles illimitées, de 5×5 à 7×7</span></button>
+  </div>
+
+  <div class="tabs" id="tabs" role="group" data-ta="modes" aria-label="Mode de jeu">
+    <button id="tabDaily" aria-pressed="true" data-t="tabDaily">Défi</button>
+    <button id="tabLevels" aria-pressed="false" data-t="tabLevels">Niveaux</button>
+    <button id="tabTrain" aria-pressed="false" data-t="tabTrain">Libre</button>
+  </div>
+
+  <!-- carte des 50 niveaux -->
+  <div class="stack" id="levelMap" hidden>
+    <section class="progress">
+      <div class="top"><strong data-t="journey">Parcours</strong><span id="lvCount">0 / 50 · 0 ★</span></div>
+      <div class="bar"><i id="lvBar"></i></div>
+      <p class="subttl" data-t="badges">Badges</p>
+      <div class="badges" id="badgeShelf"></div>
+    </section>
+    <div class="path" id="path"></div>
+  </div>
+
+  <!-- écran de jeu -->
+  <div class="stack" id="game">
+    <div class="meta">
+      <div>
+        <button class="back" id="back" hidden data-t="back">← Carte des niveaux</button>
+        <div class="label" id="label">Grille n°1</div>
+        <div class="sub" id="sub"></div>
+      </div>
+      <div class="timer" id="timer" aria-live="off">0:00</div>
+    </div>
+
+    <div class="sizes" id="sizes" hidden>
+      <button class="chip" data-n="5" aria-pressed="false">5 × 5</button>
+      <button class="chip" data-n="6" aria-pressed="true">6 × 6</button>
+      <button class="chip" data-n="7" aria-pressed="false">7 × 7</button>
+      <button class="chip new" id="newGrid" data-t="newGrid">Nouvelle grille</button>
+    </div>
+
+    <div class="boardwrap" id="boardwrap">
+      <svg class="daysun2" viewBox="-60 -60 120 120" aria-hidden="true">
+        <g class="rays" fill="#FFB400" stroke="#E08A00" stroke-width="3" stroke-linejoin="round">
+          <path d="M0 -58 L9 -40 L-9 -40 Z"/><path d="M0 58 L9 40 L-9 40 Z"/><path d="M-58 0 L-40 9 L-40 -9 Z"/><path d="M58 0 L40 9 L40 -9 Z"/>
+          <path d="M-41 -41 L-22 -35 L-35 -22 Z"/><path d="M41 -41 L35 -22 L22 -35 Z"/><path d="M-41 41 L-35 22 L-22 35 Z"/><path d="M41 41 L22 35 L35 22 Z"/>
+        </g>
+        <circle r="34" fill="#FFD23F" stroke="#E08A00" stroke-width="4"/>
+        <ellipse cx="-16" cy="6" rx="6" ry="3.5" fill="#FF9A9A"/><ellipse cx="16" cy="6" rx="6" ry="3.5" fill="#FF9A9A"/>
+        <path d="M-17 -6 Q-11 -12 -5 -6" fill="none" stroke="#1B1640" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M5 -6 Q11 -12 17 -6" fill="none" stroke="#1B1640" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M-9 8 Q0 18 9 8" fill="#1B1640"/>
+      </svg>
+    <div class="board" id="board" data-ta="board" aria-label="Grille de jeu">
+      <div class="layer cells" id="cells"></div>
+      <div class="dayfog" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <svg class="threadsvg" id="svg" viewBox="0 0 6 6" preserveAspectRatio="none" aria-hidden="true">
+        <g class="walls" id="walls"></g>
+        <polyline id="line" points=""/>
+        <circle id="head" r="0" cx="0" cy="0"/>
+      </svg>
+      <div class="layer knots" id="knots"></div>
+      <div class="countdown" id="countdown" hidden aria-live="assertive"></div>
+    </div>
+    </div>
+    <p class="status" id="status" aria-live="polite"></p>
+
+    <div class="controls" id="controls">
+      <button class="btn" id="undo" data-t="undo">Annuler</button>
+      <button class="btn" id="hint"><span data-t="hint">Indice</span><small>+15 s</small></button>
+      <button class="btn" id="reset" data-t="reset">Recommencer</button>
+    </div>
+
+    <section class="result" id="result" hidden aria-live="polite">
+      <h2 id="resTitle">Grille terminée</h2>
+      <p id="resLine"></p>
+      <pre class="share" id="shareText"></pre>
+      <div class="row">
+        <button class="btn primary" id="copy" data-t="copy">Copier mon résultat</button>
+        <button class="btn" id="alt">Jouer les niveaux</button>
+      </div>
+    </section>
+
+    <dl class="stats" id="dailyStats">
+      <div><dt data-t="streak">Série</dt><dd id="stStreak">0</dd></div>
+      <div><dt data-t="dailyPlayed">Grilles du jour</dt><dd id="stPlayed">0</dd></div>
+      <div><dt data-t="best">Record</dt><dd id="stBest">–</dd></div>
+    </dl>
+
+    <section class="rules">
+      <h3 data-t="howto">Comment jouer</h3>
+      <ol>
+        <li data-th="rule1">Posez le doigt sur le <strong>1</strong> et glissez de case en case (pas de diagonale).</li>
+        <li data-th="rule2">Passez par les numéros dans l'ordre : 1, 2, 3…</li>
+        <li data-th="rule3">Remplissez <strong>toutes</strong> les cases et finissez sur le dernier numéro.</li>
+        <li data-th="rule4">Le fil ne traverse jamais les <strong>murs</strong>.</li>
+      </ol>
+    </section>
+  </div>
+
+  <footer>
+    <b>Filozen</b><button class="linkbtn" id="footTip" data-t="tipOpen">☕ Offrir un café à Filo</button><span id="adInfo"></span><span data-t="footer">Prototype bêta — une nouvelle grille chaque jour à minuit.</span>
+    <button class="linkbtn" id="replayDaily" hidden>🔁 Rejouer le défi du jour (mode test)</button>
+    <button class="linkbtn" id="unlockAll">Débloquer tous les niveaux (mode test)</button>
+  </footer>
+</div>
+
+<div class="overlay" id="celebrate" hidden role="dialog" aria-modal="true" aria-labelledby="cTitle">
+  <div class="card" id="card">
+    <div class="kicker" id="cKicker">Niveau 1</div>
+    <h2 id="cTitle">Bravo !</h2>
+    <div class="bigstars" id="cStars"><span>★</span><span>★</span><span>★</span></div>
+    <div class="ctime" id="cTime">0:00</div>
+    <ul class="gains" id="cGains"></ul>
+    <div class="rankbox">
+      <div class="rankline"><span id="cRank">Esprit embrumé</span><b id="cXp">0</b></div>
+      <div class="bar"><i id="cBar"></i></div>
+      <p class="rankmsg" id="cRankMsg"></p>
+    </div>
+    <div class="newbadges" id="cBadges"></div>
+    <button class="btn reward" id="cReward" hidden></button>
+    <div class="row">
+      <button class="btn primary" id="cNext">Niveau suivant</button>
+      <button class="btn" id="cAlt">Carte</button>
+    </div>
+  </div>
+</div>
+<div class="intro" id="intro" role="button" tabindex="0" data-ta="tapToPlay" aria-label="Toucher pour jouer">
+  <div class="introInner">
+    <svg class="introThread" viewBox="0 0 300 120" aria-hidden="true">
+      <path class="thr" d="M20 60 C 50 5, 90 5, 110 60 S 170 115, 195 60 S 250 5, 280 40" pathLength="1"/>
+      <g class="k k1"><circle cx="20" cy="60" r="15"/><text x="20" y="66">1</text></g>
+      <g class="k k2"><circle cx="110" cy="60" r="15"/><text x="110" y="66">2</text></g>
+      <g class="k k3"><circle cx="195" cy="60" r="15"/><text x="195" y="66">3</text></g>
+      <g class="k k4"><circle cx="280" cy="40" r="15"/><text x="280" y="46">4</text></g>
+      <!-- Filo, la pelote mascotte : entre en roulant, cligne des yeux, déroule le fil puis saute de joie -->
+      <g id="filo" visibility="hidden">
+        <set attributeName="visibility" to="visible" begin="filoIn.begin"/>
+        <animateMotion id="filoIn" begin="indefinite" dur="0.7s" fill="freeze" path="M-60 60 L20 60" keyTimes="0;1" keySplines=".2 .8 .3 1" calcMode="spline"/>
+        <animateMotion id="filoRun" begin="filoIn.end+0.5s" dur="1.3s" fill="freeze" path="M20 60 C 50 5, 90 5, 110 60 S 170 115, 195 60 S 250 5, 280 40"/>
+        <g>
+          <animateTransform attributeName="transform" type="translate" begin="filoRun.end" dur="0.5s" values="0 0; 0 -30; 0 0" keyTimes="0;.45;1" calcMode="spline" keySplines=".2 .8 .3 1; .6 0 .8 .3" fill="freeze"/>
+          <g>
+            <animateTransform attributeName="transform" type="scale" begin="filoIn.end" dur="0.35s" values="1 1; 1.25 .75; .9 1.1; 1 1"/>
+            <animateTransform attributeName="transform" type="scale" begin="filoRun.end+0.5s" dur="0.3s" values="1 1; 1.2 .8; 1 1"/>
+            <circle r="22" fill="#FF5D5D"/>
+            <g fill="none" stroke="#E04545" stroke-width="1.9" stroke-linecap="round">
+              <path d="M-21 4 Q-3 -3 11 -19"/><path d="M-18 11 Q1 4 16 -14"/><path d="M-13 17 Q5 10 20 -6"/><path d="M-6 21 Q9 15 21 3"/><path d="M-16 -15 Q-9 -3 -20 8"/><path d="M-9 -20 Q-2 -6 -14 14"/>
+            </g>
+            <ellipse cx="-13" cy="6" rx="4" ry="2.5" fill="#FF9A9A"/><ellipse cx="13" cy="6" rx="4" ry="2.5" fill="#FF9A9A"/>
+            <ellipse cx="-7" cy="-4" rx="5" ry="6" fill="#fff"><animate attributeName="ry" begin="filoIn.end+0.2s" dur="0.18s" values="6;0.6;6"/></ellipse>
+            <ellipse cx="7" cy="-4" rx="5" ry="6" fill="#fff">
+              <animate attributeName="ry" begin="filoIn.end+0.2s" dur="0.18s" values="6;0.6;6"/>
+              <animate attributeName="ry" begin="filoRun.end+0.7s" dur="0.4s" values="6;0.6;0.6;6" keyTimes="0;.2;.8;1"/>
+            </ellipse>
+            <circle cx="-6" cy="-3" r="2.6" fill="#1B1640"><animate attributeName="r" begin="filoIn.end+0.2s" dur="0.18s" values="2.6;0;2.6"/></circle>
+            <circle cx="8" cy="-3" r="2.6" fill="#1B1640">
+              <animate attributeName="r" begin="filoIn.end+0.2s" dur="0.18s" values="2.6;0;2.6"/>
+              <animate attributeName="r" begin="filoRun.end+0.7s" dur="0.4s" values="2.6;0;0;2.6" keyTimes="0;.2;.8;1"/>
+            </circle>
+            <path d="M-6 8 Q0 14 6 8" fill="none" stroke="#1B1640" stroke-width="2" stroke-linecap="round"/>
+          </g>
+        </g>
+      </g>
+    </svg>
+    <div class="introWord" aria-hidden="true"><span class="c1">f</span><span class="c2">i</span><span class="c3">l</span><span class="c4">o</span><span class="c5">z</span><span class="c6">e</span><span class="c7">n</span></div>
+    <p class="introTag" data-t="tagline">Ne perdez plus le fil.</p>
+    <div class="introGo" data-t="tapToPlay">Touchez pour jouer</div>
+  </div>
+</div>
+<!-- fin du jeu : le brouillard se dissipe -->
+<div class="finale" id="finale" hidden role="dialog" aria-modal="true" aria-labelledby="finTitle">
+  <div class="finSky"></div>
+  <div class="finSun"><i></i></div>
+  <div class="finFog"><b class="f1"></b><b class="f2"></b><b class="f3"></b><b class="f4"></b><b class="f5"></b><b class="f6"></b></div>
+  <div class="finInner">
+    <svg class="finFilo" viewBox="-30 -30 60 60" aria-hidden="true">
+        <circle r="22" fill="#FF5D5D"/>
+        <g fill="none" stroke="#E04545" stroke-width="1.9" stroke-linecap="round"><path d="M-21 4 Q-3 -3 11 -19"/><path d="M-18 11 Q1 4 16 -14"/><path d="M-13 17 Q5 10 20 -6"/><path d="M-6 21 Q9 15 21 3"/><path d="M-16 -15 Q-9 -3 -20 8"/><path d="M-9 -20 Q-2 -6 -14 14"/></g>
+        <ellipse cx="-13" cy="6" rx="4" ry="2.5" fill="#FF9A9A"/><ellipse cx="13" cy="6" rx="4" ry="2.5" fill="#FF9A9A"/>
+        <g class="eyes"><ellipse cx="-7" cy="-4" rx="5" ry="6" fill="#fff"/><ellipse cx="7" cy="-4" rx="5" ry="6" fill="#fff"/><circle cx="-6" cy="-5" r="2.6" fill="#1B1640"/><circle cx="8" cy="-5" r="2.6" fill="#1B1640"/></g>
+        <path d="M-8 7 Q0 16 8 7" fill="#1B1640"/>
+      </svg>
+    <h2 id="finTitle" data-t="finaleTitle">Bravo !</h2>
+    <p class="finBig" data-t="finaleLine1">Vous êtes sorti du brouillard.</p>
+    <p data-t="finaleLine2">Félicitations : vous avez terminé les 50 niveaux.</p>
+    <p class="finSoon" data-t="finaleLine3">La suite arrive très bientôt.</p>
+    <div class="row">
+      <button class="btn primary" id="finShare" data-t="share">Partager</button>
+      <button class="btn" id="finHome" data-t="finaleHome">Retour au menu</button>
+    </div>
+    <div class="row">
+      <button class="btn tipfin" id="finTip" data-t="tipOpen">☕ Offrir un café à Filo</button>
+    </div>
+  </div>
+</div>
+<div class="overlay" id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="card setcard">
+    <h2 id="setTitle" data-t="settings">Réglages</h2>
+    <div class="setrow"><span data-t="setSound">Son</span><button class="settoggle" id="sound">🔊</button></div>
+    <label class="setrow" for="lang"><span data-t="language">Langue</span><select id="lang" class="setselect"></select></label>
+    <a class="setrow link" href="https://filozen.app/privacy.html" target="_blank" rel="noopener"><span data-t="setPrivacy">Politique de confidentialité</span><b>›</b></a>
+    <a class="setrow link" href="mailto:contact@filozen.app"><span data-t="setContact">Nous contacter</span><small>contact@filozen.app</small></a>
+    <button class="setrow tiprow" id="setAds" hidden><span data-t="adPrivacy">Gérer mes choix publicitaires</span><b>›</b></button>
+    <button class="setrow tiprow" id="setTip"><span data-t="tipOpen">☕ Offrir un café à Filo</span><b>›</b></button>
+    <p class="setver"><span data-t="setVersion">Version</span> 1.0 (bêta) · Filozen</p>
+    <button class="btn primary" id="setClose" data-t="close">Fermer</button>
+  </div>
+</div>
+<div class="overlay" id="tip" hidden role="dialog" aria-modal="true" aria-labelledby="tipTitle">
+  <div class="card tipcard">
+    <svg class="tipFilo" viewBox="-30 -30 60 60" aria-hidden="true">
+        <circle r="22" fill="#FF5D5D"/>
+        <g fill="none" stroke="#E04545" stroke-width="1.9" stroke-linecap="round"><path d="M-21 4 Q-3 -3 11 -19"/><path d="M-18 11 Q1 4 16 -14"/><path d="M-13 17 Q5 10 20 -6"/><path d="M-6 21 Q9 15 21 3"/><path d="M-16 -15 Q-9 -3 -20 8"/><path d="M-9 -20 Q-2 -6 -14 14"/></g>
+        <ellipse cx="-13" cy="6" rx="4" ry="2.5" fill="#FF9A9A"/><ellipse cx="13" cy="6" rx="4" ry="2.5" fill="#FF9A9A"/>
+        <ellipse cx="-7" cy="-4" rx="5" ry="6" fill="#fff"/><ellipse cx="7" cy="-4" rx="5" ry="6" fill="#fff"/>
+        <circle cx="-6" cy="-3" r="2.6" fill="#1B1640"/><circle cx="8" cy="-3" r="2.6" fill="#1B1640"/>
+        <path d="M-8 7 Q0 16 8 7" fill="#1B1640"/>
+      </svg>
+    <div id="tipAsk">
+      <h2 id="tipTitle" data-t="tipTitle">Soutenir Filozen</h2>
+      <p class="tiptext" data-t="tipText">Filozen est créé par un développeur indépendant. Si le jeu vous aide à sortir du brouillard, offrez un café à Filo !</p>
+      <div class="tiplist">
+        <button class="tipbtn" data-tip="1.99"><span>☕ <b data-t="tip1">Un café</b></span><em></em></button>
+        <button class="tipbtn" data-tip="4.99"><span>🥐 <b data-t="tip2">Café + croissant</b></span><em></em></button>
+        <button class="tipbtn" data-tip="9.99"><span>🎁 <b data-t="tip3">Un grand merci</b></span><em></em></button>
+      </div>
+      <p class="tipnote" data-t="tipNote">Paiement sécurisé par l’App Store ou Google Play.</p>
+      <p class="tipnote sim" data-t="tipSim">Prototype : simulation, aucun paiement réel.</p>
+    </div>
+    <div id="tipDone" hidden>
+      <h2 data-t="tipThanks">Merci infiniment ! 💛</h2>
+      <p class="tiptext" data-t="tipThanksText">Votre soutien aide Filozen à grandir. Filo est aux anges !</p>
+    </div>
+    <button class="btn" id="tipClose" data-t="close">Fermer</button>
+  </div>
+</div>
+<div class="adscreen" id="adscreen" hidden role="dialog" aria-modal="true" aria-labelledby="adTitle">
+  <div class="adtop"><span class="adtag" data-t="adLabel">Publicité</span><button class="adclose" id="adClose" disabled>5</button></div>
+  <div class="adbox">
+    <div class="adicon" aria-hidden="true">▶</div>
+    <h2 id="adTitle" data-t="adTitle">Espace publicitaire</h2>
+    <p data-t="adBody">Ici s’affichera une vraie pub vidéo (15 à 30 s) dans l’app finale.</p>
+  </div>
+  <button class="btn primary adpremium" id="adPremium" data-t="adPremium">Premium : zéro pub</button>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const LAUNCH = new Date(2026, 8, 1);
+const PENALTY = 15000;
+const TOTAL = 50;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- utilitaires ---------- */
+/* Sauvegarde de la progression.
+   - Écriture immédiate dans le stockage de la page (rapide, synchrone)
+   - Copie dans le stockage natif du téléphone (Capacitor Preferences), bien plus robuste :
+     si le système vide un jour le stockage de la page, tout est restauré au lancement suivant. */
+const NativePrefs = (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()
+  && window.Capacitor.Plugins && window.Capacitor.Plugins.Preferences) || null;
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('fil:' + k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){
+    const val = JSON.stringify(v);
+    try{ localStorage.setItem('fil:' + k, val); }catch(e){}
+    if(NativePrefs) NativePrefs.set({ key: 'fil:' + k, value: val }).catch(() => {});
+  }
+};
+// Version du format de sauvegarde : à chaque changement de format, ajouter une étape de conversion ici.
+const SAVE_VERSION = 1;
+function migrateSave(){
+  let v = store.get('saveVersion', 0);
+  if(v < 1){
+    // v0 → v1 : aucune conversion nécessaire (le format v0 est celui de la bêta), on pose juste le numéro
+    v = 1;
+  }
+  // futur exemple : if(v < 2){ … convertir … ; v = 2; }
+  store.set('saveVersion', v);
+}
+// Au lancement dans l'app : synchronise la page et le stockage natif dans les deux sens.
+// Renvoie true si une progression a dû être restaurée (la page se recharge alors une fois).
+async function syncNativeSave(){
+  if(!NativePrefs) return false;
+  try{
+    const { keys } = await NativePrefs.keys();
+    const mine = keys.filter(k => k.startsWith('fil:'));
+    let restored = false;
+    for(const key of mine){
+      if(localStorage.getItem(key) === null){
+        const { value } = await NativePrefs.get({ key });
+        if(value !== null){ localStorage.setItem(key, value); restored = true; }
+      }
+    }
+    for(let i = 0; i < localStorage.length; i++){
+      const key = localStorage.key(i);
+      if(key && key.startsWith('fil:') && !mine.includes(key)) await NativePrefs.set({ key, value: localStorage.getItem(key) });
+    }
+    return restored;
+  }catch(e){ return false; }
+}
+migrateSave();
+function dateKey(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function dayNumber(){ const t = new Date(); t.setHours(0,0,0,0); return Math.round((t - LAUNCH) / 864e5) + 1; }
+function hash(str){ let h = 1779033703 ^ str.length; for(let i=0;i<str.length;i++){ h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19; } return h >>> 0; }
+function mulberry(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function fmt(ms){ const s = Math.floor(ms / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+function neighbors(i, n){ const r = Math.floor(i / n), c = i % n, o = []; if(r>0) o.push(i-n); if(r<n-1) o.push(i+n); if(c>0) o.push(i-1); if(c<n-1) o.push(i+1); return o; }
+function adjacent(a, b, n){ return Math.abs(a - b) === n || (Math.abs(a - b) === 1 && Math.floor(a / n) === Math.floor(b / n)); }
+function edge(a, b){ return a < b ? a + '-' + b : b + '-' + a; }
+const pick = a => a[Math.floor(Math.random() * a.length)];
+
+/* ---------- langues : tous les textes du jeu, une entrée par langue ---------- */
+const APP = 'Filozen';
+const s_ = (n, one, many) => n > 1 ? many : one;
+const I18N = {
+  fr: {
+    locale: 'fr-FR', music: 'Choisir la musique', player: 'Votre progression', rankN: i => `Rang ${i}`, neurons: 'neurones',
+    rankHint: (n, r) => `Encore ${n} neurones pour « ${r} »`, rankMax: 'Rang maximal atteint. Respect.',
+    modes: 'Mode de jeu', tabDaily: 'Défi', tabLevels: 'Niveaux', tabTrain: 'Libre',
+    journey: 'Parcours', badges: 'Badges', lvCount: (d, T, s, S) => `${d} / ${T} niveaux · ${s} / ${S} ★`,
+    back: '← Carte des niveaux', newGrid: 'Nouvelle grille', board: 'Grille de jeu',
+    undo: 'Annuler', hint: 'Indice', reset: 'Recommencer',
+    copy: 'Partager mon résultat', copied: 'Copié !', selected: 'Texte sélectionné', playLevels: 'Jouer les niveaux',
+    streak: 'Série', dailyPlayed: 'Grilles du jour', best: 'Record',
+    howto: 'Comment jouer',
+    rule1: 'Posez le doigt sur le <strong>1</strong> et glissez de case en case (pas de diagonale).',
+    rule2: 'Passez par les numéros dans l’ordre : 1, 2, 3…',
+    rule3: 'Remplissez <strong>toutes</strong> les cases et finissez sur le dernier numéro.',
+    rule4: 'Le fil ne traverse jamais les <strong>murs</strong>.',
+    footer: 'Une nouvelle grille chaque jour à minuit.',
+    unlockAll: 'Débloquer tous les niveaux (mode test)', unlocked: 'Tous les niveaux sont débloqués',
+    tapToPlay: 'Touchez pour jouer', tagline: 'Ne perdez plus le fil.', language: 'Langue',
+    muteOn: 'Couper tout le son', muteOff: 'Réactiver le son', soundOff: 'Son coupé', soundOn: 'Son activé',
+    musicStudio: 'Musique : Filozen (ambiances originales)', musicArcade: 'Musique : Rétro 8 bits', musicClassic: 'Musique : Classique (Bach, Pachelbel)', musicOff: 'Musique coupée',
+    bands: ['Échauffement', 'Éveil', 'Concentration', 'Focus', 'Maîtrise'],
+    ranks: ['Esprit embrumé', 'Réveillé', 'Attentif', 'Concentré', 'Focus laser', 'Maître du fil', 'Légende'],
+    badgeNames: { first: 'Premier fil', clean: 'Sans filet', fast: 'Éclair', daily: 'Rituel', streak3: '3 jours d’affilée', perfect5: 'Série parfaite' },
+    bandDone: b => `${b} fini`,
+    wall: 'Un mur bloque ce passage.', stopAt: k => `Le fil s’arrête au ${k}. Revenez en arrière pour couvrir les cases vides.`,
+    needFirst: k => `Il faut d’abord passer par le ${k}.`, almost: n => `Presque ! Il reste ${n} ${s_(n, 'case vide', 'cases vides')}.`,
+    startOn1: 'Commencez sur le 1.', continueEnd: 'Continuez depuis le bout du fil.', backTo1: 'Retour au 1.',
+    hintFix: 'Indice : le fil a été corrigé et prolongé d’une case.', hintOne: 'Indice : une case de plus.',
+    titles: ['Bravo !', 'Magnifique !', 'Cerveau en feu !', 'Net et précis !', 'Quel fil !', 'Imparable !'],
+    gLevel: 'Niveau réussi', gClean: 'Sans indice', gFast: t => `Rapide (moins de ${t})`, gReplay: 'Niveau rejoué',
+    gStars: n => s_(n, 'Nouvelle étoile', 'Nouvelles étoiles'), gCombo: n => `Série parfaite ×${n}`,
+    tMaster: 'Maître du fil !', tBoss: 'Boss vaincu !', gBand: b => `Palier ${b} terminé`, newBand: (b, n) => `Nouveau palier débloqué : ${b} ${n}×${n}`,
+    gDaily: 'Grille du jour', gUnder: 'Moins de 1:30', gDays: n => `Série de ${n} jours`, gFree: 'Grille libre',
+    kLevel: (l, b) => `Niveau ${l} · ${b}`, kDaily: () => 'Défi du jour', kFree: n => `Libre ${n}×${n}`,
+    nextLevel: 'Niveau suivant →', map: 'Carte', share: 'Partager', close: 'Fermer',
+    timeIs: t => `Temps : ${t}`, hints: n => `${n} ${s_(n, 'indice', 'indices')}`, badgeUnlocked: b => `Badge débloqué : ${b}`,
+    shClean: '✨ Sans indice', shHints: n => `💡 ${n} ${s_(n, 'indice', 'indices')}`, shStreak: n => `🔥 Série : ${n} ${s_(n, 'jour', 'jours')}`,
+    shFree: n => `entraînement ${n}×${n}`, shLevel: (l, T) => `niveau ${l}/${T}`,
+    resDaily: (n, t) => `Défi du jour réussi en ${t}`, resOther: t => `Terminée en ${t}`,
+    resFree: 'Partagez votre temps ou enchaînez une nouvelle grille.', nextIn: (h, m) => `Prochaine grille dans ${h} h ${m} min.`,
+    lvLocked: l => `Niveau ${l}, verrouillé`, lvAria: (l, s) => `Niveau ${l}` + (s ? `, ${s} étoiles` : ''),
+    play: 'JOUER', boss: 'BOSS', bossPlay: 'BOSS · JOUER',
+    tipStart: 'Posez le doigt sur le 1 et tracez le fil.', tipWalls: 'Nouveau : les murs. Le fil ne peut pas les traverser.',
+    tipBoss: 'Niveau boss : le plus dur du palier.', tipResume: 'Reprenez là où vous en étiez.',
+    lvLabel: (l, boss) => `Niveau ${l}` + (boss ? ' · Boss' : ''), walls: n => `${n} ${s_(n, 'mur', 'murs')}`,
+    go: 'Go !', dailyLabel: () => 'Défi du jour', freeLabel: n => `Libre ${n} × ${n}`, freeSub: 'Grilles illimitées'
+  },
+  en: {
+    locale: 'en-US', music: 'Choose music', player: 'Your progress', rankN: i => `Rank ${i}`, neurons: 'neurons',
+    rankHint: (n, r) => `${n} more neurons to reach “${r}”`, rankMax: 'Top rank reached. Respect.',
+    modes: 'Game mode', tabDaily: 'Daily', tabLevels: 'Levels', tabTrain: 'Free play',
+    journey: 'Journey', badges: 'Badges', lvCount: (d, T, s, S) => `${d} / ${T} levels · ${s} / ${S} ★`,
+    back: '← Level map', newGrid: 'New grid', board: 'Game grid',
+    undo: 'Undo', hint: 'Hint', reset: 'Restart',
+    copy: 'Share my result', copied: 'Copied!', selected: 'Text selected', playLevels: 'Play the levels',
+    streak: 'Streak', dailyPlayed: 'Daily grids', best: 'Best',
+    howto: 'How to play',
+    rule1: 'Put your finger on <strong>1</strong> and slide from cell to cell (no diagonals).',
+    rule2: 'Pass through the numbers in order: 1, 2, 3…',
+    rule3: 'Fill <strong>every</strong> cell and finish on the last number.',
+    rule4: 'The thread never crosses <strong>walls</strong>.',
+    footer: 'A new grid every day at midnight.',
+    unlockAll: 'Unlock all levels (test mode)', unlocked: 'All levels are unlocked',
+    tapToPlay: 'Tap to play', tagline: 'Never lose the thread.', language: 'Language',
+    muteOn: 'Mute all sound', muteOff: 'Unmute', soundOff: 'Sound off', soundOn: 'Sound on',
+    musicStudio: 'Music: Filozen (original soundtrack)', musicArcade: 'Music: Retro 8-bit', musicClassic: 'Music: Classical (Bach, Pachelbel)', musicOff: 'Music off',
+    bands: ['Warm-up', 'Wake-up', 'Concentration', 'Focus', 'Mastery'],
+    ranks: ['Foggy mind', 'Awake', 'Attentive', 'Concentrated', 'Laser focus', 'Thread master', 'Legend'],
+    badgeNames: { first: 'First thread', clean: 'No safety net', fast: 'Lightning', daily: 'Ritual', streak3: '3 days in a row', perfect5: 'Perfect streak' },
+    bandDone: b => `${b} done`,
+    wall: 'A wall blocks the way.', stopAt: k => `The thread ends at ${k}. Go back to cover the empty cells.`,
+    needFirst: k => `You need to pass through ${k} first.`, almost: n => `Almost! ${n} empty ${n === 1 ? 'cell' : 'cells'} left.`,
+    startOn1: 'Start on 1.', continueEnd: 'Keep going from the end of the thread.', backTo1: 'Back to 1.',
+    hintFix: 'Hint: the thread was fixed and extended by one cell.', hintOne: 'Hint: one more cell.',
+    titles: ['Well done!', 'Brilliant!', 'Brain on fire!', 'Sharp!', 'What a thread!', 'Unstoppable!'],
+    gLevel: 'Level cleared', gClean: 'No hints', gFast: t => `Fast (under ${t})`, gReplay: 'Level replayed',
+    gStars: n => n === 1 ? 'New star' : 'New stars', gCombo: n => `Perfect streak ×${n}`,
+    tMaster: 'Thread master!', tBoss: 'Boss defeated!', gBand: b => `${b} stage complete`, newBand: (b, n) => `New stage unlocked: ${b} ${n}×${n}`,
+    gDaily: 'Daily grid', gUnder: 'Under 1:30', gDays: n => `${n}-day streak`, gFree: 'Free grid',
+    kLevel: (l, b) => `Level ${l} · ${b}`, kDaily: () => 'Daily challenge', kFree: n => `Free play ${n}×${n}`,
+    nextLevel: 'Next level →', map: 'Map', share: 'Share', close: 'Close',
+    timeIs: t => `Time: ${t}`, hints: n => `${n} ${n === 1 ? 'hint' : 'hints'}`, badgeUnlocked: b => `Badge unlocked: ${b}`,
+    shClean: '✨ No hints', shHints: n => `💡 ${n} ${n === 1 ? 'hint' : 'hints'}`, shStreak: n => `🔥 Streak: ${n} ${n === 1 ? 'day' : 'days'}`,
+    shFree: n => `free play ${n}×${n}`, shLevel: (l, T) => `level ${l}/${T}`,
+    resDaily: (n, t) => `Daily challenge solved in ${t}`, resOther: t => `Solved in ${t}`,
+    resFree: 'Share your time or jump into a new grid.', nextIn: (h, m) => `Next grid in ${h} h ${m} min.`,
+    lvLocked: l => `Level ${l}, locked`, lvAria: (l, s) => `Level ${l}` + (s ? `, ${s} stars` : ''),
+    play: 'PLAY', boss: 'BOSS', bossPlay: 'BOSS · PLAY',
+    tipStart: 'Put your finger on 1 and draw the thread.', tipWalls: 'New: walls. The thread can’t cross them.',
+    tipBoss: 'Boss level: the hardest of the stage.', tipResume: 'Pick up where you left off.',
+    lvLabel: (l, boss) => `Level ${l}` + (boss ? ' · Boss' : ''), walls: n => `${n} ${n === 1 ? 'wall' : 'walls'}`,
+    go: 'Go!', dailyLabel: () => 'Daily challenge', freeLabel: n => `Free play ${n} × ${n}`, freeSub: 'Unlimited grids'
+  },
+  es: {
+    locale: 'es-ES', music: 'Elegir música', player: 'Tu progreso', rankN: i => `Rango ${i}`, neurons: 'neuronas',
+    rankHint: (n, r) => `Faltan ${n} neuronas para «${r}»`, rankMax: 'Rango máximo alcanzado. Respeto.',
+    modes: 'Modo de juego', tabDaily: 'Del día', tabLevels: 'Niveles', tabTrain: 'Libre',
+    journey: 'Recorrido', badges: 'Insignias', lvCount: (d, T, s, S) => `${d} / ${T} niveles · ${s} / ${S} ★`,
+    back: '← Mapa de niveles', newGrid: 'Nueva cuadrícula', board: 'Cuadrícula de juego',
+    undo: 'Deshacer', hint: 'Pista', reset: 'Reiniciar',
+    copy: 'Compartir mi resultado', copied: '¡Copiado!', selected: 'Texto seleccionado', playLevels: 'Jugar los niveles',
+    streak: 'Racha', dailyPlayed: 'Retos diarios', best: 'Récord',
+    howto: 'Cómo jugar',
+    rule1: 'Pon el dedo en el <strong>1</strong> y desliza de casilla en casilla (sin diagonales).',
+    rule2: 'Pasa por los números en orden: 1, 2, 3…',
+    rule3: 'Rellena <strong>todas</strong> las casillas y termina en el último número.',
+    rule4: 'El hilo nunca atraviesa los <strong>muros</strong>.',
+    footer: 'Una nueva cuadrícula cada día a medianoche.',
+    unlockAll: 'Desbloquear todos los niveles (modo prueba)', unlocked: 'Todos los niveles están desbloqueados',
+    tapToPlay: 'Toca para jugar', tagline: 'No pierdas el hilo.', language: 'Idioma',
+    muteOn: 'Silenciar todo', muteOff: 'Activar sonido', soundOff: 'Sonido desactivado', soundOn: 'Sonido activado',
+    musicStudio: 'Música: Filozen (banda sonora original)', musicArcade: 'Música: Retro 8 bits', musicClassic: 'Música: Clásica (Bach, Pachelbel)', musicOff: 'Música desactivada',
+    bands: ['Calentamiento', 'Despertar', 'Concentración', 'Enfoque', 'Maestría'],
+    ranks: ['Mente nublada', 'Despierto', 'Atento', 'Concentrado', 'Enfoque láser', 'Maestro del hilo', 'Leyenda'],
+    badgeNames: { first: 'Primer hilo', clean: 'Sin red', fast: 'Relámpago', daily: 'Ritual', streak3: '3 días seguidos', perfect5: 'Racha perfecta' },
+    bandDone: b => `${b} completado`,
+    wall: 'Un muro bloquea el paso.', stopAt: k => `El hilo termina en el ${k}. Retrocede para cubrir las casillas vacías.`,
+    needFirst: k => `Primero tienes que pasar por el ${k}.`, almost: n => `¡Casi! ${n === 1 ? 'Queda 1 casilla vacía' : `Quedan ${n} casillas vacías`}.`,
+    startOn1: 'Empieza en el 1.', continueEnd: 'Continúa desde el extremo del hilo.', backTo1: 'Vuelta al 1.',
+    hintFix: 'Pista: el hilo se corrigió y avanzó una casilla.', hintOne: 'Pista: una casilla más.',
+    titles: ['¡Bravo!', '¡Magnífico!', '¡Cerebro en llamas!', '¡Preciso!', '¡Qué hilo!', '¡Imparable!'],
+    gLevel: 'Nivel superado', gClean: 'Sin pistas', gFast: t => `Rápido (menos de ${t})`, gReplay: 'Nivel repetido',
+    gStars: n => n === 1 ? 'Nueva estrella' : 'Nuevas estrellas', gCombo: n => `Racha perfecta ×${n}`,
+    tMaster: '¡Maestro del hilo!', tBoss: '¡Jefe derrotado!', gBand: b => `Etapa ${b} completada`, newBand: (b, n) => `Nueva etapa desbloqueada: ${b} ${n}×${n}`,
+    gDaily: 'Reto del día', gUnder: 'Menos de 1:30', gDays: n => `Racha de ${n} días`, gFree: 'Cuadrícula libre',
+    kLevel: (l, b) => `Nivel ${l} · ${b}`, kDaily: () => 'Reto del día', kFree: n => `Libre ${n}×${n}`,
+    nextLevel: 'Siguiente nivel →', map: 'Mapa', share: 'Compartir', close: 'Cerrar',
+    timeIs: t => `Tiempo: ${t}`, hints: n => `${n} ${n === 1 ? 'pista' : 'pistas'}`, badgeUnlocked: b => `Insignia desbloqueada: ${b}`,
+    shClean: '✨ Sin pistas', shHints: n => `💡 ${n} ${n === 1 ? 'pista' : 'pistas'}`, shStreak: n => `🔥 Racha: ${n} ${n === 1 ? 'día' : 'días'}`,
+    shFree: n => `libre ${n}×${n}`, shLevel: (l, T) => `nivel ${l}/${T}`,
+    resDaily: (n, t) => `Reto del día resuelto en ${t}`, resOther: t => `Resuelto en ${t}`,
+    resFree: 'Comparte tu tiempo o empieza una nueva cuadrícula.', nextIn: (h, m) => `Próximo reto en ${h} h ${m} min.`,
+    lvLocked: l => `Nivel ${l}, bloqueado`, lvAria: (l, s) => `Nivel ${l}` + (s ? `, ${s} estrellas` : ''),
+    play: 'JUGAR', boss: 'JEFE', bossPlay: 'JEFE · JUGAR',
+    tipStart: 'Pon el dedo en el 1 y traza el hilo.', tipWalls: 'Nuevo: los muros. El hilo no puede atravesarlos.',
+    tipBoss: 'Nivel jefe: el más difícil de la etapa.', tipResume: 'Continúa donde lo dejaste.',
+    lvLabel: (l, boss) => `Nivel ${l}` + (boss ? ' · Jefe' : ''), walls: n => `${n} ${n === 1 ? 'muro' : 'muros'}`,
+    go: '¡Ya!', dailyLabel: () => 'Reto del día', freeLabel: n => `Libre ${n} × ${n}`, freeSub: 'Cuadrículas ilimitadas'
+  },
+  de: {
+    locale: 'de-DE', music: 'Musik wählen', player: 'Dein Fortschritt', rankN: i => `Rang ${i}`, neurons: 'Neuronen',
+    rankHint: (n, r) => `Noch ${n} Neuronen bis „${r}“`, rankMax: 'Höchster Rang erreicht. Respekt.',
+    modes: 'Spielmodus', tabDaily: 'Täglich', tabLevels: 'Level', tabTrain: 'Frei',
+    journey: 'Reise', badges: 'Abzeichen', lvCount: (d, T, s, S) => `${d} / ${T} Level · ${s} / ${S} ★`,
+    back: '← Levelkarte', newGrid: 'Neues Gitter', board: 'Spielgitter',
+    undo: 'Zurück', hint: 'Tipp', reset: 'Neustart',
+    copy: 'Ergebnis teilen', copied: 'Kopiert!', selected: 'Text markiert', playLevels: 'Level spielen',
+    streak: 'Serie', dailyPlayed: 'Tagesrätsel', best: 'Rekord',
+    howto: 'So wird gespielt',
+    rule1: 'Leg den Finger auf die <strong>1</strong> und zieh von Feld zu Feld (nicht diagonal).',
+    rule2: 'Geh der Reihe nach über die Zahlen: 1, 2, 3…',
+    rule3: 'Füll <strong>alle</strong> Felder und ende auf der letzten Zahl.',
+    rule4: 'Der Faden geht nie durch <strong>Mauern</strong>.',
+    footer: 'Jeden Tag um Mitternacht ein neues Rätsel.',
+    unlockAll: 'Alle Level freischalten (Testmodus)', unlocked: 'Alle Level sind freigeschaltet',
+    tapToPlay: 'Tippen zum Spielen', tagline: 'Verlier nie den Faden.', language: 'Sprache',
+    muteOn: 'Ton komplett aus', muteOff: 'Ton an', soundOff: 'Ton aus', soundOn: 'Ton an',
+    musicStudio: 'Musik: Filozen (Original-Soundtrack)', musicArcade: 'Musik: Retro 8-Bit', musicClassic: 'Musik: Klassik (Bach, Pachelbel)', musicOff: 'Musik aus',
+    bands: ['Aufwärmen', 'Erwachen', 'Konzentration', 'Fokus', 'Meisterschaft'],
+    ranks: ['Nebelkopf', 'Wach', 'Aufmerksam', 'Konzentriert', 'Laserfokus', 'Fadenmeister', 'Legende'],
+    badgeNames: { first: 'Erster Faden', clean: 'Ohne Netz', fast: 'Blitz', daily: 'Ritual', streak3: '3 Tage am Stück', perfect5: 'Perfekte Serie' },
+    bandDone: b => `${b} geschafft`,
+    wall: 'Eine Mauer versperrt den Weg.', stopAt: k => `Der Faden endet bei ${k}. Geh zurück, um die leeren Felder zu füllen.`,
+    needFirst: k => `Du musst zuerst über die ${k}.`, almost: n => `Fast! Noch ${n} ${n === 1 ? 'leeres Feld' : 'leere Felder'}.`,
+    startOn1: 'Starte bei der 1.', continueEnd: 'Mach am Ende des Fadens weiter.', backTo1: 'Zurück zur 1.',
+    hintFix: 'Tipp: Der Faden wurde korrigiert und um ein Feld verlängert.', hintOne: 'Tipp: ein Feld weiter.',
+    titles: ['Bravo!', 'Großartig!', 'Hirn auf Hochtouren!', 'Präzise!', 'Was für ein Faden!', 'Unaufhaltsam!'],
+    gLevel: 'Level geschafft', gClean: 'Ohne Tipp', gFast: t => `Schnell (unter ${t})`, gReplay: 'Level wiederholt',
+    gStars: n => n === 1 ? 'Neuer Stern' : 'Neue Sterne', gCombo: n => `Perfekte Serie ×${n}`,
+    tMaster: 'Fadenmeister!', tBoss: 'Boss besiegt!', gBand: b => `Etappe ${b} geschafft`, newBand: (b, n) => `Neue Etappe freigeschaltet: ${b} ${n}×${n}`,
+    gDaily: 'Tagesrätsel', gUnder: 'Unter 1:30', gDays: n => `${n} Tage in Folge`, gFree: 'Freies Gitter',
+    kLevel: (l, b) => `Level ${l} · ${b}`, kDaily: () => 'Tagesrätsel', kFree: n => `Frei ${n}×${n}`,
+    nextLevel: 'Nächstes Level →', map: 'Karte', share: 'Teilen', close: 'Schließen',
+    timeIs: t => `Zeit: ${t}`, hints: n => `${n} ${n === 1 ? 'Tipp' : 'Tipps'}`, badgeUnlocked: b => `Abzeichen freigeschaltet: ${b}`,
+    shClean: '✨ Ohne Tipp', shHints: n => `💡 ${n} ${n === 1 ? 'Tipp' : 'Tipps'}`, shStreak: n => `🔥 Serie: ${n} ${n === 1 ? 'Tag' : 'Tage'}`,
+    shFree: n => `frei ${n}×${n}`, shLevel: (l, T) => `Level ${l}/${T}`,
+    resDaily: (n, t) => `Tagesrätsel gelöst in ${t}`, resOther: t => `Gelöst in ${t}`,
+    resFree: 'Teile deine Zeit oder starte ein neues Gitter.', nextIn: (h, m) => `Nächstes Rätsel in ${h} Std. ${m} Min.`,
+    lvLocked: l => `Level ${l}, gesperrt`, lvAria: (l, s) => `Level ${l}` + (s ? `, ${s} Sterne` : ''),
+    play: 'SPIELEN', boss: 'BOSS', bossPlay: 'BOSS · SPIELEN',
+    tipStart: 'Leg den Finger auf die 1 und zieh den Faden.', tipWalls: 'Neu: Mauern. Der Faden kann sie nicht durchqueren.',
+    tipBoss: 'Boss-Level: das schwerste der Etappe.', tipResume: 'Mach da weiter, wo du aufgehört hast.',
+    lvLabel: (l, boss) => `Level ${l}` + (boss ? ' · Boss' : ''), walls: n => `${n} ${n === 1 ? 'Mauer' : 'Mauern'}`,
+    go: 'Los!', dailyLabel: () => 'Tagesrätsel', freeLabel: n => `Frei ${n} × ${n}`, freeSub: 'Unbegrenzte Gitter'
+  },
+  pt: {
+    locale: 'pt-BR', music: 'Escolher música', player: 'Seu progresso', rankN: i => `Nível ${i}`, neurons: 'neurônios',
+    rankHint: (n, r) => `Faltam ${n} neurônios para “${r}”`, rankMax: 'Nível máximo alcançado. Respeito.',
+    modes: 'Modo de jogo', tabDaily: 'Do dia', tabLevels: 'Fases', tabTrain: 'Livre',
+    journey: 'Jornada', badges: 'Conquistas', lvCount: (d, T, s, S) => `${d} / ${T} fases · ${s} / ${S} ★`,
+    back: '← Mapa das fases', newGrid: 'Nova grade', board: 'Grade do jogo',
+    undo: 'Desfazer', hint: 'Dica', reset: 'Recomeçar',
+    copy: 'Compartilhar meu resultado', copied: 'Copiado!', selected: 'Texto selecionado', playLevels: 'Jogar as fases',
+    streak: 'Sequência', dailyPlayed: 'Desafios diários', best: 'Recorde',
+    howto: 'Como jogar',
+    rule1: 'Coloque o dedo no <strong>1</strong> e deslize de casa em casa (sem diagonais).',
+    rule2: 'Passe pelos números em ordem: 1, 2, 3…',
+    rule3: 'Preencha <strong>todas</strong> as casas e termine no último número.',
+    rule4: 'O fio nunca atravessa as <strong>paredes</strong>.',
+    footer: 'Uma nova grade todos os dias à meia-noite.',
+    unlockAll: 'Desbloquear todas as fases (modo teste)', unlocked: 'Todas as fases estão desbloqueadas',
+    tapToPlay: 'Toque para jogar', tagline: 'Não perca o fio da meada.', language: 'Idioma',
+    muteOn: 'Silenciar tudo', muteOff: 'Ativar som', soundOff: 'Som desligado', soundOn: 'Som ligado',
+    musicStudio: 'Música: Filozen (trilha original)', musicArcade: 'Música: Retrô 8 bits', musicClassic: 'Música: Clássica (Bach, Pachelbel)', musicOff: 'Música desligada',
+    bands: ['Aquecimento', 'Despertar', 'Concentração', 'Foco', 'Maestria'],
+    ranks: ['Mente nublada', 'Desperto', 'Atento', 'Concentrado', 'Foco laser', 'Mestre do fio', 'Lenda'],
+    badgeNames: { first: 'Primeiro fio', clean: 'Sem rede', fast: 'Relâmpago', daily: 'Ritual', streak3: '3 dias seguidos', perfect5: 'Sequência perfeita' },
+    bandDone: b => `${b} concluído`,
+    wall: 'Uma parede bloqueia a passagem.', stopAt: k => `O fio termina no ${k}. Volte para cobrir as casas vazias.`,
+    needFirst: k => `Primeiro você precisa passar pelo ${k}.`, almost: n => `Quase! ${n === 1 ? 'Falta 1 casa vazia' : `Faltam ${n} casas vazias`}.`,
+    startOn1: 'Comece no 1.', continueEnd: 'Continue a partir da ponta do fio.', backTo1: 'De volta ao 1.',
+    hintFix: 'Dica: o fio foi corrigido e avançou uma casa.', hintOne: 'Dica: mais uma casa.',
+    titles: ['Bravo!', 'Magnífico!', 'Cérebro a mil!', 'Preciso!', 'Que fio!', 'Imparável!'],
+    gLevel: 'Fase concluída', gClean: 'Sem dicas', gFast: t => `Rápido (menos de ${t})`, gReplay: 'Fase repetida',
+    gStars: n => n === 1 ? 'Nova estrela' : 'Novas estrelas', gCombo: n => `Sequência perfeita ×${n}`,
+    tMaster: 'Mestre do fio!', tBoss: 'Chefe derrotado!', gBand: b => `Etapa ${b} concluída`, newBand: (b, n) => `Nova etapa desbloqueada: ${b} ${n}×${n}`,
+    gDaily: 'Desafio do dia', gUnder: 'Menos de 1:30', gDays: n => `Sequência de ${n} dias`, gFree: 'Grade livre',
+    kLevel: (l, b) => `Fase ${l} · ${b}`, kDaily: () => 'Desafio do dia', kFree: n => `Livre ${n}×${n}`,
+    nextLevel: 'Próxima fase →', map: 'Mapa', share: 'Compartilhar', close: 'Fechar',
+    timeIs: t => `Tempo: ${t}`, hints: n => `${n} ${n === 1 ? 'dica' : 'dicas'}`, badgeUnlocked: b => `Conquista desbloqueada: ${b}`,
+    shClean: '✨ Sem dicas', shHints: n => `💡 ${n} ${n === 1 ? 'dica' : 'dicas'}`, shStreak: n => `🔥 Sequência: ${n} ${n === 1 ? 'dia' : 'dias'}`,
+    shFree: n => `livre ${n}×${n}`, shLevel: (l, T) => `fase ${l}/${T}`,
+    resDaily: (n, t) => `Desafio do dia resolvido em ${t}`, resOther: t => `Resolvido em ${t}`,
+    resFree: 'Compartilhe seu tempo ou comece uma nova grade.', nextIn: (h, m) => `Próximo desafio em ${h} h ${m} min.`,
+    lvLocked: l => `Fase ${l}, bloqueada`, lvAria: (l, s) => `Fase ${l}` + (s ? `, ${s} estrelas` : ''),
+    play: 'JOGAR', boss: 'CHEFE', bossPlay: 'CHEFE · JOGAR',
+    tipStart: 'Coloque o dedo no 1 e trace o fio.', tipWalls: 'Novidade: paredes. O fio não pode atravessá-las.',
+    tipBoss: 'Fase chefe: a mais difícil da etapa.', tipResume: 'Continue de onde parou.',
+    lvLabel: (l, boss) => `Fase ${l}` + (boss ? ' · Chefe' : ''), walls: n => `${n} ${n === 1 ? 'parede' : 'paredes'}`,
+    go: 'Já!', dailyLabel: () => 'Desafio do dia', freeLabel: n => `Livre ${n} × ${n}`, freeSub: 'Grades ilimitadas'
+  },
+  it: {
+    locale: 'it-IT', music: 'Scegli la musica', player: 'I tuoi progressi', rankN: i => `Grado ${i}`, neurons: 'neuroni',
+    rankHint: (n, r) => `Ancora ${n} neuroni per «${r}»`, rankMax: 'Grado massimo raggiunto. Rispetto.',
+    modes: 'Modalità di gioco', tabDaily: 'Del giorno', tabLevels: 'Livelli', tabTrain: 'Libero',
+    journey: 'Percorso', badges: 'Medaglie', lvCount: (d, T, s, S) => `${d} / ${T} livelli · ${s} / ${S} ★`,
+    back: '← Mappa dei livelli', newGrid: 'Nuova griglia', board: 'Griglia di gioco',
+    undo: 'Annulla', hint: 'Aiuto', reset: 'Ricomincia',
+    copy: 'Condividi il risultato', copied: 'Copiato!', selected: 'Testo selezionato', playLevels: 'Gioca i livelli',
+    streak: 'Serie', dailyPlayed: 'Sfide del giorno', best: 'Record',
+    howto: 'Come si gioca',
+    rule1: 'Metti il dito sull’<strong>1</strong> e scorri di casella in casella (niente diagonali).',
+    rule2: 'Passa dai numeri in ordine: 1, 2, 3…',
+    rule3: 'Riempi <strong>tutte</strong> le caselle e finisci sull’ultimo numero.',
+    rule4: 'Il filo non attraversa mai i <strong>muri</strong>.',
+    footer: 'Una nuova griglia ogni giorno a mezzanotte.',
+    unlockAll: 'Sblocca tutti i livelli (modalità test)', unlocked: 'Tutti i livelli sono sbloccati',
+    tapToPlay: 'Tocca per giocare', tagline: 'Non perdere il filo.', language: 'Lingua',
+    muteOn: 'Disattiva tutto l’audio', muteOff: 'Riattiva l’audio', soundOff: 'Audio disattivato', soundOn: 'Audio attivato',
+    musicStudio: 'Musica: Filozen (colonna sonora originale)', musicArcade: 'Musica: Retrò 8 bit', musicClassic: 'Musica: Classica (Bach, Pachelbel)', musicOff: 'Musica disattivata',
+    bands: ['Riscaldamento', 'Risveglio', 'Concentrazione', 'Focus', 'Maestria'],
+    ranks: ['Mente annebbiata', 'Sveglio', 'Attento', 'Concentrato', 'Focus laser', 'Maestro del filo', 'Leggenda'],
+    badgeNames: { first: 'Primo filo', clean: 'Senza rete', fast: 'Fulmine', daily: 'Rituale', streak3: '3 giorni di fila', perfect5: 'Serie perfetta' },
+    bandDone: b => `${b} completato`,
+    wall: 'Un muro blocca il passaggio.', stopAt: k => `Il filo finisce sul ${k}. Torna indietro per coprire le caselle vuote.`,
+    needFirst: k => `Devi prima passare dal ${k}.`, almost: n => `Quasi! ${n === 1 ? 'Resta 1 casella vuota' : `Restano ${n} caselle vuote`}.`,
+    startOn1: 'Parti dall’1.', continueEnd: 'Continua dalla punta del filo.', backTo1: 'Di nuovo all’1.',
+    hintFix: 'Aiuto: il filo è stato corretto e allungato di una casella.', hintOne: 'Aiuto: una casella in più.',
+    titles: ['Bravo!', 'Magnifico!', 'Cervello in fiamme!', 'Preciso!', 'Che filo!', 'Inarrestabile!'],
+    gLevel: 'Livello superato', gClean: 'Senza aiuti', gFast: t => `Veloce (meno di ${t})`, gReplay: 'Livello rigiocato',
+    gStars: n => n === 1 ? 'Nuova stella' : 'Nuove stelle', gCombo: n => `Serie perfetta ×${n}`,
+    tMaster: 'Maestro del filo!', tBoss: 'Boss sconfitto!', gBand: b => `Tappa ${b} completata`, newBand: (b, n) => `Nuova tappa sbloccata: ${b} ${n}×${n}`,
+    gDaily: 'Sfida del giorno', gUnder: 'Meno di 1:30', gDays: n => `Serie di ${n} giorni`, gFree: 'Griglia libera',
+    kLevel: (l, b) => `Livello ${l} · ${b}`, kDaily: () => 'Sfida del giorno', kFree: n => `Libero ${n}×${n}`,
+    nextLevel: 'Livello successivo →', map: 'Mappa', share: 'Condividi', close: 'Chiudi',
+    timeIs: t => `Tempo: ${t}`, hints: n => `${n} ${n === 1 ? 'aiuto' : 'aiuti'}`, badgeUnlocked: b => `Medaglia sbloccata: ${b}`,
+    shClean: '✨ Senza aiuti', shHints: n => `💡 ${n} ${n === 1 ? 'aiuto' : 'aiuti'}`, shStreak: n => `🔥 Serie: ${n} ${n === 1 ? 'giorno' : 'giorni'}`,
+    shFree: n => `libero ${n}×${n}`, shLevel: (l, T) => `livello ${l}/${T}`,
+    resDaily: (n, t) => `Sfida del giorno risolta in ${t}`, resOther: t => `Risolta in ${t}`,
+    resFree: 'Condividi il tuo tempo o inizia una nuova griglia.', nextIn: (h, m) => `Prossima sfida tra ${h} h ${m} min.`,
+    lvLocked: l => `Livello ${l}, bloccato`, lvAria: (l, s) => `Livello ${l}` + (s ? `, ${s} stelle` : ''),
+    play: 'GIOCA', boss: 'BOSS', bossPlay: 'BOSS · GIOCA',
+    tipStart: 'Metti il dito sull’1 e traccia il filo.', tipWalls: 'Novità: i muri. Il filo non può attraversarli.',
+    tipBoss: 'Livello boss: il più difficile della tappa.', tipResume: 'Riprendi da dove avevi lasciato.',
+    lvLabel: (l, boss) => `Livello ${l}` + (boss ? ' · Boss' : ''), walls: n => `${n} ${n === 1 ? 'muro' : 'muri'}`,
+    go: 'Via!', dailyLabel: () => 'Sfida del giorno', freeLabel: n => `Libero ${n} × ${n}`, freeSub: 'Griglie illimitate'
+  },
+  ja: {
+    locale: 'ja-JP', music: '音楽を選ぶ', player: 'あなたの進捗', rankN: i => `ランク ${i}`, neurons: 'ニューロン',
+    rankHint: (n, r) => `「${r}」まであと ${n} ニューロン`, rankMax: '最高ランクに到達。お見事！',
+    modes: 'ゲームモード', tabDaily: 'デイリー', tabLevels: 'レベル', tabTrain: 'フリー',
+    journey: 'ジャーニー', badges: 'バッジ', lvCount: (d, T, s, S) => `${d} / ${T} レベル · ${s} / ${S} ★`,
+    back: '← レベルマップ', newGrid: '新しいグリッド', board: 'ゲームグリッド',
+    undo: '戻す', hint: 'ヒント', reset: 'やり直す',
+    copy: '結果をシェア', copied: 'コピーしました！', selected: 'テキストを選択しました', playLevels: 'レベルをプレイ',
+    streak: '連続', dailyPlayed: 'デイリー達成', best: 'ベスト',
+    howto: '遊び方',
+    rule1: '<strong>1</strong> に指を置き、マスからマスへなぞります（斜めは不可）。',
+    rule2: '数字を順番に通ります：1、2、3…',
+    rule3: '<strong>すべて</strong>のマスを埋めて、最後の数字でゴール。',
+    rule4: '糸は<strong>壁</strong>を通れません。',
+    footer: '毎日0時に新しいグリッド。',
+    unlockAll: '全レベルを解放（テストモード）', unlocked: '全レベル解放済み',
+    tapToPlay: 'タップしてスタート', tagline: '思考の糸を、つなぎ直そう。', language: '言語',
+    muteOn: 'サウンドをすべてオフ', muteOff: 'サウンドをオン', soundOff: 'サウンド オフ', soundOn: 'サウンド オン',
+    musicStudio: '音楽：Filozen オリジナル', musicArcade: '音楽：レトロ8ビット', musicClassic: '音楽：クラシック', musicOff: '音楽 オフ',
+    bands: ['ウォームアップ', '目覚め', '集中', 'フォーカス', 'マスター'],
+    ranks: ['モヤモヤ頭', '目覚めた', '注意深い', '集中', 'レーザーフォーカス', '糸の達人', 'レジェンド'],
+    badgeNames: { first: 'はじめての糸', clean: 'ノーヒント', fast: '稲妻', daily: '日課', streak3: '3日連続', perfect5: 'パーフェクト連続' },
+    bandDone: b => `${b} クリア`,
+    wall: '壁があって通れません。', stopAt: k => `糸は ${k} で終わりです。戻って空いているマスを埋めましょう。`,
+    needFirst: k => `先に ${k} を通る必要があります。`, almost: n => `あと少し！空きマスが ${n} 個あります。`,
+    startOn1: '1 からスタートしてください。', continueEnd: '糸の先端から続けてください。', backTo1: '1 に戻りました。',
+    hintFix: 'ヒント：糸を修正して1マス進めました。', hintOne: 'ヒント：1マス進めました。',
+    titles: ['お見事！', 'すばらしい！', '頭が冴えてる！', '正確！', '見事な糸さばき！', '止まらない！'],
+    gLevel: 'レベルクリア', gClean: 'ヒントなし', gFast: t => `スピード（${t} 以内）`, gReplay: '再プレイ',
+    gStars: () => '新しい星', gCombo: n => `パーフェクト連続 ×${n}`,
+    tMaster: '糸の達人！', tBoss: 'ボス撃破！', gBand: b => `${b} ステージクリア`, newBand: (b, n) => `新ステージ解放：${b} ${n}×${n}`,
+    gDaily: 'デイリーグリッド', gUnder: '1:30 以内', gDays: n => `${n}日連続`, gFree: 'フリーグリッド',
+    kLevel: (l, b) => `レベル ${l} · ${b}`, kDaily: () => 'デイリーチャレンジ', kFree: n => `フリー ${n}×${n}`,
+    nextLevel: '次のレベル →', map: 'マップ', share: 'シェア', close: '閉じる',
+    timeIs: t => `タイム：${t}`, hints: n => `ヒント ${n} 回`, badgeUnlocked: b => `バッジ獲得：${b}`,
+    shClean: '✨ ヒントなし', shHints: n => `💡 ヒント ${n} 回`, shStreak: n => `🔥 ${n}日連続`,
+    shFree: n => `フリー ${n}×${n}`, shLevel: (l, T) => `レベル ${l}/${T}`,
+    resDaily: (n, t) => `デイリーチャレンジを ${t} でクリア`, resOther: t => `${t} でクリア`,
+    resFree: 'タイムをシェアするか、新しいグリッドに挑戦しよう。', nextIn: (h, m) => `次のグリッドまで ${h}時間${m}分`,
+    lvLocked: l => `レベル ${l}（ロック中）`, lvAria: (l, s) => `レベル ${l}` + (s ? `、星 ${s}` : ''),
+    play: 'プレイ', boss: 'ボス', bossPlay: 'ボス · プレイ',
+    tipStart: '1 に指を置いて糸を引こう。', tipWalls: '新要素：壁。糸は壁を通れません。',
+    tipBoss: 'ボスレベル：このステージで一番の難関。', tipResume: '前回の続きから再開しよう。',
+    lvLabel: (l, boss) => `レベル ${l}` + (boss ? ' · ボス' : ''), walls: n => `壁 ${n}`,
+    go: 'スタート！', dailyLabel: () => 'デイリーチャレンジ', freeLabel: n => `フリー ${n} × ${n}`, freeSub: 'グリッド無制限'
+  }
+};
+const LANGS = [['fr', 'Français'], ['en', 'English'], ['es', 'Español'], ['de', 'Deutsch'], ['pt', 'Português'], ['it', 'Italiano'], ['ja', '日本語']];
+function detectLang(){
+  const saved = store.get('lang', null); if(saved && I18N[saved]) return saved;
+  const nav = (navigator.languages || [navigator.language || 'en']).map(l => String(l).slice(0, 2).toLowerCase());
+  return nav.find(l => I18N[l]) || 'en';
+}
+let lang = detectLang(), L = I18N[lang];
+const nf = n => Math.round(n).toLocaleString(L.locale);
+function applyStatic(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-t]').forEach(el => { el.textContent = L[el.dataset.t]; });
+  document.querySelectorAll('[data-th]').forEach(el => { el.innerHTML = L[el.dataset.th]; });
+  document.querySelectorAll('[data-ta]').forEach(el => { el.setAttribute('aria-label', L[el.dataset.ta]); });
+  $('lang').value = lang;
+}
+
+Object.assign(I18N.fr, { rankUp: r => `Nouveau rang : ${r} !` });
+Object.assign(I18N.fr, { rewardBtn: '🎬 Pub bonus → Pass sans pub', rewardSub: 'La prochaine pub sera sautée', rewardLabel: 'Pub récompensée', rewardGot: 'Pass sans pub gagné ! La prochaine pub sera sautée.', passUsed: 'Pass sans pub utilisé : pas de pub cette fois.', passes: n => ` · Pass sans pub : ${n}` });
+Object.assign(I18N.fr, { menu: 'Menu', homeStart: 'Commencer', homeContinue: 'Continuer', homeLevelsSub: (d, T) => `${d} / ${T} réussis`, homeDaily: 'Défi du jour', homeDailyNew: 'Une nouvelle grille vous attend', homeDailyDone: n => `Réussi ✓ · série de ${n} jour${n > 1 ? 's' : ''}`, homeFree: 'Entraînement libre', homeFreeSub: 'Grilles illimitées, de 5×5 à 7×7' });
+Object.assign(I18N.fr, { finaleBtn: '✨ Voir la surprise', finaleTitle: 'Bravo !', finaleLine1: 'Vous êtes sorti du brouillard.', finaleLine2: 'Félicitations : vous avez terminé les 50 niveaux de Filozen.', finaleLine3: 'La suite arrive très bientôt : de nouveaux niveaux sont en préparation.', finaleHome: 'Retour au menu', finaleShare: a => `J’ai terminé les 50 niveaux de ${a} 🧵 et je suis sorti du brouillard ☀️\n#Filozen` });
+Object.assign(I18N.fr, { gRecord: t => `🎉 Nouveau record personnel (avant ${t})`, tRecord: 'Nouveau record !', recordShort: t => `Record ${t}` });
+Object.assign(I18N.fr, { adLabel: 'Publicité', adTitle: 'Espace publicitaire', adBody: 'Ici s’affichera une vraie pub vidéo (15 à 30 s) dans l’app finale.', adPremium: 'Premium : zéro pub', adPremiumSoon: 'L’abonnement Premium arrivera avec l’app.', adWait: n => `Fermeture possible dans ${n} s`, adNext: n => `Pub de test après ${n} grille${n > 1 ? 's' : ''}.` });
+Object.assign(I18N.en, { rewardBtn: '🎬 Bonus ad → Ad-free pass', rewardSub: 'Your next ad will be skipped', rewardLabel: 'Rewarded ad', rewardGot: 'Ad-free pass earned! Your next ad will be skipped.', passUsed: 'Ad-free pass used: no ad this time.', passes: n => ` · Ad-free passes: ${n}` });
+Object.assign(I18N.en, { menu: 'Menu', homeStart: 'Start', homeContinue: 'Continue', homeLevelsSub: (d, T) => `${d} / ${T} cleared`, homeDaily: 'Daily challenge', homeDailyNew: 'A new grid is waiting', homeDailyDone: n => `Done ✓ · ${n}-day streak`, homeFree: 'Free play', homeFreeSub: 'Unlimited grids, 5×5 to 7×7' });
+Object.assign(I18N.en, { finaleBtn: '✨ See the surprise', finaleTitle: 'Well done!', finaleLine1: 'You made it out of the fog.', finaleLine2: 'Congratulations: you finished all 50 levels of Filozen.', finaleLine3: 'More is coming very soon: new levels are on the way.', finaleHome: 'Back to menu', finaleShare: a => `I finished all 50 levels of ${a} 🧵 and made it out of the fog ☀️\n#Filozen` });
+Object.assign(I18N.en, { gRecord: t => `🎉 New personal best (was ${t})`, tRecord: 'New record!', recordShort: t => `Best ${t}` });
+Object.assign(I18N.en, { adLabel: 'Ad', adTitle: 'Ad space', adBody: 'A real video ad (15–30 s) will play here in the final app.', adPremium: 'Premium: no ads', adPremiumSoon: 'Premium will come with the app.', adWait: n => `You can close in ${n} s`, adNext: n => `Test ad after ${n} ${n === 1 ? 'grid' : 'grids'}.` });
+Object.assign(I18N.es, { rewardBtn: '🎬 Anuncio extra → Pase sin anuncios', rewardSub: 'Te saltarás el próximo anuncio', rewardLabel: 'Anuncio con premio', rewardGot: '¡Pase sin anuncios ganado! Te saltarás el próximo anuncio.', passUsed: 'Pase usado: esta vez sin anuncio.', passes: n => ` · Pases sin anuncios: ${n}` });
+Object.assign(I18N.es, { menu: 'Menú', homeStart: 'Empezar', homeContinue: 'Continuar', homeLevelsSub: (d, T) => `${d} / ${T} superados`, homeDaily: 'Reto del día', homeDailyNew: 'Te espera una cuadrícula nueva', homeDailyDone: n => `Hecho ✓ · racha de ${n} ${n === 1 ? 'día' : 'días'}`, homeFree: 'Juego libre', homeFreeSub: 'Cuadrículas ilimitadas, de 5×5 a 7×7' });
+Object.assign(I18N.es, { finaleBtn: '✨ Ver la sorpresa', finaleTitle: '¡Bravo!', finaleLine1: 'Has salido de la niebla.', finaleLine2: 'Enhorabuena: has completado los 50 niveles de Filozen.', finaleLine3: 'Muy pronto habrá más: estamos preparando nuevos niveles.', finaleHome: 'Volver al menú', finaleShare: a => `He completado los 50 niveles de ${a} 🧵 y he salido de la niebla ☀️\n#Filozen` });
+Object.assign(I18N.es, { gRecord: t => `🎉 Nuevo récord personal (antes ${t})`, tRecord: '¡Nuevo récord!', recordShort: t => `Récord ${t}` });
+Object.assign(I18N.es, { adLabel: 'Anuncio', adTitle: 'Espacio publicitario', adBody: 'Aquí se mostrará un anuncio en vídeo real (15–30 s) en la app final.', adPremium: 'Premium: sin anuncios', adPremiumSoon: 'Premium llegará con la app.', adWait: n => `Podrás cerrar en ${n} s`, adNext: n => `Anuncio de prueba tras ${n} ${n === 1 ? 'cuadrícula' : 'cuadrículas'}.` });
+Object.assign(I18N.de, { rewardBtn: '🎬 Bonus-Werbung → Werbefrei-Pass', rewardSub: 'Die nächste Werbung wird übersprungen', rewardLabel: 'Belohnte Werbung', rewardGot: 'Werbefrei-Pass verdient! Die nächste Werbung entfällt.', passUsed: 'Pass eingesetzt: diesmal keine Werbung.', passes: n => ` · Werbefrei-Pässe: ${n}` });
+Object.assign(I18N.de, { menu: 'Menü', homeStart: 'Los geht’s', homeContinue: 'Weiterspielen', homeLevelsSub: (d, T) => `${d} / ${T} geschafft`, homeDaily: 'Tagesrätsel', homeDailyNew: 'Ein neues Rätsel wartet', homeDailyDone: n => `Geschafft ✓ · ${n} ${n === 1 ? 'Tag' : 'Tage'} in Folge`, homeFree: 'Freies Spiel', homeFreeSub: 'Unbegrenzte Gitter, 5×5 bis 7×7' });
+Object.assign(I18N.de, { finaleBtn: '✨ Überraschung ansehen', finaleTitle: 'Bravo!', finaleLine1: 'Du hast den Nebel hinter dir gelassen.', finaleLine2: 'Glückwunsch: Du hast alle 50 Level von Filozen geschafft.', finaleLine3: 'Bald geht es weiter: Neue Level sind in Arbeit.', finaleHome: 'Zurück zum Menü', finaleShare: a => `Ich habe alle 50 Level von ${a} geschafft 🧵 und den Nebel hinter mir gelassen ☀️\n#Filozen` });
+Object.assign(I18N.de, { gRecord: t => `🎉 Neue Bestzeit (vorher ${t})`, tRecord: 'Neuer Rekord!', recordShort: t => `Rekord ${t}` });
+Object.assign(I18N.de, { adLabel: 'Werbung', adTitle: 'Werbefläche', adBody: 'Hier läuft in der fertigen App ein echtes Werbevideo (15–30 s).', adPremium: 'Premium: keine Werbung', adPremiumSoon: 'Premium kommt mit der App.', adWait: n => `Schließen in ${n} s möglich`, adNext: n => `Testwerbung nach ${n} ${n === 1 ? 'Gitter' : 'Gittern'}.` });
+Object.assign(I18N.pt, { rewardBtn: '🎬 Anúncio bônus → Passe sem anúncios', rewardSub: 'O próximo anúncio será pulado', rewardLabel: 'Anúncio premiado', rewardGot: 'Passe sem anúncios ganho! O próximo anúncio será pulado.', passUsed: 'Passe usado: sem anúncio desta vez.', passes: n => ` · Passes sem anúncios: ${n}` });
+Object.assign(I18N.pt, { menu: 'Menu', homeStart: 'Começar', homeContinue: 'Continuar', homeLevelsSub: (d, T) => `${d} / ${T} concluídas`, homeDaily: 'Desafio do dia', homeDailyNew: 'Uma nova grade te espera', homeDailyDone: n => `Feito ✓ · sequência de ${n} ${n === 1 ? 'dia' : 'dias'}`, homeFree: 'Jogo livre', homeFreeSub: 'Grades ilimitadas, de 5×5 a 7×7' });
+Object.assign(I18N.pt, { finaleBtn: '✨ Ver a surpresa', finaleTitle: 'Bravo!', finaleLine1: 'Você saiu da névoa.', finaleLine2: 'Parabéns: você concluiu as 50 fases de Filozen.', finaleLine3: 'Tem mais chegando: novas fases estão sendo preparadas.', finaleHome: 'Voltar ao menu', finaleShare: a => `Terminei as 50 fases de ${a} 🧵 e saí da névoa ☀️\n#Filozen` });
+Object.assign(I18N.pt, { gRecord: t => `🎉 Novo recorde pessoal (antes ${t})`, tRecord: 'Novo recorde!', recordShort: t => `Recorde ${t}` });
+Object.assign(I18N.pt, { adLabel: 'Anúncio', adTitle: 'Espaço publicitário', adBody: 'Aqui aparecerá um anúncio em vídeo real (15–30 s) no app final.', adPremium: 'Premium: sem anúncios', adPremiumSoon: 'O Premium chegará com o app.', adWait: n => `Fechar em ${n} s`, adNext: n => `Anúncio de teste após ${n} ${n === 1 ? 'grade' : 'grades'}.` });
+Object.assign(I18N.it, { rewardBtn: '🎬 Pubblicità bonus → Pass senza pubblicità', rewardSub: 'La prossima pubblicità verrà saltata', rewardLabel: 'Pubblicità premiata', rewardGot: 'Pass guadagnato! La prossima pubblicità verrà saltata.', passUsed: 'Pass usato: niente pubblicità stavolta.', passes: n => ` · Pass senza pubblicità: ${n}` });
+Object.assign(I18N.it, { menu: 'Menu', homeStart: 'Inizia', homeContinue: 'Continua', homeLevelsSub: (d, T) => `${d} / ${T} superati`, homeDaily: 'Sfida del giorno', homeDailyNew: 'Ti aspetta una nuova griglia', homeDailyDone: n => `Fatto ✓ · serie di ${n} ${n === 1 ? 'giorno' : 'giorni'}`, homeFree: 'Gioco libero', homeFreeSub: 'Griglie illimitate, da 5×5 a 7×7' });
+Object.assign(I18N.it, { finaleBtn: '✨ Guarda la sorpresa', finaleTitle: 'Bravo!', finaleLine1: 'Sei uscito dalla nebbia.', finaleLine2: 'Complimenti: hai completato i 50 livelli di Filozen.', finaleLine3: 'Il seguito arriva prestissimo: nuovi livelli in preparazione.', finaleHome: 'Torna al menu', finaleShare: a => `Ho completato i 50 livelli di ${a} 🧵 e sono uscito dalla nebbia ☀️\n#Filozen` });
+Object.assign(I18N.it, { gRecord: t => `🎉 Nuovo record personale (prima ${t})`, tRecord: 'Nuovo record!', recordShort: t => `Record ${t}` });
+Object.assign(I18N.it, { adLabel: 'Pubblicità', adTitle: 'Spazio pubblicitario', adBody: 'Qui apparirà una vera pubblicità video (15–30 s) nell’app finale.', adPremium: 'Premium: zero pubblicità', adPremiumSoon: 'Il Premium arriverà con l’app.', adWait: n => `Chiudi tra ${n} s`, adNext: n => `Pubblicità di prova dopo ${n} ${n === 1 ? 'griglia' : 'griglie'}.` });
+Object.assign(I18N.en, { rankUp: r => `New rank: ${r}!` });
+Object.assign(I18N.es, { rankUp: r => `¡Nuevo rango: ${r}!` });
+Object.assign(I18N.de, { rankUp: r => `Neuer Rang: ${r}!` });
+Object.assign(I18N.pt, { rankUp: r => `Novo nível: ${r}!` });
+Object.assign(I18N.it, { rankUp: r => `Nuovo grado: ${r}!` });
+Object.assign(I18N.ja, { rewardBtn: '🎬 ボーナス広告 → 広告スキップパス', rewardSub: '次の広告がスキップされます', rewardLabel: 'リワード広告', rewardGot: '広告スキップパスを獲得！次の広告はスキップされます。', passUsed: 'パスを使用：今回は広告なし。', passes: n => ` · 広告スキップパス：${n}` });
+Object.assign(I18N.ja, { menu: 'メニュー', homeStart: 'はじめる', homeContinue: 'つづきから', homeLevelsSub: (d, T) => `${d} / ${T} クリア`, homeDaily: 'デイリーチャレンジ', homeDailyNew: '新しいグリッドが待っています', homeDailyDone: n => `クリア ✓ · ${n}日連続`, homeFree: 'フリープレイ', homeFreeSub: 'グリッド無制限、5×5〜7×7' });
+Object.assign(I18N.ja, { finaleBtn: '✨ サプライズを見る', finaleTitle: 'おめでとう！', finaleLine1: '頭のモヤが晴れました。', finaleLine2: 'Filozen の全50レベルをクリアしました。', finaleLine3: '続編はまもなく登場：新しいレベルを準備中です。', finaleHome: 'メニューに戻る', finaleShare: a => `${a} の全50レベルをクリアして、頭のモヤが晴れた！🧵☀️\n#Filozen` });
+Object.assign(I18N.ja, { gRecord: t => `🎉 自己ベスト更新（前回 ${t}）`, tRecord: '新記録！', recordShort: t => `ベスト ${t}` });
+Object.assign(I18N.ja, { adLabel: '広告', adTitle: '広告スペース', adBody: '正式版ではここに動画広告（15〜30秒）が流れます。', adPremium: 'プレミアム：広告なし', adPremiumSoon: 'プレミアムはアプリ版で登場予定です。', adWait: n => `あと ${n} 秒で閉じられます`, adNext: n => `あと ${n} グリッドでテスト広告` });
+Object.assign(I18N.ja, { rankUp: r => `新ランク：${r}！` });
+Object.assign(I18N.fr, { settings: 'Réglages', setSound: 'Son', setOn: 'Activé', setOff: 'Coupé', setPrivacy: 'Politique de confidentialité', setContact: 'Nous contacter', setVersion: 'Version' });
+Object.assign(I18N.en, { settings: 'Settings', setSound: 'Sound', setOn: 'On', setOff: 'Off', setPrivacy: 'Privacy policy', setContact: 'Contact us', setVersion: 'Version' });
+Object.assign(I18N.es, { settings: 'Ajustes', setSound: 'Sonido', setOn: 'Activado', setOff: 'Desactivado', setPrivacy: 'Política de privacidad', setContact: 'Contacto', setVersion: 'Versión' });
+Object.assign(I18N.de, { settings: 'Einstellungen', setSound: 'Ton', setOn: 'An', setOff: 'Aus', setPrivacy: 'Datenschutzerklärung', setContact: 'Kontakt', setVersion: 'Version' });
+Object.assign(I18N.pt, { settings: 'Ajustes', setSound: 'Som', setOn: 'Ligado', setOff: 'Desligado', setPrivacy: 'Política de privacidade', setContact: 'Contato', setVersion: 'Versão' });
+Object.assign(I18N.it, { settings: 'Impostazioni', setSound: 'Audio', setOn: 'Attivo', setOff: 'Disattivato', setPrivacy: 'Informativa sulla privacy', setContact: 'Contattaci', setVersion: 'Versione' });
+Object.assign(I18N.ja, { settings: '設定', setSound: 'サウンド', setOn: 'オン', setOff: 'オフ', setPrivacy: 'プライバシーポリシー', setContact: 'お問い合わせ', setVersion: 'バージョン' });
+Object.assign(I18N.fr, { shCta: 'Tu fais mieux ?', shClarity: n => `Clarté ${n}/5` });
+Object.assign(I18N.fr, { webApp: '50 niveaux dans l’app gratuite' });
+Object.assign(I18N.en, { webApp: '50 levels in the free app' });
+Object.assign(I18N.es, { webApp: '50 niveles en la app gratis' });
+Object.assign(I18N.de, { webApp: '50 Level in der Gratis-App' });
+Object.assign(I18N.pt, { webApp: '50 fases no app grátis' });
+Object.assign(I18N.it, { webApp: '50 livelli nell’app gratis' });
+Object.assign(I18N.ja, { webApp: '無料アプリで50レベル' });
+Object.assign(I18N.en, { shCta: 'Can you beat me?', shClarity: n => `Clarity ${n}/5` });
+Object.assign(I18N.es, { shCta: '¿Me superas?', shClarity: n => `Claridad ${n}/5` });
+Object.assign(I18N.de, { shCta: 'Schaffst du’s schneller?', shClarity: n => `Klarheit ${n}/5` });
+Object.assign(I18N.pt, { shCta: 'Consegue me superar?', shClarity: n => `Clareza ${n}/5` });
+Object.assign(I18N.it, { shCta: 'Riesci a battermi?', shClarity: n => `Chiarezza ${n}/5` });
+Object.assign(I18N.ja, { shCta: 'あなたも挑戦してみて！', shClarity: n => `クリア度 ${n}/5` });
+Object.assign(I18N.fr, { adPrivacy: 'Gérer mes choix publicitaires', adUnavailable: 'Aucune pub disponible pour le moment, réessayez plus tard.' });
+Object.assign(I18N.en, { adPrivacy: 'Manage ad choices', adUnavailable: 'No ad available right now, please try again later.' });
+Object.assign(I18N.es, { adPrivacy: 'Gestionar mis opciones de anuncios', adUnavailable: 'No hay anuncios disponibles ahora, inténtalo más tarde.' });
+Object.assign(I18N.de, { adPrivacy: 'Werbeeinstellungen verwalten', adUnavailable: 'Gerade ist keine Werbung verfügbar, versuch es später noch einmal.' });
+Object.assign(I18N.pt, { adPrivacy: 'Gerenciar escolhas de anúncios', adUnavailable: 'Nenhum anúncio disponível agora, tente mais tarde.' });
+Object.assign(I18N.it, { adPrivacy: 'Gestisci le scelte pubblicitarie', adUnavailable: 'Nessuna pubblicità disponibile al momento, riprova più tardi.' });
+Object.assign(I18N.ja, { adPrivacy: '広告の設定を管理', adUnavailable: '現在表示できる広告がありません。後でもう一度お試しください。' });
+Object.assign(I18N.fr, { tipOpen: '☕ Offrir un café à Filo', tipTitle: 'Soutenir Filozen', tipText: 'Filozen est créé par un développeur indépendant. Si le jeu vous aide à sortir du brouillard, offrez un café à Filo !', tip1: 'Un café', tip2: 'Café + croissant', tip3: 'Un grand merci', tipNote: 'Paiement sécurisé par l’App Store ou Google Play.', tipSim: 'Prototype : simulation, aucun paiement réel.', tipThanks: 'Merci infiniment ! 💛', tipThanksText: 'Votre soutien aide Filozen à grandir. Filo est aux anges !' });
+Object.assign(I18N.en, { tipOpen: '☕ Buy Filo a coffee', tipTitle: 'Support Filozen', tipText: 'Filozen is made by an independent developer. If the game helps you clear the fog, buy Filo a coffee!', tip1: 'A coffee', tip2: 'Coffee + croissant', tip3: 'A big thank you', tipNote: 'Secure payment through the App Store or Google Play.', tipSim: 'Prototype: simulation, no real payment.', tipThanks: 'Thank you so much! 💛', tipThanksText: 'Your support helps Filozen grow. Filo is over the moon!' });
+Object.assign(I18N.es, { tipOpen: '☕ Invita a Filo a un café', tipTitle: 'Apoya Filozen', tipText: 'Filozen lo crea un desarrollador independiente. Si el juego te ayuda a salir de la niebla, ¡invita a Filo a un café!', tip1: 'Un café', tip2: 'Café + cruasán', tip3: 'Un gran gracias', tipNote: 'Pago seguro con App Store o Google Play.', tipSim: 'Prototipo: simulación, sin pago real.', tipThanks: '¡Muchísimas gracias! 💛', tipThanksText: 'Tu apoyo ayuda a Filozen a crecer. ¡Filo está feliz!' });
+Object.assign(I18N.de, { tipOpen: '☕ Spendier Filo einen Kaffee', tipTitle: 'Filozen unterstützen', tipText: 'Filozen wird von einem unabhängigen Entwickler gemacht. Wenn dir das Spiel gegen den Nebel im Kopf hilft, spendier Filo einen Kaffee!', tip1: 'Ein Kaffee', tip2: 'Kaffee + Croissant', tip3: 'Ein großes Dankeschön', tipNote: 'Sichere Zahlung über den App Store oder Google Play.', tipSim: 'Prototyp: Simulation, keine echte Zahlung.', tipThanks: 'Tausend Dank! 💛', tipThanksText: 'Deine Unterstützung lässt Filozen wachsen. Filo ist überglücklich!' });
+Object.assign(I18N.pt, { tipOpen: '☕ Pague um café para o Filo', tipTitle: 'Apoie o Filozen', tipText: 'O Filozen é feito por um desenvolvedor independente. Se o jogo te ajuda a sair da névoa, pague um café para o Filo!', tip1: 'Um café', tip2: 'Café + croissant', tip3: 'Um grande obrigado', tipNote: 'Pagamento seguro pela App Store ou Google Play.', tipSim: 'Protótipo: simulação, sem pagamento real.', tipThanks: 'Muito obrigado! 💛', tipThanksText: 'Seu apoio ajuda o Filozen a crescer. O Filo está nas nuvens!' });
+Object.assign(I18N.it, { tipOpen: '☕ Offri un caffè a Filo', tipTitle: 'Sostieni Filozen', tipText: 'Filozen è creato da uno sviluppatore indipendente. Se il gioco ti aiuta a uscire dalla nebbia, offri un caffè a Filo!', tip1: 'Un caffè', tip2: 'Caffè + cornetto', tip3: 'Un grande grazie', tipNote: 'Pagamento sicuro tramite App Store o Google Play.', tipSim: 'Prototipo: simulazione, nessun pagamento reale.', tipThanks: 'Grazie di cuore! 💛', tipThanksText: 'Il tuo sostegno aiuta Filozen a crescere. Filo è al settimo cielo!' });
+Object.assign(I18N.ja, { tipOpen: '☕ Filo にコーヒーをおごる', tipTitle: 'Filozen を応援する', tipText: 'Filozen は個人開発者が作っています。頭のモヤが晴れたら、Filo にコーヒーをおごってください！', tip1: 'コーヒー1杯', tip2: 'コーヒー＋クロワッサン', tip3: '大感謝', tipNote: 'App Store または Google Play による安全な支払い。', tipSim: 'プロトタイプ：シミュレーションです。実際の支払いは発生しません。', tipThanks: '本当にありがとう！💛', tipThanksText: 'あなたの応援で Filozen が成長します。Filo も大喜び！' });
+
+/* ---------- audio : un bus principal (bouton muet), des bruitages et de la musique, tout synthétisé ---------- */
+let AC = null, master = null, audioReady = false, muted = store.get('mute', false);
+function audio(){
+  if(!AC){
+    AC = new (window.AudioContext || window.webkitAudioContext)();
+    const comp = AC.createDynamicsCompressor();
+    master = AC.createGain(); master.gain.value = muted ? 0 : 1;
+    master.connect(comp); comp.connect(AC.destination);
+    AC.onstatechange = () => resumeAudio();
+  }
+  if(AC.state !== 'running') AC.resume().catch(() => {});
+  return AC;
+}
+/* iPhone : l'interrupteur silencieux (ou un appel, une alarme…) met le son du jeu en pause, et iOS ne le
+   relance pas tout seul. On vérifie régulièrement et on relance la musique dès que c'est à nouveau possible. */
+function resumeAudio(){
+  if(!AC || muted || !audioReady || document.hidden) return;
+  if(AC.state !== 'running') AC.resume().catch(() => {});
+  const d = typeof fileDeck !== 'undefined' ? fileDeck.cur : null;
+  if(d && d.el.paused && fileDeck.duck > 0) d.el.play().catch(() => {});
+}
+setInterval(resumeAudio, 1500);
+function tone(f, dur, type, vol, delay){
+  if(!audioReady || muted) return;
+  try{
+    const ac = audio(), t = ac.currentTime + (delay || 0), o = ac.createOscillator(), g = ac.createGain();
+    o.type = type || 'sine'; o.frequency.value = f;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol || .08, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + .02);
+  }catch(e){}
+}
+const SCALE = [523, 587, 659, 784, 880, 1047, 1175, 1319, 1568, 1760, 2093, 2349];
+const sfx = {
+  step(){ tone(1400, .04, 'triangle', .018); },
+  knot(k){ tone(SCALE[(k - 1) % SCALE.length], .28, 'triangle', .09); },
+  bump(){ tone(160, .12, 'square', .03); },
+  win(){ [0, 2, 4, 7].forEach((s, i) => tone(SCALE[s], .35, 'triangle', .09, i * .09)); },
+  star(i){ tone(SCALE[4 + i * 2], .3, 'sine', .1); },
+  badge(){ tone(1568, .2, 'sine', .07); tone(2093, .35, 'sine', .07, .12); },
+  rankup(){ [0, 4, 7, 9, 11].forEach((s, i) => tone(SCALE[s], .4, 'sawtooth', .035, i * .08)); },
+  count(){ tone(660, .14, 'square', .05); },
+  go(){ tone(1320, .35, 'square', .06); tone(660, .35, 'square', .04); },
+  start(){ [0, 2, 4, 7].forEach((s, i) => tone(SCALE[s] / 2, .25, 'square', .04, i * .06)); }
+};
+
+function midi(name){ const m = /^([A-G])(#|b)?(-?\d)$/.exec(name); return 12 * (+m[3] + 1) + { C:0, D:2, E:4, F:5, G:7, A:9, B:11 }[m[1]] + (m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0); }
+const hz = name => 440 * Math.pow(2, (midi(name) - 69) / 12);
+
+/* --- compositions originales façon console 8 bits ---
+   Notation : une mesure = 8 croches ; "-" prolonge la note, "." silence.
+   Chaque morceau a plusieurs sections (A, B…) enchaînées dans un "arrangement" :
+   batterie pleine / légère / absente, arpèges en plus, mélodie coupée pour un pont. */
+const CH = {
+  C:['C3','G3','C4'], Am:['A2','E3','A3'], F:['F2','C3','F3'], G:['G2','D3','G3'], Em:['E2','B2','E3'], Dm:['D3','A3','D4'],
+  E:['E2','B2','E3'], D:['D2','A2','D3'], A:['A2','E3','A3'], B:['B1','F#2','B2'], Bm:['B1','F#2','B2'], 'F#m':['F#2','C#3','F#3'], Bb:['Bb1','F2','Bb2']
+};
+const ARP = {
+  C:['C4','E4','G4'], Am:['A3','C4','E4'], F:['F3','A3','C4'], G:['G3','B3','D4'], Em:['E4','G4','B4'], Dm:['D4','F4','A4'],
+  E:['E4','G#4','B4'], D:['D4','F#4','A4'], A:['A3','C#4','E4'], B:['B3','D#4','F#4'], Bm:['B3','D4','F#4'], 'F#m':['F#3','A3','C#4'], Bb:['Bb3','D4','F4']
+};
+const DRUMS = {
+  drive: (b, last) => last ? 'ksssksss' : b % 4 === 3 ? 'khshksss' : 'khshkksh',
+  bounce: (b, last) => last ? 'k.s.ssss' : 'k.h.s.hh',
+  soft: (b, last) => last ? 'k...s.ss' : 'k...s...',
+  light: () => 'h.h.h.h.',
+  none: () => '........'
+};
+function song({ bpm, gain, sections, arrangement, bass, drums }){
+  const e8 = 60 / bpm / 2, ev = []; let bar0 = 0;
+  const add = (tok, bi, k, v) => tok.forEach((x, i) => {
+    if(x === '-' || x === '.') return;
+    let len = 1; while(tok[i + len] === '-') len++;
+    ev.push({ t: ((bar0 + bi) * 8 + i) * e8, k, f: hz(x), d: len * e8 * .92, v });
+  });
+  arrangement.forEach(part => {
+    const sec = sections[part.s], n = sec.chords.length;
+    sec.chords.forEach((c, bi) => {
+      if(part.lead !== false) add(sec.lead[bi].trim().split(/\s+/), bi, 'lead', part.soft ? .11 : .16);
+      add(bass(CH[c]).split(' '), bi, 'bass', .34);
+      if(part.arp){ const a = ARP[c]; add([a[0], a[1], a[2], a[1], a[0], a[1], a[2], a[1]], bi, 'arp', .05); }
+      const pat = DRUMS[part.drums || drums](bi, bi === n - 1);
+      [...pat].forEach((ch, i) => {
+        const t = ((bar0 + bi) * 8 + i) * e8;
+        if(ch === 'k') ev.push({ t, k: 'kick', v: .75 });
+        if(ch === 's') ev.push({ t, k: 'snare', v: .32 });
+        if(ch !== '.') ev.push({ t, k: 'hat', v: .09 });
+      });
+    });
+    bar0 += n;
+  });
+  ev.sort((a, b) => a.t - b.t);
+  return { ev, len: bar0 * 8 * e8, gain };
+}
+const pump = c => `${c[0]} ${c[2]} ${c[0]} ${c[2]} ${c[0]} ${c[2]} ${c[1]} ${c[2]}`;
+const walk = c => `${c[0]} - ${c[1]} - ${c[2]} - ${c[1]} -`;
+const half = c => `${c[0]} - - - ${c[1]} - - -`;
+
+// ——— Musiques de jeu ———
+// « Rush » : la mineur, 150 bpm, ça pousse
+const RUSH = song({ bpm: 150, gain: .34, bass: pump, drums: 'drive',
+  sections: {
+    A: { chords: ['Am','F','C','G','Am','F','G','E'], lead: [
+      'A4 C5 E5 A5 G5 E5 D5 E5', 'F5 E5 C5 A4 C5 - D5 -', 'E5 G5 E5 C5 G5 E5 C5 E5', 'D5 - B4 - G4 A4 B4 D5',
+      'A5 - G5 E5 A5 - G5 E5', 'F5 E5 D5 C5 D5 - A4 -', 'B4 C5 D5 G5 F5 D5 B4 D5', 'E5 - G#5 - B5 - E5 -'] },
+    B: { chords: ['F','G','Em','Am','F','G','E','E'], lead: [
+      'C6 - A5 - F5 - A5 C6', 'B5 - G5 - D5 - G5 B5', 'E6 - B5 G5 E5 G5 B5 -', 'A5 G5 E5 C5 A4 - . .',
+      'F5 A5 C6 A5 F5 A5 C6 A5', 'G5 B5 D6 B5 G5 B5 D6 B5', 'G#5 - B5 - E6 - D6 -', 'B5 - G#5 - E5 - . .'] },
+    C: { chords: ['Dm','Am','Dm','E','Dm','Am','F','E'], lead: [
+      'D5 F5 A5 - F5 D5 A4 -', 'C5 E5 A5 - E5 C5 A4 -', 'F5 A5 D6 - A5 F5 D5 -', 'E5 - G#5 - B4 - E5 -',
+      'A5 - F5 - D5 - F5 A5', 'C6 - A5 - E5 - C5 -', 'F5 G5 A5 C6 A5 G5 F5 E5', 'E5 - - - . . . .'] }
+  },
+  arrangement: [ { s: 'A' }, { s: 'B', arp: true }, { s: 'C', drums: 'light', arp: true }, { s: 'A', arp: true }, { s: 'B', lead: false, arp: true, drums: 'light' }, { s: 'B', arp: true } ]
+});
+// « Pulse » : mi mineur, 138 bpm, nerveux
+const PULSE = song({ bpm: 138, gain: .34, bass: pump, drums: 'drive',
+  sections: {
+    A: { chords: ['Em','C','G','D','Em','C','D','B'], lead: [
+      'E5 - G5 B5 - A5 G5 F#5', 'E5 - C5 - E5 G5 - .', 'D5 - B4 D5 G5 - F#5 G5', 'A5 - F#5 - D5 - . .',
+      'B5 - A5 G5 E5 - G5 A5', 'G5 - E5 - C6 - B5 -', 'A5 G5 F#5 D5 F#5 A5 D6 -', 'D#6 - B5 - F#5 - B4 -'] },
+    B: { chords: ['C','D','Em','Em','C','D','B','B'], lead: [
+      'C6 B5 G5 E5 C5 E5 G5 B5', 'A5 F#5 D5 F#5 A5 - D6 -', 'B5 - . B5 A5 G5 A5 B5', 'E5 - - - . . . .',
+      'E6 - D6 C6 B5 - G5 -', 'F#5 G5 A5 D6 - C6 A5 F#5', 'D#5 F#5 B5 D#6 B5 F#5 D#5 F#5', 'B5 - - - . . . .'] }
+  },
+  arrangement: [ { s: 'A' }, { s: 'A', arp: true }, { s: 'B', arp: true }, { s: 'A', lead: false, arp: true, drums: 'light' }, { s: 'B', arp: true } ]
+});
+// « Glide » : ré majeur, 126 bpm, lumineux
+const GLIDE = song({ bpm: 126, gain: .32, bass: walk, drums: 'bounce',
+  sections: {
+    A: { chords: ['D','A','Bm','G','D','A','G','A'], lead: [
+      'F#5 - A5 - D6 - A5 -', 'E5 - C#5 - E5 A5 - .', 'D5 - F#5 - B5 A5 F#5 D5', 'G5 - - B5 A5 G5 F#5 E5',
+      'F#5 A5 D6 A5 F#5 - D5 -', 'E5 - A5 - C#6 - B5 A5', 'B5 - G5 - D5 E5 F#5 G5', 'A5 - - - E5 - C#5 -'] },
+    B: { chords: ['G','A','F#m','Bm','G','A','D','D'], lead: [
+      'D6 - B5 - G5 - B5 D6', 'C#6 - A5 - E5 - A5 C#6', 'A5 - F#5 - C#5 - F#5 A5', 'B5 - A5 - F#5 - D5 -',
+      'G5 A5 B5 D6 B5 A5 G5 B5', 'A5 B5 C#6 E6 C#6 B5 A5 C#6', 'D6 - A5 - F#5 - A5 -', 'D6 - - - . . . .'] }
+  },
+  arrangement: [ { s: 'A' }, { s: 'B' }, { s: 'A', arp: true }, { s: 'B', lead: false, arp: true, drums: 'light' }, { s: 'B', arp: true } ]
+});
+
+// ——— Musiques des menus ———
+// « Lobby » : do majeur, 112 bpm, sautillant
+const LOBBY = song({ bpm: 112, gain: .3, bass: walk, drums: 'bounce',
+  sections: {
+    A: { chords: ['C','Am','F','G','C','Em','F','G'], lead: [
+      'E5 - G5 - C6 - G5 E5', 'A5 - G5 E5 C5 - . .', 'F5 - A5 - C6 - A5 F5', 'G5 F5 E5 D5 B4 - . .',
+      'C5 E5 G5 E5 C6 - B5 A5', 'G5 - E5 - B4 - . .', 'A4 C5 F5 A5 G5 F5 E5 D5', 'D5 - E5 - D5 - . .'] },
+    B: { chords: ['F','G','Em','Am','Dm','G','C','C'], lead: [
+      'A5 - F5 - C5 - F5 A5', 'B5 - G5 - D5 - . .', 'G5 - E5 - B4 - E5 G5', 'A5 - . . E5 - C5 -',
+      'D5 F5 A5 - F5 D5 F5 A5', 'G5 - F5 - D5 - B4 -', 'C5 E5 G5 C6 G5 E5 C5 E5', 'C5 - . . . . . .'] }
+  },
+  arrangement: [ { s: 'A' }, { s: 'B' }, { s: 'A', arp: true, soft: true }, { s: 'B', lead: false, arp: true, drums: 'light' } ]
+});
+// « Chill » : fa majeur, 96 bpm, doux
+const CHILL = song({ bpm: 96, gain: .3, bass: half, drums: 'soft',
+  sections: {
+    A: { chords: ['F','C','Dm','Bb','F','C','Bb','C'], lead: [
+      'A5 - - C6 - A5 G5 F5', 'G5 - E5 - C5 - . .', 'F5 - A5 - D6 - C6 A5', 'Bb5 - - A5 G5 - F5 -',
+      'C6 - A5 - F5 - A5 C6', 'E6 - D6 - C6 - G5 -', 'D6 C6 Bb5 A5 G5 A5 Bb5 D6', 'C6 - - - G5 - E5 -'] },
+    B: { chords: ['Dm','Bb','F','C','Dm','Bb','C','C'], lead: [
+      'D6 - C6 A5 F5 - A5 -', 'F5 - D5 - Bb4 - D5 F5', 'A5 - - - C6 - A5 -', 'G5 - E5 - C5 - E5 G5',
+      'A5 - D6 - F6 - E6 D6', 'D6 - Bb5 - F5 - D5 -', 'E5 F5 G5 C6 G5 E5 C5 E5', 'C5 - - - . . . .'] }
+  },
+  arrangement: [ { s: 'A', soft: true }, { s: 'B', soft: true, arp: true }, { s: 'A', lead: false, arp: true, drums: 'light' }, { s: 'B', soft: true } ]
+});
+const PLAYLISTS = { arcadePlay: [RUSH, PULSE, GLIDE], arcadeMenu: [LOBBY, CHILL] };
+
+/* --- œuvres du domaine public, au piano (option « Classique ») --- */
+const BACH = ['C4 E4 G4 C5 E5','C4 D4 A4 D5 F5','B3 D4 G4 D5 F5','C4 E4 G4 C5 E5','C4 E4 A4 E5 A5','C4 D4 F#4 A4 D5','B3 D4 G4 D5 G5','B3 C4 E4 G4 C5',
+  'A3 C4 E4 G4 C5','D3 A3 D4 F#4 C5','G3 B3 D4 G4 B4','G3 Bb3 E4 G4 C#5','F3 A3 D4 A4 D5','F3 Ab3 D4 F4 B4','E3 G3 C4 G4 C5','E3 F3 A3 C4 F4',
+  'D3 F3 A3 C4 F4','G2 D3 G3 B3 F4','C3 E3 G3 C4 E4','C3 G3 Bb3 C4 E4','F2 F3 A3 C4 E4','F#2 C3 A3 C4 Eb4','Ab2 F3 B3 C4 D4','G2 F3 G3 B3 D4',
+  'G2 E3 G3 C4 E4','G2 D3 G3 C4 F4','G2 D3 G3 B3 F4','G2 Eb3 A3 C4 F#4','G2 E3 G3 C4 G4','G2 D3 G3 C4 F4','G2 D3 G3 B3 F4','C2 C3 G3 Bb3 E4'];
+function bachScore(){
+  const ev = [], s = 0.21; let t = 0;
+  BACH.forEach(m => {
+    const n = m.split(' ');
+    for(let rep=0; rep<2; rep++){
+      [0,1,2,3,4,2,3,4].forEach((k, i) => {
+        if(rep === 0 || i > 1) ev.push({ t: t + i * s, k: 'piano', f: hz(n[k]), d: i === 0 ? s * 16 : i === 1 ? s * 14 : s * 1.6, v: i < 2 ? .5 : .35 });
+      });
+      t += 8 * s;
+    }
+  });
+  return { ev, len: t + s * 4, gain: .12 };
+}
+function pachelbelScore(){
+  const chords = ['D3 A3 D4 F#4','A2 E3 A3 C#4','B2 F#3 B3 D4','F#2 C#3 F#3 A3','G2 D3 G3 B3','D3 A3 D4 F#4','G2 D3 G3 B3','A2 E3 A3 C#4'];
+  const lines = [null, 'F#5 E5 D5 C#5 B4 A4 B4 C#5', 'D5 C#5 B4 A4 G4 F#4 G4 E4'];
+  const ev = [], beat = 0.95; let t = 0;
+  lines.forEach(mel => chords.forEach((c, ci) => {
+    const n = c.split(' ');
+    ev.push({ t, k: 'piano', f: hz(n[0]), d: beat * 2.2, v: .55 });
+    [1, 2, 3, 2].forEach((k, i) => ev.push({ t: t + i * beat / 2, k: 'piano', f: hz(n[k]), d: beat * 1.1, v: .3 }));
+    if(mel) ev.push({ t, k: 'piano', f: hz(mel.split(' ')[ci]), d: beat * 2.2, v: .42 });
+    t += beat * 2;
+  }));
+  return { ev, len: t, gain: .12 };
+}
+const BACH_T = bachScore(), PACH_T = pachelbelScore();
+
+/* --- instruments --- */
+let pulseWave = null, noiseBuf = null;
+function instruments(){
+  if(pulseWave) return;
+  const N = 32, re = new Float32Array(N), im = new Float32Array(N), duty = .25;
+  for(let k=1;k<N;k++){ re[k] = Math.sin(2 * Math.PI * k * duty) / (k * Math.PI); im[k] = (1 - Math.cos(2 * Math.PI * k * duty)) / (k * Math.PI); }
+  pulseWave = AC.createPeriodicWave(re, im);
+  noiseBuf = AC.createBuffer(1, AC.sampleRate, AC.sampleRate);
+  const ch = noiseBuf.getChannelData(0); for(let i=0;i<ch.length;i++) ch[i] = Math.random() * 2 - 1;
+}
+function playEv(bus, e, t, gm){
+  const v = e.v * (gm || 1);
+  if(e.k === 'kick'){
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(40, t + .12);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + .16);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + .17); return;
+  }
+  if(e.k === 'snare' || e.k === 'hat'){
+    const s = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain(), len = e.k === 'hat' ? .04 : .13;
+    s.buffer = noiseBuf; f.type = 'highpass'; f.frequency.value = e.k === 'hat' ? 7000 : 1800;
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + len);
+    s.connect(f); f.connect(g); g.connect(bus); s.start(t, Math.random() * .5); s.stop(t + len + .02); return;
+  }
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.frequency.value = e.f;
+  if(e.k === 'piano'){
+    const o2 = AC.createOscillator(), g2 = AC.createGain();
+    o.type = 'triangle'; o2.type = 'sine'; o2.frequency.value = e.f * 2; g2.gain.value = .25;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .008);
+    g.gain.exponentialRampToValueAtTime(v * .35, t + .35); g.gain.exponentialRampToValueAtTime(.0001, t + e.d + .8);
+    o2.connect(g2); g2.connect(g); o2.start(t); o2.stop(t + e.d + .9);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + e.d + .9); return;
+  }
+  if(e.k === 'lead') o.setPeriodicWave(pulseWave); else o.type = e.k === 'bass' ? 'triangle' : 'square';
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .005);
+  g.gain.setValueAtTime(v * .75, t + Math.max(.02, e.d - .03)); g.gain.linearRampToValueAtTime(0, t + e.d);
+  o.connect(g); g.connect(bus); o.start(t); o.stop(t + e.d + .05);
+}
+
+/* --- lecteur : une musique pour les menus, une pour le jeu --- */
+/* --- musiques en fichiers (style « Filozen », par défaut) : une ambiance par mode et par palier --- */
+const MUSIC_GAIN = {"menu": 0.881, "daily": 0.912, "eveil": 0.944, "concentration": 0.832, "focus": 1.059, "focus-2": 0.955, "boss-final": 0.977};   // mesuré en LUFS (volume perçu), cible -16 LUFS
+const MUSIC_FILES = {
+  menu: ['menu'], daily: ['daily'], boss: ['boss-final'],
+  band0: ['eveil'], band1: ['eveil'], band2: ['concentration'], band3: ['focus-2'], band4: ['focus-2', 'concentration'],
+  free: ['eveil', 'concentration', 'focus', 'focus-2']
+};
+let playKey = 'free';                 // choisi au lancement d'une partie (palier, défi du jour, libre)
+const fileDeck = { key: null, list: null, i: 0, cur: null, duck: 1, pos: {} };
+// Atténuation selon le moment : plein volume en jeu, plus doux pendant le compte à rebours
+// et la célébration, en pause pendant une pub. La musique du palier ne s'arrête plus entre deux niveaux.
+const DUCK = { play: 1, menu: 1, count: .35, celebrate: .5, finale: 1, ad: 0 };
+function fileStart(name, at){
+  const el = new Audio('music/' + name + '.mp4'); el.preload = 'auto';
+  const g = AC.createGain(); g.gain.value = 0;
+  try{ AC.createMediaElementSource(el).connect(g); }catch(e){ return null; }
+  g.connect(master);
+  const deck = { el, g, name, base: .55 * (MUSIC_GAIN[name] || 1), done: false };
+  if(at) el.addEventListener('loadedmetadata', () => { if(at < el.duration - 5) el.currentTime = at; }, { once: true });
+  // enchaînement en fondu 2 s avant la fin vers le morceau suivant de la liste (ou le même s'il est seul)
+  el.addEventListener('timeupdate', () => {
+    if(deck.done || !el.duration || el.duration - el.currentTime > 2.2) return;
+    deck.done = true;
+    if(fileDeck.cur !== deck) return;
+    fileDeck.i = (fileDeck.i + 1) % fileDeck.list.length;
+    fileFade(deck); fileDeck.cur = fileStart(fileDeck.list[fileDeck.i], 0); fileApplyDuck();
+  });
+  el.play().catch(() => {});
+  return deck;
+}
+function fileApplyDuck(){
+  const d = fileDeck.cur; if(!d) return;
+  const v = d.base * fileDeck.duck;
+  try{ d.g.gain.setTargetAtTime(v, AC.currentTime, v === 0 ? .15 : .2); }catch(e){}
+  if(v === 0) setTimeout(() => { if(fileDeck.cur === d && fileDeck.duck === 0) d.el.pause(); }, 700);
+  else if(d.el.paused) d.el.play().catch(() => {});
+}
+function fileFade(deck){
+  if(!deck) return;
+  try{ deck.g.gain.setTargetAtTime(0, AC.currentTime, .35); }catch(e){}
+  setTimeout(() => { deck.el.pause(); deck.el.removeAttribute('src'); deck.el.load(); try{ deck.g.disconnect(); }catch(e){} }, 1800);
+}
+function filePlay(key, duck){
+  fileDeck.duck = duck;
+  if(fileDeck.key === key && fileDeck.cur){ fileApplyDuck(); return; }
+  // on retient où on en était pour reprendre au même endroit plus tard
+  if(fileDeck.cur) fileDeck.pos[fileDeck.key] = { i: fileDeck.i, t: fileDeck.cur.el.currentTime };
+  fileFade(fileDeck.cur);
+  fileDeck.key = key; fileDeck.list = MUSIC_FILES[key] || MUSIC_FILES.menu;
+  const p = fileDeck.pos[key] || { i: 0, t: 0 };
+  fileDeck.i = p.i % fileDeck.list.length;
+  fileDeck.cur = fileStart(fileDeck.list[fileDeck.i], p.t);
+  fileApplyDuck();
+}
+function fileStop(){ if(fileDeck.cur) fileDeck.pos[fileDeck.key] = { i: fileDeck.i, t: fileDeck.cur.el.currentTime }; fileFade(fileDeck.cur); fileDeck.cur = null; fileDeck.key = null; }
+
+const STYLES = ['studio', 'arcade', 'classique', 'off'];
+let musicStyle = 'studio', scene = 'menu', curTrack = null, curBus = null, musicTimer = null;
+const turn = { play: 0, menu: 0 };   // on démarre sur un morceau différent à chaque fois
+const CLASSIC = { play: [BACH_T], menu: [PACH_T] };
+function trackFor(){
+  if(musicStyle === 'off' || musicStyle === 'studio' || scene === 'count' || scene === 'ad') return null;
+  if(musicStyle === 'arcade') return scene === 'play' ? PLAYLISTS.arcadePlay : PLAYLISTS.arcadeMenu;
+  return scene === 'play' ? CLASSIC.play : CLASSIC.menu;   // (célébration : musique de menu pour les styles synthétisés)
+}
+function stopMusic(){
+  clearInterval(musicTimer); musicTimer = null;
+  if(curBus){ const b = curBus; try{ b.gain.setTargetAtTime(0, AC.currentTime, .06); setTimeout(() => b.disconnect(), 700); }catch(e){} }
+  curBus = null; curTrack = null;
+}
+function refreshMusic(){
+  const off = muted || !audioReady || document.hidden || musicStyle === 'off';
+  if(musicStyle === 'studio' && !off){
+    try{ audio(); }catch(e){ return; }
+    stopMusic(); filePlay(scene === 'menu' ? 'menu' : playKey, DUCK[scene] ?? 1); return;
+  }
+  const silent = off || scene === 'count' || scene === 'ad';
+  fileStop();
+  const want = silent ? null : trackFor();
+  if(want === curTrack) return;
+  stopMusic();
+  if(!want) return;
+  try{ audio(); instruments(); }catch(e){ return; }
+  const key = scene === 'play' ? 'play' : 'menu';
+  let ti = turn[key]++ % want.length, song = want[ti];
+  const bus = AC.createGain(); bus.gain.value = 1; bus.connect(master);
+  curTrack = want; curBus = bus;
+  let loopStart = AC.currentTime + .08, idx = 0;
+  musicTimer = setInterval(() => {
+    const horizon = AC.currentTime + .5;
+    while(true){
+      if(idx >= song.ev.length){ loopStart += song.len + .4; idx = 0; ti = (ti + 1) % want.length; song = want[ti]; }
+      const e = song.ev[idx], at = loopStart + e.t;
+      if(at > horizon) break;
+      if(at >= AC.currentTime - .03) playEv(bus, e, at, song.gain);
+      idx++;
+    }
+  }, 120);
+}
+function setScene(s){ scene = s; refreshMusic(); }
+
+function paintSound(){
+  $('sound').textContent = muted ? `🔇 ${L.setOff}` : `🔊 ${L.setOn}`;
+  $('sound').setAttribute('aria-pressed', String(!muted));
+  $('sound').classList.toggle('isoff', muted);
+}
+const musicLabel = () => ({ studio: L.musicStudio, arcade: L.musicArcade, classique: L.musicClassic })[musicStyle] || L.musicOff;
+function paintMusic(){}
+$('sound').onclick = () => {
+  muted = !muted; store.set('mute', muted); paintSound();
+  audioReady = true;
+  try{ audio(); master.gain.setTargetAtTime(muted ? 0 : 1, AC.currentTime, .03); }catch(e){}
+  refreshMusic();
+};
+
+// les navigateurs n'autorisent le son qu'après un premier geste
+document.addEventListener('pointerdown', () => { if(!audioReady){ audioReady = true; refreshMusic(); } else resumeAudio(); }, { capture: true });
+document.addEventListener('visibilitychange', refreshMusic);
+
+/* ---------- les 50 niveaux, en 5 paliers ---------- */
+const BANDS = [
+  { name: 'Échauffement',  n: 4, from: 1,  to: 5,  clues: [7, 4],  walls: [0, 0],  c: '#16C79A', d: '#0E9E7A', t: '#FFFFFF', badge: '🌱' },
+  { name: 'Éveil',         n: 5, from: 6,  to: 12, clues: [9, 4],  walls: [0, 0],  c: '#FFB400', d: '#D08E00', t: '#3A2600', badge: '☀️', ring: '#FF5D5D' },
+  { name: 'Concentration', n: 6, from: 13, to: 22, clues: [10, 4], walls: [0, 8],  c: '#FF5D5D', d: '#D63E3E', t: '#FFFFFF', badge: '🧠' },
+  { name: 'Focus',         n: 7, from: 23, to: 34, clues: [11, 3], walls: [4, 14], c: '#8A5CF6', d: '#6A3FD6', t: '#FFFFFF', badge: '🔭' },
+  { name: 'Maîtrise',      n: 8, from: 35, to: 50, clues: [12, 2], walls: [8, 24], c: '#2F6BFF', d: '#1F4FD1', t: '#FFFFFF', badge: '👑' }
+];
+function bandOf(lv){ return BANDS.find(x => lv >= x.from && lv <= x.to); }
+function levelSpec(lv){
+  const b = bandOf(lv), t = (lv - b.from) / (b.to - b.from);
+  return { band: b, n: b.n, K: Math.round(b.clues[0] + (b.clues[1] - b.clues[0]) * t), W: Math.round(b.walls[0] + (b.walls[1] - b.walls[0]) * t) };
+}
+function setAccent(el, c, d, t, ring){
+  el.style.setProperty('--accent', c); el.style.setProperty('--accent-dark', d);
+  el.style.setProperty('--accent-ink', t); el.style.setProperty('--ring', ring || '#FFB400');
+}
+
+/* ---------- rangs et badges ---------- */
+const RANKS = [
+  [0, 'Esprit embrumé'], [250, 'Réveillé'], [800, 'Attentif'], [2000, 'Concentré'],
+  [4500, 'Focus laser'], [8000, 'Maître du fil'], [11000, 'Légende']
+];
+function rankOf(xp){
+  let i = 0; while(i < RANKS.length - 1 && xp >= RANKS[i + 1][0]) i++;
+  const next = RANKS[i + 1];
+  return { i, name: L.ranks[i], min: RANKS[i][0], next: next ? next[0] : null, nextName: next ? L.ranks[i + 1] : null,
+    pct: next ? (xp - RANKS[i][0]) / (next[0] - RANKS[i][0]) * 100 : 100 };
+}
+const BADGES = [
+  { id: 'first',    ic: '🧵' },
+  { id: 'clean',    ic: '🎯' },
+  { id: 'fast',     ic: '⚡' },
+  { id: 'daily',    ic: '📅' },
+  { id: 'streak3',  ic: '🔥' },
+  { id: 'perfect5', ic: '💎' },
+  ...BANDS.map((b, i) => ({ id: 'band' + i, ic: b.badge, band: i }))
+];
+const badgeName = b => b.band === undefined ? L.badgeNames[b.id] : L.bandDone(L.bands[b.band]);
+const bandName = b => L.bands[BANDS.indexOf(b)];
+
+function paintPlayer(xpShown){
+  const xp = xpShown === undefined ? store.get('xp', 0) : xpShown, r = rankOf(xp);
+  $('xp').textContent = nf(xp);
+  $('rankName').innerHTML = `<small>${L.rankN(r.i + 1)}</small>${r.name}`;
+  $('xpBar').style.width = r.pct + '%';
+  $('rankHint').textContent = r.next ? L.rankHint(nf(r.next - Math.round(xp)), r.nextName) : L.rankMax;
+}
+
+/* ---------- génération : chemin hamiltonien aléatoire (mouvements "backbite") ---------- */
+function generate(n, rng, K, W){
+  const L = n * n;
+  let p = [];
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++) p.push(r*n + (r % 2 ? n-1-c : c));
+  for(let t=0;t<L*150;t++){
+    if(rng() < 0.5) p.reverse();
+    const end = p[L-1], prev = p[L-2];
+    const nb = neighbors(end, n).filter(x => x !== prev);
+    const x = nb[Math.floor(rng() * nb.length)];
+    const i = p.indexOf(x);
+    p = p.slice(0, i+1).concat(p.slice(i+1).reverse());
+  }
+  const seg = (L - 1) / (K - 1), idx = [0];
+  for(let j=1;j<K-1;j++){
+    let v = Math.round(j * seg + (rng() - 0.5) * seg * 0.6);
+    v = Math.max(idx[idx.length-1] + 2, Math.min(v, L - 1 - 2 * (K - 1 - j)));
+    idx.push(v);
+  }
+  idx.push(L - 1);
+  const nums = new Map();
+  idx.forEach((pi, k) => nums.set(p[pi], k + 1));
+  // murs : uniquement sur des passages que la solution n'emprunte jamais
+  const used = new Set(); for(let i=1;i<L;i++) used.add(edge(p[i-1], p[i]));
+  const free = [];
+  for(let a=0;a<L;a++) for(const b of neighbors(a, n)) if(a < b && !used.has(edge(a, b))) free.push(edge(a, b));
+  for(let i=free.length-1;i>0;i--){ const j = Math.floor(rng() * (i + 1)); [free[i], free[j]] = [free[j], free[i]]; }
+  return { n, sol: p, nums, K, walls: new Set(free.slice(0, W || 0)) };
+}
+
+/* 50 niveaux figés (v1) — NE PAS MODIFIER : la progression des joueurs en dépend.
+   Pour ajouter des niveaux, créer LEVELS_V2 à la suite. Généré par scripts/freeze-levels.js. */
+const LEVELS_V1 = [{"n":4,"sol":[8,12,13,9,10,14,15,11,7,3,2,6,5,4,0,1],"clues":[[8,1],[13,2],[14,3],[11,4],[2,5],[5,6],[1,7]],"walls":[]},{"n":4,"sol":[10,6,5,9,13,12,8,4,0,1,2,3,7,11,15,14],"clues":[[10,1],[5,2],[8,3],[1,4],[3,5],[14,6]],"walls":[]},{"n":4,"sol":[0,1,2,3,7,11,15,14,13,12,8,4,5,9,10,6],"clues":[[0,1],[3,2],[14,3],[12,4],[5,5],[6,6]],"walls":[]},{"n":4,"sol":[15,14,13,12,8,9,10,11,7,3,2,6,5,4,0,1],"clues":[[15,1],[12,2],[7,3],[5,4],[1,5]],"walls":[]},{"n":4,"sol":[5,1,0,4,8,12,13,9,10,6,2,3,7,11,15,14],"clues":[[5,1],[13,2],[6,3],[14,4]],"walls":[]},{"n":5,"sol":[14,19,18,13,8,9,4,3,2,7,12,17,16,11,6,1,0,5,10,15,20,21,22,23,24],"clues":[[14,1],[8,2],[4,3],[7,4],[16,5],[1,6],[10,7],[20,8],[24,9]],"walls":[]},{"n":5,"sol":[16,17,18,13,12,11,6,7,2,1,0,5,10,15,20,21,22,23,24,19,14,9,4,3,8],"clues":[[16,1],[12,2],[2,3],[0,4],[20,5],[23,6],[14,7],[8,8]],"walls":[]},{"n":5,"sol":[20,21,22,23,24,19,14,13,18,17,12,7,6,11,16,15,10,5,0,1,2,3,4,9,8],"clues":[[20,1],[24,2],[18,3],[6,4],[5,5],[3,6],[8,7]],"walls":[]},{"n":5,"sol":[18,17,22,23,24,19,14,9,4,3,8,13,12,7,2,1,6,11,16,21,20,15,10,5,0],"clues":[[18,1],[24,2],[4,3],[7,4],[11,5],[20,6],[0,7]],"walls":[]},{"n":5,"sol":[18,23,24,19,14,13,8,9,4,3,2,7,12,17,22,21,20,15,16,11,10,5,0,1,6],"clues":[[18,1],[8,2],[3,3],[22,4],[10,5],[6,6]],"walls":[]},{"n":5,"sol":[2,1,0,5,10,15,20,21,16,11,6,7,12,17,22,23,24,19,14,9,4,3,8,13,18],"clues":[[2,1],[21,2],[7,3],[9,4],[18,5]],"walls":[]},{"n":5,"sol":[8,7,6,11,12,13,18,23,24,19,14,9,4,3,2,1,0,5,10,15,20,21,22,17,16],"clues":[[8,1],[18,2],[10,3],[16,4]],"walls":[]},{"n":6,"sol":[19,20,14,13,7,1,0,6,12,18,24,25,26,27,21,15,16,10,9,8,2,3,4,5,11,17,23,22,28,29,35,34,33,32,31,30],"clues":[[19,1],[13,2],[18,3],[26,4],[16,5],[2,6],[11,7],[22,8],[33,9],[30,10]],"walls":[]},{"n":6,"sol":[21,22,23,17,16,15,9,10,11,5,4,3,2,1,0,6,7,8,14,20,26,27,28,29,35,34,33,32,31,30,24,25,19,13,12,18],"clues":[[21,1],[16,2],[11,3],[1,4],[20,5],[27,6],[32,7],[25,8],[18,9]],"walls":["8-9"]},{"n":6,"sol":[2,1,0,6,12,13,7,8,14,20,19,18,24,30,31,25,26,32,33,27,21,15,16,10,9,3,4,5,11,17,23,29,35,34,28,22],"clues":[[2,1],[13,2],[20,3],[30,4],[33,5],[16,6],[5,7],[23,8],[22,9]],"walls":["14-15","33-34"]},{"n":6,"sol":[7,8,9,10,16,15,21,22,23,17,11,5,4,3,2,1,0,6,12,18,19,13,14,20,26,27,28,29,35,34,33,32,31,30,24,25],"clues":[[7,1],[16,2],[17,3],[1,4],[13,5],[27,6],[32,7],[25,8]],"walls":["26-32","3-9","12-13"]},{"n":6,"sol":[23,29,35,34,33,32,31,30,24,25,19,18,12,6,0,1,2,8,7,13,14,20,26,27,28,22,21,15,16,17,11,5,4,10,9,3],"clues":[[23,1],[30,2],[12,3],[2,4],[27,5],[11,6],[3,7]],"walls":["10-11","13-19","28-29","1-7"]},{"n":6,"sol":[13,14,15,9,8,7,1,2,3,4,5,11,10,16,17,23,22,28,29,35,34,33,32,31,30,24,25,26,27,21,20,19,18,12,6,0],"clues":[[13,1],[3,2],[11,3],[29,4],[30,5],[19,6],[0,7]],"walls":["28-34","11-17","6-7","23-29"]},{"n":6,"sol":[8,2,3,9,15,14,13,7,1,0,6,12,18,19,25,24,30,31,32,26,20,21,22,28,27,33,34,35,29,23,17,16,10,11,5,4],"clues":[[8,1],[7,2],[30,3],[21,4],[23,5],[4,6]],"walls":["19-20","22-23","21-27","28-29","8-14"]},{"n":6,"sol":[7,13,14,8,9,3,2,1,0,6,12,18,19,25,24,30,31,32,33,34,35,29,23,17,11,5,4,10,16,15,21,22,28,27,26,20],"clues":[[7,1],[1,2],[33,3],[15,4],[20,5]],"walls":["26-32","25-31","18-24","9-10","21-27","16-22"]},{"n":6,"sol":[6,0,1,7,8,2,3,4,5,11,10,9,15,14,13,12,18,19,25,26,20,21,27,28,22,16,17,23,29,35,34,33,32,31,30,24],"clues":[[6,1],[4,2],[25,3],[23,4],[24,5]],"walls":["4-10","26-32","15-16","7-13","26-27","8-9","13-19"]},{"n":6,"sol":[16,22,28,27,21,15,14,20,26,25,24,30,31,32,33,34,35,29,23,17,11,5,4,3,2,1,0,6,12,18,19,13,7,8,9,10],"clues":[[16,1],[30,2],[3,3],[10,4]],"walls":["28-34","1-7","4-10","13-14","20-21","9-15","19-20","10-16"]},{"n":7,"sol":[2,1,0,7,14,15,16,17,24,23,22,21,28,35,42,43,36,29,30,37,44,45,46,47,48,41,40,39,38,31,32,25,18,11,12,19,26,33,34,27,20,13,6,5,4,3,10,9,8],"clues":[[2,1],[15,2],[23,3],[43,4],[44,5],[47,6],[32,7],[19,8],[34,9],[5,10],[8,11]],"walls":["18-19","26-27","12-13","32-33"]},{"n":7,"sol":[10,9,8,15,22,29,28,21,14,7,0,1,2,3,4,5,6,13,12,11,18,17,16,23,24,25,32,33,26,19,20,27,34,41,48,47,40,39,46,45,38,31,30,37,44,43,42,35,36],"clues":[[10,1],[29,2],[7,3],[13,4],[17,5],[33,6],[41,7],[40,8],[30,9],[36,10]],"walls":["29-30","10-17","29-36","21-22","15-16"]},{"n":7,"sol":[32,25,24,23,22,29,36,37,30,31,38,45,44,43,42,35,28,21,14,15,16,17,10,9,8,7,0,1,2,3,4,11,18,19,12,5,6,13,20,27,26,33,40,39,46,47,48,41,34],"clues":[[32,1],[29,2],[44,3],[35,4],[17,5],[0,6],[18,7],[20,8],[40,9],[34,10]],"walls":["16-23","32-39","33-34","10-11","7-14","38-39"]},{"n":7,"sol":[4,5,6,13,12,11,10,3,2,9,8,1,0,7,14,21,28,35,42,43,44,45,46,47,48,41,40,39,38,37,36,29,30,23,22,15,16,17,18,19,20,27,26,25,24,31,32,33,34],"clues":[[4,1],[3,2],[7,3],[35,4],[46,5],[37,6],[15,7],[27,8],[34,9]],"walls":["16-23","18-25","23-24","9-10","36-43","30-31","21-22"]},{"n":7,"sol":[26,27,20,19,18,17,10,11,12,13,6,5,4,3,2,9,16,15,8,1,0,7,14,21,28,35,42,43,36,29,22,23,30,37,44,45,38,31,24,25,32,39,40,33,34,41,48,47,46],"clues":[[26,1],[12,2],[9,3],[7,4],[43,5],[30,6],[39,7],[46,8]],"walls":["37-38","1-2","29-30","7-8","17-24","3-10","15-22","12-19"]},{"n":7,"sol":[24,31,32,25,26,33,40,47,48,41,34,27,20,19,12,13,6,5,4,11,18,17,10,3,2,9,8,1,0,7,14,21,28,35,42,43,44,45,46,39,38,37,30,23,16,15,22,29,36],"clues":[[24,1],[34,2],[5,3],[9,4],[35,5],[39,6],[36,7]],"walls":["32-33","7-8","9-10","10-11","14-15","17-24","32-39","22-23","40-41"]},{"n":7,"sol":[16,15,22,23,30,29,36,37,44,43,42,35,28,21,14,7,0,1,2,3,4,5,6,13,12,19,20,27,34,41,48,47,46,45,38,39,40,33,26,25,32,31,24,17,18,11,10,9,8],"clues":[[16,1],[44,2],[7,3],[12,4],[47,5],[32,6],[8,7]],"walls":["18-25","10-17","13-20","3-10","32-33","26-27","19-26","31-38","33-34"]},{"n":7,"sol":[38,39,40,33,32,31,30,29,22,23,24,17,18,25,26,27,34,41,48,47,46,45,44,37,36,43,42,35,28,21,14,15,16,9,8,7,0,1,2,3,10,11,12,19,20,13,6,5,4],"clues":[[38,1],[24,2],[46,3],[42,4],[3,5],[4,6]],"walls":["1-8","5-12","40-47","20-27","16-23","19-26","40-41","28-29","2-9","11-18"]},{"n":7,"sol":[38,37,36,35,42,43,44,45,46,47,48,41,34,27,20,19,26,33,40,39,32,25,18,17,16,15,8,9,10,11,12,13,6,5,4,3,2,1,0,7,14,21,28,29,22,23,30,31,24],"clues":[[38,1],[34,2],[25,3],[1,4],[24,5]],"walls":["28-35","25-26","9-16","11-18","36-43","12-19","23-24","37-44","40-47","4-11","38-39"]},{"n":7,"sol":[6,13,20,19,18,11,12,5,4,3,10,17,24,31,38,39,40,33,32,25,26,27,34,41,48,47,46,45,44,37,36,43,42,35,28,21,14,7,0,1,2,9,8,15,16,23,30,29,22],"clues":[[6,1],[40,2],[37,3],[22,4]],"walls":["17-18","32-39","40-41","4-11","43-44","31-32","20-27","10-11","9-16","38-45","28-29","14-15"]},{"n":7,"sol":[18,25,24,17,16,15,14,21,28,35,42,43,36,29,22,23,30,37,44,45,46,47,48,41,40,39,38,31,32,33,34,27,20,13,6,5,4,3,2,1,0,7,8,9,10,11,12,19,26],"clues":[[18,1],[45,2],[4,3],[26,4]],"walls":["30-31","23-24","10-17","28-29","39-46","32-39","33-40","34-41","26-27","26-33","21-22","7-14","37-38"]},{"n":7,"sol":[10,17,24,25,26,33,40,39,32,31,30,23,22,29,36,37,44,43,42,35,28,21,14,7,0,1,8,15,16,9,2,3,4,11,18,19,12,5,6,13,20,27,34,41,48,47,46,45,38],"clues":[[10,1],[43,2],[38,3]],"walls":["23-24","38-39","17-18","15-22","30-37","44-45","35-36","4-5","3-10","24-31","11-12","26-27","36-43","12-13"]},{"n":8,"sol":[20,28,36,44,52,53,54,46,45,37,29,21,22,14,6,7,15,23,31,30,38,39,47,55,63,62,61,60,59,58,57,56,48,40,41,49,50,51,43,35,27,19,11,12,13,5,4,3,2,1,0,8,9,10,18,26,25,17,16,24,32,33,34,42],"clues":[[20,1],[46,2],[21,3],[15,4],[63,5],[57,6],[41,7],[35,8],[3,9],[8,10],[16,11],[42,12]],"walls":["19-20","22-23","14-15","29-30","20-21","37-38","2-10","31-39"]},{"n":8,"sol":[9,17,18,10,11,3,2,1,0,8,16,24,25,26,34,33,32,40,41,42,43,44,52,51,50,49,48,56,57,58,59,60,61,53,54,62,63,55,47,39,31,30,38,46,45,37,36,35,27,19,20,28,29,21,22,23,15,7,6,5,4,12,13,14],"clues":[[9,1],[3,2],[24,3],[40,4],[50,5],[61,6],[55,7],[45,8],[20,9],[6,10],[14,11]],"walls":["54-55","33-41","14-22","25-33","43-51","27-28","29-30","40-48","38-39"]},{"n":8,"sol":[13,12,20,28,27,26,25,33,34,35,36,37,45,44,52,60,59,58,50,51,43,42,41,49,57,56,48,40,32,24,16,17,9,8,0,1,2,10,18,19,11,3,4,5,6,7,15,14,22,21,29,30,38,46,54,53,61,62,63,55,47,39,31,23],"clues":[[13,1],[26,2],[52,3],[43,4],[40,5],[8,6],[10,7],[5,8],[38,9],[63,10],[23,11]],"walls":["49-50","51-59","22-30","36-44","20-21","1-9","5-13","54-62","27-35","51-52"]},{"n":8,"sol":[19,20,21,13,12,11,10,2,3,4,5,6,7,15,14,22,23,31,39,38,30,29,28,27,26,18,17,9,1,0,8,16,24,25,33,32,40,48,56,57,58,59,51,50,49,41,42,34,35,43,44,52,60,61,53,54,62,63,55,47,46,45,37,36],"clues":[[19,1],[3,2],[15,3],[29,4],[1,5],[32,6],[51,7],[34,8],[54,9],[36,10]],"walls":["4-12","54-55","20-28","6-14","10-18","50-58","36-44","46-54","52-53","25-26","9-10"]},{"n":8,"sol":[0,8,9,1,2,3,4,5,13,12,11,10,18,19,20,21,22,14,6,7,15,23,31,30,29,28,36,37,38,39,47,46,45,44,52,53,54,55,63,62,61,60,59,58,57,56,48,40,32,24,16,17,25,26,27,35,34,33,41,42,43,51,50,49],"clues":[[0,1],[11,2],[20,3],[29,4],[46,5],[63,6],[48,7],[27,8],[49,9]],"walls":["2-10","30-38","27-28","0-1","45-53","36-44","8-16","34-42","3-11","14-15","49-57","51-59"]},{"n":8,"sol":[38,39,47,55,63,62,61,53,54,46,45,37,29,30,31,23,15,7,6,14,22,21,20,12,13,5,4,3,2,10,11,19,18,17,9,1,0,8,16,24,32,40,48,56,57,58,59,60,52,44,36,28,27,35,43,51,50,49,41,42,34,33,25,26],"clues":[[38,1],[61,2],[31,3],[13,4],[17,5],[16,6],[60,7],[50,8],[26,9]],"walls":["32-33","26-34","24-25","38-46","43-44","40-41","54-55","35-36","16-17","20-28","46-47","36-37","22-23"]},{"n":8,"sol":[13,14,6,7,15,23,22,21,29,37,36,28,20,12,11,19,18,10,9,17,25,26,27,35,43,51,52,44,45,53,54,46,38,30,31,39,47,55,63,62,61,60,59,58,57,56,48,49,50,42,34,33,41,40,32,24,16,8,0,1,2,3,4,5],"clues":[[13,1],[21,2],[9,3],[51,4],[47,5],[56,6],[8,7],[5,8]],"walls":["14-22","53-61","54-62","54-55","36-44","25-33","52-60","22-30","34-35","12-13","10-11","51-59","2-10","41-42"]},{"n":8,"sol":[56,57,58,59,51,43,44,45,46,54,53,52,60,61,62,63,55,47,39,31,30,38,37,36,28,29,21,20,12,13,14,22,23,15,7,6,5,4,3,2,1,0,8,16,24,25,26,18,17,9,10,11,19,27,35,34,42,50,49,48,40,32,33,41],"clues":[[56,1],[61,2],[37,3],[13,4],[2,5],[27,6],[41,7]],"walls":["51-52","44-52","41-49","21-22","5-13","23-31","36-44","13-21","25-33","26-34","42-43","26-27","8-9","29-30","46-47"]},{"n":8,"sol":[25,17,16,24,32,33,41,40,48,56,57,49,50,58,59,51,43,42,34,35,27,26,18,10,9,8,0,1,2,3,11,19,20,12,4,5,13,21,22,14,6,7,15,23,31,30,29,28,36,44,45,37,38,39,47,46,54,55,63,62,61,60,52,53],"clues":[[25,1],[57,2],[35,3],[20,4],[6,5],[38,6],[53,7]],"walls":["11-12","1-9","18-19","17-18","45-46","22-23","29-37","31-39","14-15","10-11","47-55","53-54","25-33","54-62","48-49","2-10","33-34"]},{"n":8,"sol":[0,1,2,10,9,8,16,17,18,26,27,19,20,28,36,44,52,51,43,35,34,42,41,33,25,24,32,40,48,56,57,49,50,58,59,60,61,62,63,55,54,53,45,46,47,39,38,37,29,30,31,23,22,21,13,14,15,7,6,5,4,3,11,12],"clues":[[0,1],[19,2],[40,3],[53,4],[21,5],[12,6]],"walls":["35-36","12-20","12-13","27-28","33-34","17-25","11-19","52-53","42-43","46-54","44-45","0-8","50-51","20-21","31-39","36-37","47-55","2-3"]},{"n":8,"sol":[58,50,49,57,56,48,40,32,24,16,8,0,1,9,17,18,10,2,3,11,19,27,28,20,12,4,5,6,7,15,14,13,21,29,37,38,30,22,23,31,39,47,46,54,55,63,62,61,60,59,51,43,42,41,33,25,26,34,35,36,44,52,53,45],"clues":[[58,1],[0,2],[14,3],[60,4],[45,5]],"walls":["35-43","12-13","45-46","53-54","18-26","9-10","37-45","24-25","38-46","18-19","50-51","28-36","17-25","57-58","32-33","19-20","41-49","43-44","27-35"]},{"n":8,"sol":[38,30,29,37,36,44,43,42,41,40,48,56,57,49,50,58,59,51,52,60,61,62,63,55,54,53,45,46,47,39,31,23,22,21,20,12,13,14,15,7,6,5,4,3,2,1,0,8,9,10,11,19,18,26,25,17,16,24,32,33,34,35,27,28],"clues":[[38,1],[60,2],[23,3],[2,4],[28,5]],"walls":["19-27","10-18","52-53","57-58","11-12","35-43","3-11","50-51","24-25","22-30","6-14","42-50","2-10","9-17","15-23","44-52","59-60","17-18","38-46","37-45"]},{"n":8,"sol":[19,20,12,4,5,13,21,22,14,6,7,15,23,31,39,47,46,38,30,29,37,45,53,54,55,63,62,61,60,59,58,57,56,48,40,32,24,16,8,0,1,2,3,11,10,9,17,18,26,25,33,34,42,41,49,50,51,52,44,43,35,36,28,27],"clues":[[19,1],[54,2],[1,3],[27,4]],"walls":["20-28","42-43","42-50","24-25","34-35","54-62","50-58","26-27","33-41","1-9","13-14","44-45","52-60","20-21","8-9","11-19","48-49","36-37","17-25","38-39","16-17"]},{"n":8,"sol":[9,10,18,19,20,28,36,35,27,26,25,24,32,40,48,56,57,58,50,49,41,33,34,42,43,44,45,46,54,53,52,51,59,60,61,62,63,55,47,39,38,37,29,21,13,14,22,30,31,23,15,7,6,5,4,12,11,3,2,1,0,8,16,17],"clues":[[9,1],[59,2],[17,3]],"walls":["40-41","11-19","38-46","32-33","25-33","42-50","53-61","6-14","10-11","9-17","26-34","54-55","35-43","48-49","22-23","58-59","21-22","36-37","43-51","12-13","46-47","20-21"]},{"n":8,"sol":[14,22,23,15,7,6,5,4,3,2,1,0,8,9,10,11,19,20,12,13,21,29,37,36,28,27,26,18,17,16,24,25,33,32,40,48,56,57,58,59,60,61,53,54,62,63,55,47,39,31,30,38,46,45,44,52,51,43,35,34,42,41,49,50],"clues":[[14,1],[25,2],[50,3]],"walls":["24-32","23-31","33-41","35-36","50-58","50-51","52-60","61-62","3-11","21-22","1-9","20-28","42-50","9-17","6-14","33-34","22-30","37-45","42-43","28-29","48-49","26-34","27-35"]},{"n":8,"sol":[26,18,10,9,17,16,8,0,1,2,3,11,12,4,5,6,7,15,23,31,39,47,46,38,30,22,14,13,21,29,37,45,53,54,55,63,62,61,60,59,58,50,42,43,51,52,44,36,28,20,19,27,35,34,33,41,49,57,56,48,40,32,24,25],"clues":[[26,1],[25,2]],"walls":["50-51","30-31","36-37","2-10","20-21","16-24","35-43","48-49","32-33","25-33","49-50","17-25","26-27","6-14","44-45","35-36","45-46","53-61","17-18","14-15","41-42","29-30","43-44","1-9"]}];
+function frozenPuzzle(lv){
+  const d = LEVELS_V1[lv - 1];
+  return { n: d.n, sol: d.sol, nums: new Map(d.clues), K: d.clues.length, walls: new Set(d.walls) };
+}
+
+/* ---------- état ---------- */
+const today = dateKey(new Date());
+const DAY_KEY = 'day2:' + today;   // format du défi v2 (6 numéros + 5 murs) — changer de préfixe si le format change
+const dayNo = dayNumber();
+let S = null, cells = [], knots = [], dragging = false, pendingCut = null, trainSize = 6;
+
+function newGame(kind, n, seed, K, W, extra){
+  clearTimeout(cdTimer); pendingRound = false;
+  if(typeof board !== 'undefined'){ $('countdown').hidden = true; board.classList.remove('counting'); }
+  S = Object.assign({ mode: kind, puzzle: typeof seed === 'object' ? seed : generate(n, mulberry(seed), K, W), path: [], t0: null, elapsed: 0, done: false, hints: 0 }, extra || {});
+}
+function now(){ return S.elapsed + (S.t0 ? Date.now() - S.t0 : 0); }
+function startClock(){ if(!S.t0 && !S.done) S.t0 = Date.now(); }
+function bank(){ if(S && S.t0){ S.elapsed += Date.now() - S.t0; S.t0 = null; } }
+function lastNum(){ let m = 0; for(const c of S.path){ const k = S.puzzle.nums.get(c); if(k) m = k; } return m; }
+function saveDaily(){
+  if(!S) return;
+  if(S.mode === 'daily') store.set(DAY_KEY, { path: S.path, elapsed: now(), hints: S.hints, done: S.done });
+  else if(S.mode === 'level' && !S.done) store.set('lvState', { level: S.level, path: S.path, elapsed: now(), hints: S.hints });
+}
+function levels(){ return store.get('levels', {}); }
+function unlocked(){ const d = levels(); let u = 1; while(u <= TOTAL && d[u]) u++; return (!RELEASE && store.get('unlockAll', false)) ? TOTAL : Math.min(u, TOTAL); }
+function starsFor(h){ return h === 0 ? 3 : h === 1 ? 2 : 1; }
+
+/* ---------- rendu de la grille ---------- */
+const board = $('board'), svg = $('svg'), line = $('line'), head = $('head');
+function build(){
+  board.classList.toggle('daily', S.mode === 'daily');
+  $('boardwrap').classList.toggle('daily', S.mode === 'daily');
+  const { n, nums, walls } = S.puzzle;
+  board.style.setProperty('--n', n);
+  svg.setAttribute('viewBox', `0 0 ${n} ${n}`);
+  $('cells').innerHTML = ''; $('knots').innerHTML = ''; $('walls').innerHTML = '';
+  cells = []; knots = [];
+  for(let i=0;i<n*n;i++){
+    const d = document.createElement('div'); d.className = 'cell'; $('cells').appendChild(d); cells.push(d);
+    const s = document.createElement('div'); s.className = 'slot';
+    if(nums.has(i)){ const k = document.createElement('span'); k.className = 'knot'; k.textContent = nums.get(i); s.appendChild(k); knots[i] = k; }
+    $('knots').appendChild(s);
+  }
+  const NS = 'http://www.w3.org/2000/svg';
+  walls.forEach(w => {
+    const [a, b] = w.split('-').map(Number), r = Math.floor(a / n), c = a % n;
+    const l = document.createElementNS(NS, 'line');
+    if(b === a + 1){ l.setAttribute('x1', c + 1); l.setAttribute('x2', c + 1); l.setAttribute('y1', r + .08); l.setAttribute('y2', r + .92); }
+    else { l.setAttribute('y1', r + 1); l.setAttribute('y2', r + 1); l.setAttribute('x1', c + .08); l.setAttribute('x2', c + .92); }
+    $('walls').appendChild(l);
+  });
+  board.classList.remove('won');
+  render();
+}
+function render(){
+  const { n, nums } = S.puzzle;
+  $('boardwrap').style.setProperty('--prog', S.path.length / (n * n));
+  const pos = new Map(S.path.map((c, i) => [c, i]));
+  cells.forEach((d, i) => { const on = pos.has(i); d.classList.toggle('on', on); d.style.setProperty('--o', on ? pos.get(i) : 0); });
+  line.setAttribute('points', S.path.map(c => `${c % n + .5},${Math.floor(c / n) + .5}`).join(' '));
+  // pas de « tête » ronde au bout du fil : c'est la case en cours qui est mise en valeur (cadre qui pulse)
+  head.setAttribute('r', 0);
+  const cur = S.path.length && !S.done ? S.path[S.path.length - 1] : -1;
+  cells.forEach((d, i) => d.classList.toggle('cur', i === cur));
+  const ln = lastNum();
+  nums.forEach((k, c) => { const el = knots[c]; el.classList.toggle('hit', pos.has(c)); el.classList.toggle('next', !S.done && k === ln + 1); });
+  $('timer').textContent = fmt(now());
+}
+function say(text, warn){ const s = $('status'); s.textContent = text; s.classList.toggle('warn', !!warn); }
+function anim(el, cls){ if(!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+function buzz(ms){ try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} }
+
+/* ---------- logique de tracé ---------- */
+function tryExtend(c){
+  const { n, nums, K } = S.puzzle;
+  if(c < 0 || c >= n * n || S.path.includes(c)) return false;
+  const last = S.path[S.path.length-1];
+  if(!adjacent(last, c, n)) return false;
+  if(S.puzzle.walls.has(edge(last, c))){ say(L.wall, true); sfx.bump(); return false; }
+  const ln = lastNum();
+  if(ln === K){ say(L.stopAt(K), true); sfx.bump(); return false; }
+  if(nums.has(c)){
+    const k = nums.get(c);
+    if(k !== ln + 1){ anim(knots[c], 'shake'); sfx.bump(); say(L.needFirst(ln + 1), true); return false; }
+    S.path.push(c); anim(knots[c], 'pop'); sfx.knot(k); buzz(10);
+  } else { S.path.push(c); sfx.step(); }
+  say('');
+  return true;
+}
+function checkEnd(){
+  const { n, nums, K } = S.puzzle;
+  const last = S.path[S.path.length-1];
+  if(nums.get(last) !== K) return;
+  const left = n * n - S.path.length;
+  if(left === 0) win();
+  else say(L.almost(left), true);
+}
+function cellAt(e){
+  const r = board.getBoundingClientRect(), n = S.puzzle.n, pad = 10;
+  const x = e.clientX - r.left - pad, y = e.clientY - r.top - pad, w = r.width - 2*pad;
+  if(x < 0 || y < 0 || x >= w || y >= w) return null;
+  return Math.floor(y / w * n) * n + Math.floor(x / w * n);
+}
+function moveTo(c){
+  const n = S.puzzle.n, last = S.path[S.path.length-1];
+  if(c === last) return;
+  const at = S.path.indexOf(c);
+  // en glissant, on ne peut revenir que sur les dernières cases : frôler un vieux bout du fil ne coupe rien
+  if(at >= 0){ if(at >= S.path.length - 4){ S.path = S.path.slice(0, at + 1); say(''); } return; }
+  if(adjacent(last, c, n)){ tryExtend(c); return; }
+  // glissé rapide : on avance case par case en ligne droite
+  const lr = Math.floor(last / n), lc = last % n, cr = Math.floor(c / n), cc = c % n;
+  if(lr === cr || lc === cc){
+    const step = lr === cr ? Math.sign(cc - lc) : Math.sign(cr - lr) * n;
+    let cur = last;
+    while(cur !== c){ if(!tryExtend(cur + step)) break; cur += step; }
+  }
+}
+board.addEventListener('pointerdown', e => {
+  if(S.done || S.locked) return;
+  const c = cellAt(e); if(c === null) return;
+  e.preventDefault();
+  if(!S.path.length){
+    if(S.puzzle.nums.get(c) !== 1){ say(L.startOn1, true); sfx.bump(); anim(knots[[...S.puzzle.nums].find(([, k]) => k === 1)[0]], 'shake'); return; }
+    S.path = [c]; anim(knots[c], 'pop'); sfx.knot(1); buzz(10); say('');
+  } else if(S.path.includes(c)){
+    // toucher le fil déjà tracé (le 1 compris) ne coupe rien : il faut glisser depuis cette case pour reprendre de là
+    if(c !== S.path[S.path.length-1]) pendingCut = c;
+  } else if(adjacent(S.path[S.path.length-1], c, S.puzzle.n)){
+    tryExtend(c);
+  } else { say(L.continueEnd, true); return; }
+  startClock();
+  dragging = true;
+  try{ board.setPointerCapture(e.pointerId); }catch(err){}
+  render(); checkEnd(); saveDaily();
+});
+board.addEventListener('pointermove', e => {
+  if(!dragging || S.done) return;
+  const c = cellAt(e); if(c === null) return;
+  const before = S.path.length;
+  if(pendingCut !== null){
+    if(c === pendingCut) return;
+    S.path = S.path.slice(0, S.path.indexOf(pendingCut) + 1); pendingCut = null; say('');
+    if(adjacent(S.path[S.path.length-1], c, S.puzzle.n)) tryExtend(c);
+    render(); checkEnd(); return;
+  }
+  moveTo(c);
+  if(S.path.length !== before){ render(); checkEnd(); }
+});
+function endDrag(){ pendingCut = null; if(dragging){ dragging = false; saveDaily(); } }
+board.addEventListener('pointerup', endDrag);
+board.addEventListener('pointercancel', endDrag);
+
+$('undo').onclick = () => { if(S.done || S.locked || !S.path.length) return; S.path.pop(); say(''); render(); saveDaily(); };
+$('reset').onclick = () => { if(S.done || S.locked) return; S.path = []; say(L.backTo1); render(); saveDaily(); };
+$('hint').onclick = () => {
+  if(S.done || S.locked) return;
+  const sol = S.puzzle.sol; let p = 0;
+  while(p < S.path.length && S.path[p] === sol[p]) p++;
+  const corrected = p < S.path.length;
+  S.path = sol.slice(0, Math.min(p + 1, sol.length));
+  S.hints++; S.elapsed += PENALTY; startClock();
+  say(corrected ? L.hintFix : L.hintOne);
+  render(); checkEnd(); saveDaily();
+};
+
+/* ---------- victoire : récompenses ---------- */
+function win(){
+  bank(); S.done = true;
+  const time = S.elapsed, n = S.puzzle.n, clean = S.hints === 0;
+  board.classList.add('won'); buzz([15, 40, 15]); say(''); render();
+  const gains = [], earned = [];
+  const owned = new Set(store.get('badges', []));
+  const grant = id => { if(!owned.has(id)){ owned.add(id); earned.push(id); } };
+  let combo = store.get('combo', 0);
+  let kicker = '', title = pick(L.titles);
+  let stars = null, extraMsg = '', bossReward = false, newRecord = false;
+
+  if(S.mode === 'level'){
+    const lv = S.level, d = levels(), prev = d[lv], b = bandOf(lv), par = n * n * 1500;
+    stars = starsFor(S.hints);
+    kicker = L.kLevel(lv, bandName(b));
+    if(!prev){
+      gains.push([L.gLevel, 60 + lv * 4]);
+      if(clean) gains.push([L.gClean, 50]);
+      if(time < par) gains.push([L.gFast(fmt(par)), 30]);
+    } else {
+      gains.push([L.gReplay, 10]);
+      if(stars > prev.s) gains.push([L.gStars(stars - prev.s), 25 * (stars - prev.s)]);
+      if(time < prev.t){ gains.push([L.gRecord(fmt(prev.t)), 20, true]); newRecord = true; }
+    }
+    combo = clean ? combo + 1 : 0;
+    if(combo >= 2) gains.push([L.gCombo(combo), 10 * combo]);
+    d[lv] = { t: prev ? Math.min(prev.t, time) : time, s: prev ? Math.max(prev.s, stars) : stars };
+    store.set('levels', d);
+    store.set('lvState', null);
+    store.set('last', lv < TOTAL ? { mode: 'level', level: lv + 1 } : { mode: 'levels' });
+    grant('first'); if(clean) grant('clean'); if(combo >= 5) grant('perfect5');
+    if(lv === b.to){
+      bossReward = !store.get('bossAds', []).includes(lv);
+      title = lv === TOTAL ? L.tMaster : L.tBoss;
+      const bi = BANDS.indexOf(b);
+      if(BANDS[bi].from && [...Array(b.to - b.from + 1)].every((_, k) => d[b.from + k])) grant('band' + bi);
+      if(!prev){ gains.push([L.gBand(bandName(b)), 150, true]); if(BANDS[bi + 1]) extraMsg = L.newBand(bandName(BANDS[bi + 1]), BANDS[bi + 1].n); }
+    }
+  } else if(S.mode === 'daily'){
+    kicker = L.kDaily(dayNo);
+    const st = store.get('stats', { played: 0, streak: 0, best: null, last: null });
+    if(st.last !== today){
+      const y = new Date(); y.setDate(y.getDate() - 1);
+      st.streak = st.last === dateKey(y) ? st.streak + 1 : 1;
+      st.played++; st.last = today;
+      if(st.best !== null && time < st.best){ gains.push([L.gRecord(fmt(st.best)), 20, true]); newRecord = true; }
+      if(st.best === null || time < st.best) st.best = time;
+      store.set('stats', st);
+      gains.push([L.gDaily, 150]);
+      if(clean) gains.push([L.gClean, 50]);
+      if(time < 90000) gains.push([L.gUnder, 30]);
+      if(st.streak >= 2) gains.push([L.gDays(st.streak), 20 * Math.min(st.streak, 10), true]);
+    }
+    grant('daily'); if(st.streak >= 3) grant('streak3');
+    store.set(DAY_KEY, { path: S.path, elapsed: time, hints: S.hints, done: true });
+  } else {
+    kicker = L.kFree(n);
+    gains.push([L.gFree, 20 + n * 5]);
+    if(clean) gains.push([L.gClean, 20]);
+    const fb = store.get('freeBest', {});
+    if(fb[n] && time < fb[n]){ gains.push([L.gRecord(fmt(fb[n])), 10, true]); newRecord = true; }
+    if(!fb[n] || time < fb[n]){ fb[n] = time; store.set('freeBest', fb); }
+  }
+  if(newRecord) title = L.tRecord;
+  if(n >= 6 && time < 30000) grant('fast');
+  store.set('combo', combo);
+  store.set('badges', [...owned]);
+
+  const before = store.get('xp', 0), total = gains.reduce((s, g) => s + g[1], 0), after = before + total;
+  store.set('xp', after);
+  countGrid();
+  celebrate({ kicker, title, stars, time, gains, before, after, earned, extraMsg, bossReward, bossLevel: S.level });
+}
+
+/* ---------- célébration ---------- */
+function celebrate(o){
+  setScene('celebrate'); sfx.win();
+  const card = $('card');
+  const acc = getComputedStyle($('game'));
+  ['--accent', '--accent-dark', '--accent-ink'].forEach(v => card.style.setProperty(v, acc.getPropertyValue(v)));
+  $('cKicker').textContent = o.kicker;
+  $('cTitle').textContent = o.title;
+  $('cTime').textContent = L.timeIs(fmt(o.time)) + (S.hints ? ` · ${L.hints(S.hints)}` : '');
+  const starsEl = $('cStars');
+  starsEl.hidden = o.stars === null;
+  [...starsEl.children].forEach((s, i) => { s.className = ''; if(o.stars !== null && i < o.stars) s.classList.add('lit'); });
+  $('cGains').innerHTML = '';
+  o.gains.forEach((g, i) => {
+    const li = document.createElement('li'); if(g[2]) li.className = 'big';
+    li.style.animationDelay = (0.9 + i * 0.18) + 's';
+    li.innerHTML = `<span>${g[0]}</span><b>+${g[1]}</b>`;
+    $('cGains').appendChild(li);
+  });
+  const r0 = rankOf(o.before), r1 = rankOf(o.after);
+  $('cRank').textContent = r0.name; $('cXp').textContent = nf(o.before);
+  $('cBar').style.transition = 'none'; $('cBar').style.width = r0.pct + '%';
+  $('cRankMsg').className = 'rankmsg'; $('cRankMsg').textContent = o.extraMsg;
+  $('cBadges').innerHTML = '';
+
+  // pub récompensée proposée après un boss vaincu (première victoire seulement)
+  const rw = $('cReward');
+  rw.hidden = !ADS_ENABLED || !o.bossReward;
+  rw.innerHTML = `${L.rewardBtn}<small>${L.rewardSub}</small>`;
+  rw.onclick = () => showAd(() => {
+    store.set('adPass', store.get('adPass', 0) + 1);
+    store.set('bossAds', [...store.get('bossAds', []), o.bossLevel]);
+    pendingAd = false;            // la pub récompensée remplace la pub prévue maintenant
+    rw.hidden = true; paintAdInfo(); sfx.badge(); toast(L.rewardGot);
+  }, true);
+
+  // boutons
+  const next = $('cNext'), alt = $('cAlt');
+  if(S.mode === 'level'){
+    if(S.level < TOTAL){ next.hidden = false; next.textContent = L.nextLevel; next.onclick = afterWin(() => startLevel(S.level + 1)); }
+    else { next.hidden = false; next.textContent = L.finaleBtn; next.onclick = afterWin(showFinale); }
+    alt.textContent = L.map; alt.onclick = afterWin(showMap);
+  } else if(S.mode === 'daily'){
+    // défi du jour : « Partager » ouvre directement le partage natif, la célébration reste ouverte
+    next.hidden = false; next.textContent = '📤 ' + L.share; next.onclick = () => shareOut(shareText());
+    alt.textContent = L.close; alt.onclick = afterWin(showResult);
+  } else {
+    next.hidden = false; next.textContent = L.newGrid; next.onclick = afterWin(startTraining);
+    alt.textContent = L.close; alt.onclick = afterWin(showResult);
+  }
+
+  $('celebrate').hidden = false;
+  confetti();
+  // étoiles une par une
+  if(o.stars !== null) [...starsEl.children].forEach((s, i) => setTimeout(() => { s.classList.add('in'); if(i < o.stars) sfx.star(i); }, 350 + i * 260));
+  else [...starsEl.children].forEach(s => s.classList.add('in'));
+  // compteur de neurones
+  const startAt = 900 + o.gains.length * 180;
+  setTimeout(() => {
+    const t0 = performance.now(), dur = 1100;
+    const step = t => {
+      const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3), v = o.before + (o.after - o.before) * e;
+      $('cXp').textContent = nf(v);
+      const r = rankOf(v); $('cRank').textContent = r.name;
+      $('cBar').style.transition = 'none'; $('cBar').style.width = r.pct + '%';
+      if(k < 1) requestAnimationFrame(step);
+      else {
+        paintPlayer();
+        if(r1.i > r0.i){ $('cRankMsg').className = 'rankmsg up'; $('cRankMsg').textContent = L.rankUp(r1.name); sfx.rankup(); confetti(); }
+        o.earned.forEach((id, i) => setTimeout(() => {
+          const b = BADGES.find(x => x.id === id);
+          const el = document.createElement('div'); el.className = 'badge';
+          el.innerHTML = `<div class="ic">${b.ic}</div>${badgeName(b)}`;
+          $('cBadges').appendChild(el); sfx.badge(); toast(L.badgeUnlocked(badgeName(b)));
+        }, 250 + i * 400));
+      }
+    };
+    requestAnimationFrame(step);
+  }, reduceMotion ? 0 : startAt);
+  setTimeout(() => next.hidden ? alt.focus() : next.focus(), 50);
+}
+function closeCelebrate(){ $('celebrate').hidden = true; }
+
+function confetti(){
+  if(reduceMotion) return;
+  const cv = $('confetti'), ctx = cv.getContext('2d'), dpr = Math.min(2, devicePixelRatio || 1);
+  cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const cols = BANDS.map(b => b.c), P = [];
+  for(let i=0;i<140;i++) P.push({ x: innerWidth / 2 + (Math.random() - .5) * 60, y: innerHeight * .35, vx: (Math.random() - .5) * 14, vy: -Math.random() * 14 - 4,
+    r: Math.random() * 6, vr: (Math.random() - .5) * .4, w: 6 + Math.random() * 6, h: 8 + Math.random() * 8, c: pick(cols) });
+  const t0 = performance.now();
+  (function frame(t){
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    P.forEach(p => { p.vy += .35; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r * 2))); ctx.restore(); });
+    if(t - t0 < 2600) requestAnimationFrame(frame); else ctx.clearRect(0, 0, innerWidth, innerHeight);
+  })(t0);
+}
+let toastTimer = null;
+function toast(msg){ const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1800); }
+
+/* ---------- résultat partageable ---------- */
+/* Texte de partage, format « à la Wordle » :
+   1) marque + n° de grille + temps  2) visuel sans spoiler : le ciel se dégage (☀️ = rapide, 🌫️ = brouillard)
+   3) indices / série  4) défi + lien. Court (< 200 caractères) pour passer partout (SMS, WhatsApp, X…). */
+// Pas de lien dans le partage (adresse perso). À la sortie : lien des stores ou nom de domaine dédié.
+function clarity(ms, cells){
+  const par = cells * 4000;                     // temps de référence : 4 s par case (≈ 2:24 pour un 6×6)
+  const r = ms / par;
+  return r <= .35 ? 5 : r <= .55 ? 4 : r <= .8 ? 3 : r <= 1.1 ? 2 : r <= 1.6 ? 1 : 0;
+}
+function shareText(){
+  const t = fmt(S.elapsed), n = S.puzzle.n;
+  const c = clarity(S.elapsed, n * n);
+  const sky = '☀️'.repeat(c) + '🌫️'.repeat(5 - c) + ' ' + L.shClarity(c);
+  const h = S.hints ? L.shHints(S.hints) : L.shClean;
+  let head, extra = h;
+  if(S.mode === 'daily'){
+    const st = store.get('stats', { streak: 0 });
+    head = `🧶 ${APP}${WEB ? ' XL' : ''} #${dayNo} · ${t}`;
+    if(st.streak >= 2) extra += ' · ' + L.shStreak(st.streak);
+  } else if(S.mode === 'level'){
+    head = `🧶 ${APP} · ${L.shLevel(S.level, TOTAL)} ${'⭐'.repeat(starsFor(S.hints))} · ${t}`;
+  } else {
+    head = `🧶 ${APP} · ${L.shFree(n)} · ${t}`;
+  }
+  return `${head}\n${sky}\n${extra}\n${L.shCta} filozen.app/play #Filozen`;
+}
+let countdown = null;
+function showResult(){
+  setScene('celebrate');
+  $('controls').hidden = true; $('result').hidden = false;
+  $('shareText').textContent = shareText();
+  $('resTitle').textContent = S.mode === 'daily' ? L.resDaily(dayNo, fmt(S.elapsed)) : L.resOther(fmt(S.elapsed));
+  $('alt').textContent = S.mode === 'daily' ? (WEB ? L.webApp : L.playLevels) : L.newGrid;
+  clearInterval(countdown);
+  const tick = () => {
+    if(S.mode !== 'daily'){ $('resLine').textContent = L.resFree; return; }
+    const m = new Date(); m.setHours(24, 0, 0, 0);
+    const s = Math.max(0, Math.floor((m - Date.now()) / 1000));
+    $('resLine').textContent = L.nextIn(Math.floor(s/3600), String(Math.floor(s/60)%60).padStart(2,'0'));
+  };
+  tick(); countdown = setInterval(tick, 20000);
+}
+function hideResult(){ $('controls').hidden = false; $('result').hidden = true; clearInterval(countdown); }
+/* Partage : feuille de partage native iOS / Android (WhatsApp, Messages, Instagram…),
+   sinon celle du navigateur, sinon copie dans le presse-papiers. */
+async function shareOut(text, onFallback){
+  const cap = window.Capacitor;
+  const native = cap && cap.isNativePlatform && cap.isNativePlatform() && cap.Plugins && cap.Plugins.Share;
+  if(native){
+    try{ await native.share({ text, dialogTitle: APP }); return; }
+    catch(e){ if(/cancel/i.test(String(e && (e.message || e)))) return; }
+  }
+  if(navigator.share){
+    try{ await navigator.share({ text }); return; }
+    catch(e){ if(e && e.name === 'AbortError') return; }
+  }
+  try{ await navigator.clipboard.writeText(text); toast(L.copied); return; }catch(e){}
+  if(onFallback) onFallback(); else toast(text);
+}
+$('copy').onclick = () => shareOut(shareText(), () => {
+  const r = document.createRange(); r.selectNodeContents($('shareText'));
+  const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast(L.selected);
+});
+$('alt').onclick = () => { if(WEB && S.mode === 'daily'){ window.open('https://apps.apple.com/app/id6816490789', '_blank', 'noopener'); return; } if(S.mode === 'daily') setMode('levels'); else startTraining(); };
+
+function showStats(){
+  const st = store.get('stats', { played: 0, streak: 0, best: null });
+  $('stStreak').textContent = st.streak; $('stPlayed').textContent = st.played;
+  $('stBest').textContent = st.best === null ? '–' : fmt(st.best);
+}
+
+/* ---------- carte des niveaux : un fil qui serpente ---------- */
+function showMap(){
+  store.set('last', { mode: 'levels' });
+  bank(); setScene('menu');
+  $('game').hidden = true; $('levelMap').hidden = false;
+  const d = levels(), u = unlocked();
+  let doneCount = 0, starCount = 0;
+  for(let i=1;i<=TOTAL;i++) if(d[i]){ doneCount++; starCount += d[i].s; }
+  $('lvCount').textContent = `${doneCount} / ${TOTAL} niveaux · ${starCount} / ${TOTAL * 3} ★`;
+  $('lvBar').style.width = (doneCount / TOTAL * 100) + '%';
+
+  const owned = new Set(store.get('badges', []));
+  $('badgeShelf').innerHTML = BADGES.map(b => `<div class="badge${owned.has(b.id) ? '' : ' locked'}"><div class="ic">${b.ic}</div>${badgeName(b)}</div>`).join('');
+
+  const wrap = $('path'); wrap.innerHTML = '';
+  const pts = []; let y = 30; const frag = document.createDocumentFragment();
+  BANDS.forEach(b => {
+    const pill = document.createElement('div');
+    pill.className = 'bandpill' + (b.from > u ? ' locked' : '');
+    pill.style.top = y + 'px';
+    pill.style.setProperty('--bc', b.c); pill.style.setProperty('--bd', b.d); pill.style.setProperty('--bt', b.t);
+    pill.innerHTML = `${b.from > u ? '🔒 ' : ''}${bandName(b)}<span>${b.n}×${b.n}</span>`;
+    frag.appendChild(pill);
+    y += 80;
+    for(let lv=b.from; lv<=b.to; lv++){
+      const x = 50 + Math.sin((lv - 1) * 0.95) * 28;
+      pts.push({ x, y, lv, b });
+      const boss = lv === b.to, locked = lv > u, done = !!d[lv], cur = lv === u && !done;
+      const btn = document.createElement('button');
+      btn.className = 'node' + (done ? ' done' : '') + (cur ? ' current' : '') + (boss ? ' boss' : '');
+      btn.style.left = x + '%'; btn.style.top = y + 'px';
+      btn.style.setProperty('--bc', b.c); btn.style.setProperty('--bd', b.d); btn.style.setProperty('--bt', b.t);
+      btn.disabled = locked;
+      const tag = cur ? (boss ? L.bossPlay : L.play) : boss ? L.boss : '';
+      btn.innerHTML = (locked ? '🔒' : lv) + (tag ? `<span class="tag">${tag}</span>` : '') +
+        (done ? `<span class="st">${'★'.repeat(d[lv].s)}<span class="off">${'★'.repeat(3 - d[lv].s)}</span><em>${fmt(d[lv].t)}</em></span>` : '');
+      btn.setAttribute('aria-label', locked ? L.lvLocked(lv) : L.lvAria(lv, done ? d[lv].s : 0));
+      btn.onclick = () => startLevel(lv);
+      frag.appendChild(btn);
+      y += boss ? 100 : 92;
+    }
+    y += 6;
+  });
+  const H = y;
+  wrap.style.height = H + 'px';
+  // segments du fil entre les niveaux (catmull-rom → courbes de Bézier)
+  let paths = '';
+  for(let i=0;i<pts.length-1;i++){
+    const p0 = pts[Math.max(0, i-1)], p1 = pts[i], p2 = pts[i+1], p3 = pts[Math.min(pts.length-1, i+2)];
+    const c1 = [p1.x + (p2.x - p0.x) / 6, p1.y + (p2.y - p0.y) / 6], c2 = [p2.x - (p3.x - p1.x) / 6, p2.y - (p3.y - p1.y) / 6];
+    const open = p2.lv <= u;
+    paths += `<path d="M${p1.x},${p1.y} C${c1[0]},${c1[1]} ${c2[0]},${c2[1]} ${p2.x},${p2.y}" stroke="${open ? p2.b.c : 'var(--line)'}"${open ? '' : ' stroke-dasharray="1 18"'}/>`;
+  }
+  wrap.innerHTML = `<svg viewBox="0 0 100 ${H}" preserveAspectRatio="none" aria-hidden="true">${paths}</svg>`;
+  wrap.appendChild(frag);
+  const cur = wrap.querySelector('.node.current') || wrap.querySelectorAll('.node:not(:disabled)')[u - 1];
+  if(cur) requestAnimationFrame(() => cur.scrollIntoView({ block: 'center' }));
+}
+function startLevel(lv){
+  const sp = levelSpec(lv), b = sp.band;
+  newGame('level', sp.n, frozenPuzzle(lv), sp.K, sp.W, { level: lv });   // niveau figé : identique pour toujours
+  playKey = lv === TOTAL ? 'boss' : 'band' + BANDS.indexOf(b);
+  setAccent($('game'), b.c, b.d, b.t, b.ring);
+  $('levelMap').hidden = true; $('game').hidden = false;
+  $('back').hidden = false; $('sizes').hidden = true; $('dailyStats').hidden = true;
+  relabel();
+  store.set('last', { mode: 'level', level: lv });
+  hideResult(); build();
+  const d = levels(), saved = store.get('lvState', null);
+  if(saved && saved.level === lv && saved.path && saved.path.length){
+    // le joueur reprend exactement où il s'était arrêté, sans compte à rebours
+    S.path = saved.path; S.elapsed = saved.elapsed || 0; S.hints = saved.hints || 0;
+    render(); setScene('play'); say(L.tipResume);
+  } else {
+    beginRound();
+    say(lv === 1 ? L.tipStart : sp.W && !d[lv] && levelSpec(lv - 1).W === 0 ? L.tipWalls : lv === b.to ? L.tipBoss : '');
+  }
+  window.scrollTo({ top: 0 });
+}
+$('back').onclick = showMap;
+
+/* ---------- pubs : jamais pendant une partie, seulement après une grille terminée ----------
+   Nouveau joueur : 2 grilles offertes, pub après la 2e, puis une pub toutes les 3 grilles (5e, 8e, 11e…). */
+let pendingAd = false, adTimer = null;
+const adDue = n => n === 2 || (n > 2 && (n - 2) % 3 === 0);
+function countGrid(){
+  const n = store.get('grids', 0) + 1;
+  store.set('grids', n);
+  pendingAd = adDue(n);
+  paintAdInfo();
+}
+function paintAdInfo(){
+  const n = store.get('grids', 0); let k = n + 1; while(!adDue(k)) k++;
+  const pass = store.get('adPass', 0);
+  $('adInfo').textContent = L.adNext(k - n) + (pass ? L.passes(pass) : '') + (typeof ads !== 'undefined' && ads.log.length ? ' | ' + ads.log.join(' · ') : '');
+}
+function afterWin(fn){
+  return () => {
+    closeCelebrate();
+    if(!ADS_ENABLED || !pendingAd){ pendingAd = false; fn(); return; }
+    pendingAd = false;
+    const pass = store.get('adPass', 0);
+    if(pass > 0){ store.set('adPass', pass - 1); paintAdInfo(); toast(L.passUsed); fn(); return; }
+    showAd(fn);
+  };
+}
+/* ---------- vraies publicités AdMob (uniquement dans l'app installée) ----------
+   ⚠️ ADS_LIVE = false pendant toute la bêta : seules les pubs de TEST Google s'affichent.
+   Ne jamais afficher ni cliquer de vraies pubs sur nos propres téléphones (risque de fermeture du compte AdMob).
+   Passer à true uniquement pour la version publiée. */
+// v1 : lancement 100 % gratuit, SANS publicité (et sans le module AdMob). Code des pubs conservé pour plus tard :
+// voir l'étiquette git « v1.0-avec-pubs » pour rebrancher AdMob (plugin, Info.plist, manifeste Android).
+const ADS_ENABLED = false;
+const ADS_LIVE = false;
+// Version de publication : outils de test (7 touches sur le logo, déblocage, rejouer le défi) désactivés.
+// Mis à true automatiquement par scripts/build.sh quand FILOZEN_RELEASE=1 — ne pas modifier à la main.
+const RELEASE = true;
+// Mis à true par scripts/build-web.sh pour la version jouable sur filozen.app/play — ne pas modifier à la main.
+const WEB = true;
+const PLATFORM = (window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform()) || 'web';
+const AdMobNative = (NativePrefs && window.Capacitor.Plugins.AdMob) || null;
+const AD_UNITS = {
+  live: { android: { inter: 'ca-app-pub-6688074132144707/4646944093', reward: 'ca-app-pub-6688074132144707/2227915889' },
+          ios:     { inter: 'ca-app-pub-6688074132144707/4630717947', reward: 'ca-app-pub-6688074132144707/3889405356' } },
+  test: { android: { inter: 'ca-app-pub-3940256099942544/1033173712', reward: 'ca-app-pub-3940256099942544/5224354917' },
+          ios:     { inter: 'ca-app-pub-3940256099942544/4411468910', reward: 'ca-app-pub-3940256099942544/1712485313' } }
+};
+const adUnit = kind => AD_UNITS[ADS_LIVE ? 'live' : 'test'][PLATFORM][kind];
+const ads = { ready: false, interLoaded: false, privacy: false, log: [] };
+// journal visible en mode test (7 touches sur le logo) pour diagnostiquer les pubs sur le téléphone
+function adLog(msg){ ads.log.push(msg); if(ads.log.length > 6) ads.log.shift(); paintAdInfo(); }
+// consentement RGPD (message Google), puis demande de suivi Apple, puis préparation de la 1re pub
+async function adsInit(){
+  if(!ADS_ENABLED || !AdMobNative) return;
+  // 1) consentement RGPD — une erreur ici (message pas encore publié dans AdMob…) ne doit rien bloquer
+  let canRequest = true;
+  try{
+    let info = await AdMobNative.requestConsentInfo();
+    if(info.status === 'REQUIRED' && info.isConsentFormAvailable) info = await AdMobNative.showConsentForm();
+    ads.privacy = info.privacyOptionsRequirementStatus === 'REQUIRED';
+    canRequest = info.canRequestAds !== false;
+    adLog('RGPD : ' + (info.status || '?') + (info.canRequestAds === false ? ' (pubs refusées)' : ''));
+  }catch(e){ adLog('RGPD erreur : ' + (e && (e.message || e))); }
+  paintPrivacyRow();
+  // 2) iPhone : demande de suivi Apple, indépendante du point 1
+  if(PLATFORM === 'ios'){
+    try{
+      const t = await AdMobNative.trackingAuthorizationStatus();
+      adLog('Suivi iOS : ' + t.status);
+      if(t.status === 'notDetermined') await AdMobNative.requestTrackingAuthorization();
+    }catch(e){ adLog('Suivi erreur : ' + (e && (e.message || e))); }
+  }
+  if(!canRequest) return;
+  // 3) démarrage des pubs
+  try{
+    await AdMobNative.initialize({ initializeForTesting: !ADS_LIVE });
+    ads.ready = true; adLog('AdMob prêt (' + (ADS_LIVE ? 'VRAIES pubs' : 'pubs de test') + ')');
+    prepareInterstitial();
+  }catch(e){ adLog('Init erreur : ' + (e && (e.message || e))); }
+}
+async function prepareInterstitial(){
+  if(!ads.ready) return;
+  try{ await AdMobNative.prepareInterstitial({ adId: adUnit('inter'), isTesting: !ADS_LIVE }); ads.interLoaded = true; adLog('Interstitiel chargé'); }
+  catch(e){ ads.interLoaded = false; adLog('Interstitiel erreur : ' + (e && (e.message || e))); }
+}
+// écoute des événements natifs le temps d'une pub, puis on nettoie
+function onceAdEvents(events, done){
+  const handles = [];
+  let finished = false;
+  const finish = arg => { if(finished) return; finished = true; handles.forEach(h => Promise.resolve(h).then(x => x && x.remove && x.remove()).catch(() => {})); done(arg); };
+  Object.entries(events).forEach(([name, fn]) => handles.push(AdMobNative.addListener(name, data => fn(data, finish))));
+  return finish;
+}
+function nativeInterstitial(then){
+  const back = scene;
+  if(!ads.interLoaded){ prepareInterstitial(); then(); return; }   // pas de pub prête : on ne bloque jamais le joueur
+  ads.interLoaded = false; setScene('ad');
+  const finish = onceAdEvents({
+    interstitialAdDismissed: (d, f) => f(),
+    interstitialAdFailedToShow: (d, f) => f()
+  }, () => { setScene(back); then(); prepareInterstitial(); });
+  AdMobNative.showInterstitial().catch(() => finish());
+}
+async function nativeRewarded(onDone){
+  const back = scene;
+  if(!ads.ready){ toast(L.adUnavailable); onDone(false); return; }
+  setScene('ad');
+  let earned = false;
+  const finish = onceAdEvents({
+    onRewardedVideoAdReward: () => { earned = true; },
+    onRewardedVideoAdDismissed: (d, f) => f(),
+    onRewardedVideoAdFailedToShow: (d, f) => f(),
+    onRewardedVideoAdFailedToLoad: (d, f) => f()
+  }, () => { setScene(back); if(!earned) toast(L.adUnavailable); onDone(earned); });
+  try{
+    await AdMobNative.prepareRewardVideoAd({ adId: adUnit('reward'), isTesting: !ADS_LIVE });
+    AdMobNative.showRewardVideoAd().catch(() => finish());   // la promesse ne se résout qu'en cas de récompense : on suit les événements
+  }catch(e){ adLog('Vidéo bonus erreur : ' + (e && (e.message || e))); finish(); }
+}
+function paintPrivacyRow(){ $('setAds').hidden = !(ADS_ENABLED && AdMobNative && ads.privacy); }
+$('setAds').onclick = () => { if(AdMobNative) AdMobNative.showPrivacyOptionsForm().catch(() => {}); };
+
+function showAd(then, rewarded){
+  if(!ADS_ENABLED){ then(); return; }
+  if(AdMobNative){ if(rewarded) nativeRewarded(earned => { if(earned) then(); }); else nativeInterstitial(then); return; }
+  // prototype web : fausse pub de démonstration
+  const scr = $('adscreen'), btn = $('adClose'); let left = 5;
+  const back = scene;
+  scr.querySelector('.adtag').textContent = rewarded ? L.rewardLabel : L.adLabel;
+  setScene('ad');
+  scr.hidden = false; btn.disabled = true; btn.textContent = left; btn.setAttribute('aria-label', L.adWait(left));
+  clearInterval(adTimer);
+  adTimer = setInterval(() => {
+    left--;
+    if(left > 0){ btn.textContent = left; btn.setAttribute('aria-label', L.adWait(left)); return; }
+    clearInterval(adTimer); btn.disabled = false; btn.textContent = '✕'; btn.setAttribute('aria-label', L.close); btn.focus();
+  }, 1000);
+  btn.onclick = () => { if(btn.disabled) return; scr.hidden = true; setScene(back); then(); };
+}
+$('adPremium').onclick = () => toast(L.adPremiumSoon);
+
+/* ---------- fin du jeu : félicitations, sortie du brouillard ---------- */
+function showFinale(){
+  const f = $('finale');
+  f.hidden = false;
+  [...f.querySelectorAll('*')].forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+  playKey = 'boss'; setScene('finale');
+  setTimeout(() => { sfx.rankup(); confetti(); }, 2400);
+  setTimeout(() => { confetti(); }, 3400);
+  setTimeout(() => $('finHome').focus(), 3600);
+}
+$('finHome').onclick = () => { $('finale').hidden = true; showHome(); };
+$('finShare').onclick = () => shareOut(L.finaleShare(APP));
+
+/* ---------- fonctionnalités prévues pour la v2 (désactivées en v1) ----------
+   v1 = publicités uniquement. v2 = pourboire « café pour Filo » + option sans pub (achats intégrés). */
+const FEATURES = { tips: false, noAds: false };
+function applyFeatures(){
+  $('setTip').hidden = !FEATURES.tips;
+  $('finTip').parentElement.hidden = !FEATURES.tips;
+  $('footTip').hidden = !FEATURES.tips;
+  $('adPremium').hidden = !FEATURES.noAds;
+}
+
+/* ---------- soutenir Filozen : pourboire (simulation dans le prototype) ---------- */
+function openTip(){
+  const fmtEur = v => new Intl.NumberFormat(L.locale, { style: 'currency', currency: 'EUR' }).format(v);
+  document.querySelectorAll('.tipbtn').forEach(b => { b.querySelector('em').textContent = fmtEur(+b.dataset.tip); });
+  $('tipAsk').hidden = false; $('tipDone').hidden = true;
+  $('tip').hidden = false; setTimeout(() => $('tipClose').focus(), 30);
+}
+document.querySelectorAll('.tipbtn').forEach(b => b.onclick = () => {
+  $('tipAsk').hidden = true; $('tipDone').hidden = false;
+  store.set('supporter', true); sfx.badge(); confetti();
+});
+$('tipClose').onclick = () => { $('tip').hidden = true; };
+$('tip').addEventListener('click', e => { if(e.target === $('tip')) $('tip').hidden = true; });
+$('setTip').onclick = () => { $('settings').hidden = true; openTip(); };
+$('finTip').onclick = openTip;
+$('footTip').onclick = openTip;
+
+/* ---------- réglages ---------- */
+$('settingsBtn').onclick = () => { $('settings').hidden = false; setTimeout(() => $('setClose').focus(), 30); };
+$('setClose').onclick = () => { $('settings').hidden = true; };
+$('settings').addEventListener('click', e => { if(e.target === $('settings')) $('settings').hidden = true; });
+
+/* ---------- menu d'accueil ---------- */
+function showHome(){
+  bank(); closeCelebrate();
+  clearTimeout(cdTimer); $('countdown').hidden = true;
+  if(S && S.mode === 'daily') saveDaily();
+  if(S && S.mode === 'level') saveDaily();
+  $('home').hidden = false; $('game').hidden = true; $('levelMap').hidden = true; $('tabs').hidden = true;
+  setScene('menu');
+  const d = levels(); let done = 0; for(let i = 1; i <= TOTAL; i++) if(d[i]) done++;
+  const last = store.get('last', null);
+  const resumeLv = last && last.mode === 'level' && last.level >= 1 && last.level <= unlocked() ? last.level : null;
+  const firstTime = !resumeLv && done === 0;
+  $('homeContinue').hidden = !(resumeLv || firstTime);
+  $('hcT').textContent = firstTime ? L.homeStart : L.homeContinue;
+  $('hcS').textContent = L.lvLabel(firstTime ? 1 : resumeLv, false);
+  $('homeContinue').onclick = () => { setMode('levels'); startLevel(firstTime ? 1 : resumeLv); };
+  $('hlS').textContent = L.homeLevelsSub(done, TOTAL);
+  const dayDone = !!(store.get(DAY_KEY, {}) || {}).done, st = store.get('stats', { streak: 0 });
+  $('hdS').textContent = dayDone ? L.homeDailyDone(st.streak) : L.homeDailyNew;
+  window.scrollTo({ top: 0 });
+}
+$('homeBtn').onclick = showHome;
+$('homeLevels').onclick = () => setMode('levels');
+$('homeDaily').onclick = () => setMode('daily');
+$('homeFree').onclick = () => setMode('train');
+
+/* ---------- compte à rebours et intro ---------- */
+let cdTimer = null, introDone = false, pendingRound = false;
+function beginRound(){
+  S.locked = true; board.classList.add('counting'); setScene('count');
+  if(!introDone){ pendingRound = true; return; }
+  runCountdown();
+}
+function runCountdown(){
+  const game = S, el = $('countdown'), seq = ['3', '2', '1', L.go]; let i = 0;
+  el.hidden = false;
+  const step = () => {
+    if(S !== game) return;
+    if(i < seq.length){
+      el.textContent = seq[i]; el.classList.toggle('go', i === 3); anim(el, 'tick');
+      i < 3 ? sfx.count() : sfx.go(); i++;
+      cdTimer = setTimeout(step, i === 4 ? 550 : 700);
+    } else {
+      el.hidden = true; board.classList.remove('counting'); S.locked = false;
+      startClock(); setScene('play');
+    }
+  };
+  step();
+}
+function dismissIntro(){
+  if(introDone) return;
+  introDone = true; audioReady = true;
+  setTimeout(adsInit, 600);
+  try{ audio(); }catch(e){}
+  sfx.start();
+  $('intro').classList.add('out'); setTimeout(() => { $('intro').hidden = true; }, 380);
+  refreshMusic();
+  if(pendingRound){ pendingRound = false; setTimeout(runCountdown, 350); }
+  if(!RELEASE && location.hash === '#fin') setTimeout(showFinale, 400);   // aperçu direct de l'animation de fin
+}
+$('intro').addEventListener('click', dismissIntro);
+$('intro').addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); dismissIntro(); } });
+
+/* ---------- modes ---------- */
+function startDaily(){
+  playKey = 'daily';
+  let salt = '';
+  // défi du jour : format fixe 6×6, corsé — 6 numéros et 5 murs.
+  // Version web (filozen.app/play) : grille XL 8×8, plus longue et plus dure, différente de celle de l'app.
+  if(WEB){ newGame('daily', 8, hash('web-' + today), 6, 14); }
+  else newGame('daily', 6, hash('fil-' + today), 6, 5);
+  while(!WEB && LEVELS_V1.some(l => l.n === 6 && l.sol.join() === S.puzzle.sol.join())){ salt += '+'; newGame('daily', 6, hash('fil-' + today + salt), 6, 5); }
+  setAccent($('game'), '#F2A516', '#C27C00', '#3A2600', '#FF5D5D');
+  const saved = store.get(DAY_KEY, null);
+  if(saved){ S.path = saved.path || []; S.elapsed = saved.elapsed || 0; S.hints = saved.hints || 0; S.done = !!saved.done; }
+  relabel();
+  build();
+  if(S.done){ board.classList.add('won'); showResult(); }
+  else {
+    hideResult(); say(S.path.length ? L.tipResume : L.tipStart);
+    if(S.path.length) setScene('play'); else beginRound();
+  }
+}
+function startTraining(){
+  playKey = 'free';
+  newGame('train', trainSize, Math.floor(Math.random() * 4294967296), { 5: 7, 6: 9, 7: 11 }[trainSize], 0);
+  setAccent($('game'), '#8A5CF6', '#6A3FD6', '#FFFFFF');
+  relabel();
+  hideResult(); build(); beginRound(); say(L.tipStart);
+}
+function setMode(m){
+  $('home').hidden = true; $('tabs').hidden = WEB;
+  if(m !== 'levels') store.set('last', { mode: m });
+  if(S && S.mode === 'daily'){ bank(); saveDaily(); }
+  closeCelebrate();
+  $('tabDaily').setAttribute('aria-pressed', m === 'daily');
+  $('tabLevels').setAttribute('aria-pressed', m === 'levels');
+  $('tabTrain').setAttribute('aria-pressed', m === 'train');
+  $('sizes').hidden = m !== 'train';
+  $('back').hidden = true;
+  $('dailyStats').hidden = m !== 'daily';
+  if(m === 'levels'){ showMap(); return; }
+  $('levelMap').hidden = true; $('game').hidden = false;
+  m === 'daily' ? startDaily() : startTraining();
+}
+$('tabDaily').onclick = () => setMode('daily');
+$('tabLevels').onclick = () => setMode('levels');
+$('tabTrain').onclick = () => setMode('train');
+document.querySelectorAll('.chip[data-n]').forEach(b => b.onclick = () => {
+  trainSize = +b.dataset.n;
+  document.querySelectorAll('.chip[data-n]').forEach(x => x.setAttribute('aria-pressed', x === b));
+  startTraining();
+});
+$('newGrid').onclick = startTraining;
+$('unlockAll').onclick = () => { store.set('unlockAll', true); paintUnlock(); setMode('levels'); };
+/* mode test caché : 7 touches rapides sur le logo pour afficher/masquer les outils de test */
+function paintDev(){ const on = !RELEASE && store.get('dev', false); $('unlockAll').hidden = !on; $('adInfo').hidden = !on; $('replayDaily').hidden = !on; }
+$('replayDaily').onclick = () => {
+  S = null;                                  // on oublie la partie affichée, sinon elle serait réenregistrée « terminée »
+  store.set(DAY_KEY, null);
+  setMode('daily'); window.scrollTo({ top: 0 });
+};
+let devTaps = 0, devTimer = null;
+document.querySelector('.wordmark').addEventListener('click', () => {
+  if(RELEASE) return;
+  devTaps++; clearTimeout(devTimer); devTimer = setTimeout(() => { devTaps = 0; }, 1500);
+  if(devTaps >= 7){ devTaps = 0; const on = !store.get('dev', false); store.set('dev', on); paintDev(); toast(on ? '🛠 Mode test activé' : 'Mode test désactivé'); }
+});
+function paintUnlock(){ $('unlockAll').textContent = store.get('unlockAll', false) ? L.unlocked : L.unlockAll; }
+
+/* ---------- changement de langue ---------- */
+function relabel(){
+  if(!S) return;
+  if(S.mode === 'daily'){
+    $('label').textContent = L.dailyLabel(dayNo);
+    const best = store.get('stats', {}).best;
+    $('sub').textContent = new Date().toLocaleDateString(L.locale, { weekday: 'long', day: 'numeric', month: 'long' }) + (best ? ` · ${L.recordShort(fmt(best))}` : '');
+  } else if(S.mode === 'level'){
+    const sp = levelSpec(S.level), b = sp.band;
+    $('label').textContent = L.lvLabel(S.level, S.level === b.to);
+    const rec = (levels()[S.level] || {}).t;
+    $('sub').textContent = `${bandName(b)} · ${sp.n} × ${sp.n}` + (sp.W ? ` · ${L.walls(sp.W)}` : '') + (rec ? ` · ${L.recordShort(fmt(rec))}` : '');
+  } else {
+    $('label').textContent = L.freeLabel(S.puzzle.n);
+    const fb = store.get('freeBest', {})[S.puzzle.n];
+    $('sub').textContent = L.freeSub + (fb ? ` · ${L.recordShort(fmt(fb))}` : '');
+  }
+}
+$('lang').innerHTML = LANGS.map(([k, lab]) => `<option value="${k}">${lab}</option>`).join('');
+$('lang').onchange = () => {
+  lang = $('lang').value; L = I18N[lang]; store.set('lang', lang);
+  applyStatic(); paintSound(); paintMusic(); paintPlayer(); paintUnlock(); paintAdInfo(); relabel(); say('');
+  if(!$('levelMap').hidden) showMap();
+  if(!$('result').hidden) showResult();
+  if(!$('home').hidden) showHome();
+};
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('celebrate').hidden) afterWin(() => { if(S.mode !== 'level') showResult(); })(); });
+
+setInterval(() => { if(S && S.t0 && !S.done) $('timer').textContent = fmt(now()); }, 250);
+document.addEventListener('visibilitychange', () => { if(document.hidden && S){ bank(); saveDaily(); } });
+
+applyStatic(); applyFeatures(); paintUnlock(); paintAdInfo(); paintDev(); paintSound(); paintMusic(); paintPlayer(); showStats();
+// au retour dans l'app : on reprend là où le joueur s'était arrêté
+/* Mode silencieux du téléphone : on ne lance ni musique ni bruitages.
+   - iPhone : session audio « ambient » → respecte l'interrupteur silencieux et laisse jouer la musique du joueur.
+   - Android : si le téléphone est en silencieux ou vibreur au lancement, le son démarre coupé
+     (le joueur peut le réactiver dans Réglages). */
+try{ if(navigator.audioSession) navigator.audioSession.type = 'ambient'; }catch(e){}
+const ringerCheck = (PLATFORM === 'android' && window.Capacitor.Plugins.RingerMode)
+  ? window.Capacitor.Plugins.RingerMode.get().then(r => {
+      if(r && r.mode !== 'normal' && !muted){ muted = true; paintSound(); try{ if(master) master.gain.value = 0; }catch(e){} }
+    }).catch(() => {})
+  : Promise.resolve();
+if(WEB){ $('homeBtn').hidden = true; setMode('daily'); } else showHome();
+syncNativeSave().then(restored => { if(restored) location.reload(); });
+if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()){
+  ringerCheck.then(() => { audioReady = true; refreshMusic(); });   // la musique attend la vérification du mode silencieux
+}
+// l'intro ne s'anime qu'une fois le jeu visible (après l'écran de lancement du téléphone)
+Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 1500))])
+  .then(() => setTimeout(() => {
+    $('intro').classList.add('play');
+    const filo = $('filo'), go = document.getElementById('filoIn');
+    if(reduceMotion || !go || !go.beginElement){ filo.setAttribute('visibility', 'visible'); filo.setAttribute('transform', 'translate(280 40)'); return; }
+    go.beginElement();
+  }, 250));
+})();
+</script>
+
+<section class="fz-seo">
+  <h1>Filozen Daily XL: a new number path puzzle every day</h1>
+  <p class="fz-lead">Connect the numbers in order with one single thread that passes through every cell. Today’s grid is the same for everyone, so share your time and see who clears the fog fastest. Free, no ads, no account.</p>
+  <a class="fz-store" href="https://apps.apple.com/app/id6816490789">Get the free iPhone app · 50 levels</a>
+
+  <h2>How to play</h2>
+  <p>Start on 1. Draw one continuous thread, cell by cell, without lifting your finger. Reach 2, then 3, and so on, in order. The thread can never cross itself or a wall, and it must pass through every cell of the grid exactly once. When the last cell is filled on the last number, you win.</p>
+  <p>Stuck? Tap back along your thread to undo, or drag from any point to change direction. The timer only counts while you play.</p>
+
+  <h2>Playing LinkedIn Zip every morning?</h2>
+  <p>Then you already know the idea. Filozen gives you a bigger challenge here: an 8×8 grid every day with walls to work around. On iPhone, the app adds its own daily grid, 50 handcrafted levels and unlimited free play.</p>
+
+  <h2>Share your result</h2>
+  <p>When you finish, tap Share. You get a short message with your time and a clarity score, ready to send on WhatsApp, Messages or social media, with no spoilers of the solution.</p>
+
+  <h2>Questions</h2>
+  <details><summary>Is it the same grid for everyone?</summary><p>Yes. Everyone gets the same XL grid each day. A new one arrives at midnight, your local time.</p></details>
+  <details><summary>Is Filozen free?</summary><p>Yes. The daily grid is free in your browser, and the iPhone app is free with no ads.</p></details>
+  <details><summary>Does it work on a computer?</summary><p>Yes. Play with the mouse on a computer, or with your finger on a phone or tablet.</p></details>
+
+  <footer class="fz-foot">Made by <a href="../">Glazik Prod</a> · <a href="../sleep/">Sleep sounds</a> · <a href="../privacy.html">Privacy</a> · <a href="../cookies.html">Cookies</a></footer>
+</section>
+<style>
+.fz-seo{max-width:680px;margin:48px auto 0;padding:24px 20px 48px;font-family:'Nunito',system-ui,sans-serif;color:#1B1640;line-height:1.65;font-size:17px}
+.fz-seo h1{font-family:'Baloo 2','Nunito',sans-serif;font-size:30px;line-height:1.2;margin:0 0 12px}
+.fz-seo h2{font-family:'Baloo 2','Nunito',sans-serif;font-size:23px;margin:36px 0 8px}
+.fz-seo p{margin:0 0 14px;color:#3b3566}
+.fz-lead{font-size:18px}
+.fz-store{display:inline-block;margin:6px 0 4px;background:#1B1640;color:#fff;text-decoration:none;font-weight:800;border-radius:16px;padding:13px 22px;box-shadow:0 5px 0 #000}
+.fz-seo details{border-bottom:2px dashed #D9DBF5;padding:12px 0}
+.fz-seo summary{cursor:pointer;font-weight:800}
+.fz-seo details p{margin:8px 0 0}
+.fz-foot{margin-top:40px;font-size:14px;color:#5f5a84}
+.fz-foot a{color:#2F6BFF;font-weight:700}
+</style>
+
+</body>
+</html>
