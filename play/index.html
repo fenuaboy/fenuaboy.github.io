@@ -1756,6 +1756,34 @@ board.addEventListener('pointerup', endDrag);
 board.addEventListener('pointercancel', endDrag);
 
 $('undo').onclick = () => { if(S.done || S.locked || !S.path.length) return; S.path.pop(); say(''); render(); saveDaily(); };
+/* Clavier (ordinateur, iPad avec clavier) : flèches, ZQSD ou WASD pour tracer le fil case par case.
+   Revenir sur la case précédente efface le dernier pas ; Retour arrière annule aussi. */
+const KEY_DIRS = { ArrowUp: 'u', ArrowDown: 'd', ArrowLeft: 'l', ArrowRight: 'r', z: 'u', w: 'u', s: 'd', q: 'l', a: 'l', d: 'r' };
+document.addEventListener('keydown', e => {
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  const tag = (e.target && e.target.tagName) || '';
+  if(tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+  if(!S || $('game').hidden || !$('settings').hidden || !$('celebrate').hidden) return;
+  if(e.key === 'Backspace'){ e.preventDefault(); $('undo').click(); return; }
+  const dir = KEY_DIRS[e.key.length === 1 ? e.key.toLowerCase() : e.key];
+  if(!dir || S.done || S.locked) return;
+  e.preventDefault();
+  const n = S.puzzle.n;
+  if(!S.path.length){
+    const one = [...S.puzzle.nums].find(([, k]) => k === 1)[0];
+    S.path = [one]; anim(knots[one], 'pop'); sfx.knot(1); say('');
+    startClock(); render(); saveDaily();
+    return;
+  }
+  const last = S.path[S.path.length - 1], r = Math.floor(last / n), c = last % n;
+  const next = dir === 'u' ? (r > 0 ? last - n : -1) : dir === 'd' ? (r < n - 1 ? last + n : -1)
+             : dir === 'l' ? (c > 0 ? last - 1 : -1) : (c < n - 1 ? last + 1 : -1);
+  if(next < 0){ sfx.bump(); return; }
+  if(S.path.length > 1 && next === S.path[S.path.length - 2]){ S.path.pop(); say(''); }
+  else if(S.path.includes(next)){ sfx.bump(); return; }
+  else if(!tryExtend(next)) return;
+  startClock(); render(); checkEnd(); saveDaily();
+});
 $('reset').onclick = () => { if(S.done || S.locked) return; S.path = []; say(L.backTo1); render(); saveDaily(); };
 $('hint').onclick = () => {
   if(S.done || S.locked) return;
@@ -2478,7 +2506,8 @@ Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Pro
 
   <h2>How to play</h2>
   <p>Start on 1. Draw one continuous thread, cell by cell, without lifting your finger. Reach 2, then 3, and so on, in order. The thread can never cross itself or a wall, and it must pass through every cell of the grid exactly once. When the last cell is filled on the last number, you win.</p>
-  <p>Stuck? Tap back along your thread to undo, or drag from any point to change direction. The timer only counts while you play.</p>
+  <p>On a computer, use the arrow keys (or WASD, or ZQSD on a French keyboard): the thread moves one cell at a time, and pressing back toward the previous cell undoes the last step. Backspace undoes too. On a phone, just drag your finger.</p>
+  <p>Stuck? Go back along your thread to undo, or drag from any point to change direction. The timer only counts while you play.</p>
 
   <h2>Playing LinkedIn Zip every morning?</h2>
   <p>Then you already know the idea. Filozen gives you a bigger challenge here: an 8×8 grid every day with walls to work around. On iPhone, the app adds its own daily grid, 50 handcrafted levels and unlimited free play.</p>
@@ -2489,7 +2518,7 @@ Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Pro
   <h2>Questions</h2>
   <details><summary>Is it the same grid for everyone?</summary><p>Yes. Everyone gets the same XL grid each day. A new one arrives at midnight, your local time.</p></details>
   <details><summary>Is Filozen free?</summary><p>Yes. The daily grid is free in your browser, and the iPhone app is free with no ads.</p></details>
-  <details><summary>Does it work on a computer?</summary><p>Yes. Play with the mouse on a computer, or with your finger on a phone or tablet.</p></details>
+  <details><summary>Does it work on a computer?</summary><p>Yes. Use the arrow keys or the mouse on a computer, or your finger on a phone or tablet.</p></details>
 
   <footer class="fz-foot">Made by <a href="../">Glazik Prod</a> · <a href="../sleep/">Sleep sounds</a> · <a href="../privacy.html">Privacy</a> · <a href="../cookies.html">Cookies</a></footer>
 </section>
