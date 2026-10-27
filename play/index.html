@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Filozen Daily XL: free number path puzzle, a new grid every day</title>
 <meta name="description" content="Play today's Filozen XL grid free in your browser: connect the numbers in order with one thread that fills every cell. Same grid for everyone, share your time. No ads, no account.">
+<meta name="apple-itunes-app" content="app-id=6816490789">
 <link rel="canonical" href="https://filozen.app/play/">
 <meta property="og:title" content="Filozen Daily XL: today's number path puzzle">
 <meta property="og:description" content="One thread, every cell, numbers in order. A new 8×8 grid every day. Can you beat my time?">
@@ -2036,7 +2037,7 @@ $('copy').onclick = () => shareOut(shareText(), () => {
   const r = document.createRange(); r.selectNodeContents($('shareText'));
   const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); toast(L.selected);
 });
-$('alt').onclick = () => { if(WEB && S.mode === 'daily'){ window.open('https://apps.apple.com/app/id6816490789', '_blank', 'noopener'); return; } if(S.mode === 'daily') setMode('levels'); else startTraining(); };
+$('alt').onclick = () => { if(WEB && S.mode === 'daily'){ window.open('/app/', '_blank', 'noopener'); return; } if(S.mode === 'daily') setMode('levels'); else startTraining(); };
 
 function showStats(){
   const st = store.get('stats', { played: 0, streak: 0, best: null });
@@ -2502,7 +2503,7 @@ Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Pro
 <section class="fz-seo">
   <h1>Filozen Daily XL: a new number path puzzle every day</h1>
   <p class="fz-lead">Connect the numbers in order with one single thread that passes through every cell. Today’s grid is the same for everyone, so share your time and see who clears the fog fastest. Free, no ads, no account.</p>
-  <a class="fz-store" href="https://apps.apple.com/app/id6816490789">Get the free iPhone app · 50 levels</a>
+  <a class="fz-store" href="/app/">Get the free iPhone app · 50 levels</a>
 
   <h2>How to play</h2>
   <p>Start on 1. Draw one continuous thread, cell by cell, without lifting your finger. Reach 2, then 3, and so on, in order. The thread can never cross itself or a wall, and it must pass through every cell of the grid exactly once. When the last cell is filled on the last number, you win.</p>
