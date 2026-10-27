@@ -33,6 +33,9 @@
   .tile h2{margin:6px 0 6px;font-size:32px}
   .tile p{margin:0 0 14px;color:#d4d6ea;font-size:16px;line-height:1.55}
   .tile .cta{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 20px;border-radius:20px;background:var(--md-primary);color:var(--md-on-primary);font-weight:600;font-size:14px}
+  .tile .ctas{display:flex;flex-wrap:wrap;gap:10px}
+  .tile a.cta{text-decoration:none}
+  .tile a.cta.tonal:hover{background:rgba(255,255,255,.2)}
   .tile .cta.tonal{background:rgba(255,255,255,.12);color:var(--ink);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 
   /* Tuile Filozen : la grille et son fil */
@@ -95,7 +98,7 @@
     </div>
   </div>
   <div class="tiles">
-    <a class="tile" href="../play/">
+    <div class="tile">
       <div class="art app" aria-hidden="true">
         <img src="../icon.png" alt="">
         <svg viewBox="0 0 200 200">
@@ -114,9 +117,9 @@
         <span class="kicker">App · Manhã</span>
         <h2>Filozen</h2>
         <p>Uma grade por dia para tirar a névoa da manhã. Ligue os números com um único fio que preenche cada casa.</p>
-        <span class="cta">Jogar a grade do dia</span>
+        <div class="ctas"><a class="cta" href="https://apps.apple.com/app/id6816490789">Baixar o app</a><a class="cta tonal" href="../play/">Jogar online</a></div>
       </div>
-    </a>
+    </div>
     <a class="tile" href="../sleep/pt/#sleep">
       <div class="art sleep" aria-hidden="true"><div class="bigmoon"></div><div class="hill"></div></div>
       <div class="txt">

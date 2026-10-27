@@ -406,7 +406,7 @@ footer{color:var(--muted); font-size:12px; font-weight:700; text-align:center; d
 
 <div class="app">
   <div class="top">
-    <h1 class="wordmark" aria-label="Filozen"><span class="wm" aria-hidden="true"><span class="c1">f</span><span class="c2">i</span><span class="c3">l</span><span class="c4">o</span><span class="c5">z</span><span class="c6">e</span><span class="c7">n</span></span><svg viewBox="0 0 90 12" aria-hidden="true"><path d="M3 7 C 15 1, 25 1, 35 6 S 55 12, 65 6 S 82 2, 87 4"/></svg></h1>
+    <div class="wordmark" aria-label="Filozen"><span class="wm" aria-hidden="true"><span class="c1">f</span><span class="c2">i</span><span class="c3">l</span><span class="c4">o</span><span class="c5">z</span><span class="c6">e</span><span class="c7">n</span></span><svg viewBox="0 0 90 12" aria-hidden="true"><path d="M3 7 C 15 1, 25 1, 35 6 S 55 12, 65 6 S 82 2, 87 4"/></svg></div>
     <div class="topbtns">
       <button class="iconbtn" id="homeBtn" data-ta="menu" aria-label="Menu">⌂</button>
       <button class="iconbtn" id="settingsBtn" data-ta="settings" aria-label="Réglages">⚙︎</button>
@@ -2483,7 +2483,7 @@ const ringerCheck = (PLATFORM === 'android' && window.Capacitor.Plugins.RingerMo
       if(r && r.mode !== 'normal' && !muted){ muted = true; paintSound(); try{ if(master) master.gain.value = 0; }catch(e){} }
     }).catch(() => {})
   : Promise.resolve();
-if(WEB){ $('homeBtn').hidden = true; setMode('daily'); } else showHome();
+if(WEB){ $('homeBtn').onclick = () => { location.href = '../'; }; $('homeBtn').setAttribute('aria-label', 'filozen.app'); setMode('daily'); } else showHome();
 syncNativeSave().then(restored => { if(restored) location.reload(); });
 if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()){
   ringerCheck.then(() => { audioReady = true; refreshMusic(); });   // la musique attend la vérification du mode silencieux
